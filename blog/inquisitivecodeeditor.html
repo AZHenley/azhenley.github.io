@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>An inquisitive code editor: Overcome bugs before you know you have them - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="An idea for a code editor that asks you questions about your code to help you identify, fix, and prevent bugs.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="An inquisitive code editor: Overcome bugs before you know you have them">
+    <meta property="og:description" content="An idea for a code editor that asks you questions about your code to help you identify, fix, and prevent bugs.">
+    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/explainingcode.jpg">
+    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/inquisitivecodeeditor.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">An inquisitive code editor: Overcome bugs before you know you have them</h1>
+	<small>5/11/2021</small><br><br>
+
+<img src="images/explainingcode.jpg" class="center" style="max-width:70%;">
+
+<p><i><small>This post is an informal summary of our recent ICSE'21 Education idea paper, "An Inquisitive Code Editor for Addressing Novice Programmers’ Misconceptions of Program Behavior". Check out the <a href="../pubs/Henley2021ICSE_Inquisitive.pdf">preprint</a> for more details. Special thanks to the NSF for funding this work.</small></i></p>
+<hr style="margin-top:8px;margin-bottom:12px;">
+
+<p>What if a code editor could detect that <i>you</i> have a potential misunderstanding of your code and help you overcome the misunderstanding? I'll be describing the approach and prototype we've been working on in the context of helping <i>novice programmers</i> learn how to code.</p> 
+
+<p>Let's start with this snippet of code based on a student's homework submission:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+response = 0
+while response != 'y' or response != 'n':
+    response = input("Please enter (y)es or (n)o. \n")
+</pre>
+
+<p>The program asks the user to input y for yes or n for no, and it will repeat until valid input is given. 
+However, the loop will actually never end because of a mistake. The “or” should instead be an “and”. 
+These types of errors are known as <i>semantic errors</i>. It compiles, but does not behave the way the programmer expects.</p>
+
+<h3>Correctness is hard</h3>
+
+<p>Program correctness is particularly challenging for novices because they have a different definition of correctness than professional programmers<sup>1</sup>. A study reported that students believe their code is correct when there are no more compiler errors<sup>2</sup>. Due to this flawed definition of correctness, semantic errors persist and take far longer to fix than syntax errors. In fact, semantic errors can take 50x longer for novices to fix<sup>3</sup>, if they ever fixed at all!</p>
+
+<p>Ultimately, the novice has a misconception about how their program will behave and it takes considerable effort for them to realize they even have a misconception.</p>
+
+<p>While looking into possible solutions, I was inspired by <a href="https://www.cs.cmu.edu/~NatProg/whyline-java.html">Whyline</a><sup>4</sup>. Whyline was <a href="https://faculty.washington.edu/ajko/">Amy Ko</a>’s dissertation project that enables programmers to ask why and why not questions about their program’s output. It provides these features by recording a program execution and using dynamic slicing to map the output in question to the sequence of code that caused the output.</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pbElN8nfe3k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<p>Although Whyline is fantastic for helping experienced programmers in tracking down bugs, it may not help novices with semantic errors since they often aren’t even aware that they have a bug.</p>
+
+<h3>The Inquisitive Code Editor</h3>
+
+<p>The idea that we propose is an inquisitive code editor. Rather than the programmer asking questions, it is the code editor asking the programmer questions.</p>
+	
+<p>It works in 4 main steps:</p>
+
+<ol>
+<li>The code editor detects potentially problematic code using code smell detectors, program analysis, and predictive models.</li>
+<li>The editor will ask the programmer a question about how the programmer *thinks* their code will behave.</li>
+<li>If the answer is different than how the program will actually behave, then the tool can attempt to correct the misconception and assist in fixing the buggy code.</li>
+<li>The editor can try to prevent future misconceptions of the same type by generating test code and documentation as well as sending aggregated reports to the instructor about common issues.</li>
+</ol>
+
+<img src="images/inquisitiveflowchart.png" class="center" style="max-width:80%;">
+
+<h3>1. Detecting potentially problematic code</h3>
+
+<p>There are a number of existing techniques that we are using to identify these potential semantic errors. For example, there are large datasets of common errors that novices make that we can plug into existing code smell detectors. We can also use static program analysis to find other common issues, such as when code can never be reached, if a loop will never iterate, or if a return value is ignored from a function that doesn't have side effects. We are also training machine learning models to identify more patterns in novice code across several languages.</p>
+
+<img src="images/inquisitor1.png" class="center" style="max-width:60%;">
+
+<p>In the code editor, the tool will annotate potential problems with a question mark. We want to entice the programmer to click it, but not be too disruptive so we are using prior work on negotiable interruptions<sup>5</sup> and surprise-explain-reward<sup>6</sup>.</p>
+
+<h3>2. Asking the programmer questions</h3>
+
+<p>If the programmer clicks the question mark, the editor shows a question from a predefined set.</p>
+
+<img src="images/inquisitor2.png" class="center" style="max-width:60%;">
+
+<p>For example, a student's code includes a for loop that iterates on a list, but the list is always either empty or has one element. So the tool asks the student to type a range of how many times they believe the loop will iterate.</p>
+
+<p>If they answer more than 1 time, then the tool is confident that it has identified a semantic error and the novice has a misconception.</p>
+
+<h3>3. Correcting the misconception and code</h3>
+
+<p>This is an opportunity to teach the student about how the program will actually behave. The tool can provide an explanation that is generated for the specific scenario and also point them to the relevant code that will need to be changed. Other interventions could be added, such as linking to lecture notes, documentation, or StackOverflow.</p>
+
+<p>Although in some cases the error could be fixed automatically, it will instead only provide support in making the fix, since the goal is for the student to learn.</p>
+
+<h3>4. Preventing future misconceptions</h3>
+
+<p>Not only that, but the tool can also prevent future misconceptions. One study found that particular errors happen repeatedly to students, even in the same coding session<sup>3</sup>.</p>
+
+<p>Since we have elicited the expected behavior from the programmer, the tool can generate test code in the form of assertions and unit tests, and generate documentation in the form of code comments. That way, if the behavior ever deviates from their expectation again, it will provide a clear signal to the programmer that something is wrong.</p>
+
+<p>Additionally, the tool can monitor issues that reoccur and suggest tutorials or longer explanations about the error. The tool can also produce aggregated reports to the instructor about common issues that the students are having that can be referenced in future lectures or office hours.</p>
+
+<h3>Current progress and next steps</h3>
+
+<p>There you have it, our proposed idea for an inquisitive code editor to identify, correct, and prevent misconceptions that novices have about their program's behavior.</p>
+
+<img src="images/inquisitor3.png" class="center" style="max-width:60%;">
+
+<p>Currently, we have prototyped these ideas in the form of Atom plugins but have a lot of work to do. There are several grad students that are investigating different pieces, including how to identify potentially problematic code, what questions should be asked, what information should be included in the explanations, and how to minimize false positives and interruptions. We are also looking into how such a system could be adapted for professional programmers (e.g., to get them to document the complex portions of their code).</p>
+
+<p>Stay tuned!</p>
+
+
+<br><hr><br>
+
+<p><small><sup>1</sup> Yifat Ben-David Kolikant. 2005. Students' alternative standards for correctness. In Proceedings of the first international workshop on Computing education research (ICER '05). Association for Computing Machinery, New York, NY, USA, 37–43. DOI:https://doi.org/10.1145/1089786.1089790
+</small></p>
+
+<p><small><sup>2</sup> Ioanna Stamouli and Meriel Huggard. 2006. Object oriented programming and program correctness: the students' perspective. In Proceedings of the second international workshop on Computing education research (ICER '06). Association for Computing Machinery, New York, NY, USA, 109–118. DOI:https://doi.org/10.1145/1151588.1151605
+</small></p>
+
+<p><small><sup>3</sup> Amjad Altadmri and Neil C.C. Brown. 2015. 37 Million Compilations: Investigating Novice Programming Mistakes in Large-Scale Student Data. In Proceedings of the 46th ACM Technical Symposium on Computer Science Education (SIGCSE '15). Association for Computing Machinery, New York, NY, USA, 522–527. DOI:https://doi.org/10.1145/2676723.2677258
+</small></p>
+
+<p><small><sup>4</sup> Amy J. Ko and Brad A. Myers. 2008. Debugging reinvented: asking and answering why and why not questions about program behavior. In Proceedings of the 30th international conference on Software engineering (ICSE '08). Association for Computing Machinery, New York, NY, USA, 301–310. DOI:https://doi.org/10.1145/1368088.1368130
+</small></p>
+
+<p><small><sup>5</sup> McFarlane, Daniel C. "Comparison of four primary methods for coordinating the interruption of people in human-computer interaction." Human-Computer Interaction 17.1 (2002): 63-139.
+</small></p>
+
+<p><small><sup>6</sup> Aaron Wilson, Margaret Burnett, Laura Beckwith, Orion Granatir, Ledah Casburn, Curtis Cook, Mike Durham, and Gregg Rothermel. 2003. Harnessing curiosity to increase correctness in end-user programming. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '03). Association for Computing Machinery, New York, NY, USA, 305–312. DOI:https://doi.org/10.1145/642611.642665
+</small></p>
+
+<br><br>
+
+
+    <br><br><br><br>
+
+</body>
+</html>

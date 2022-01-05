@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Progress bars still lie: Please fix them - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Progress bars still lie: Please fix them.">
+	<meta name="author" content="Austin Z. Henley">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Progress bars still lie: Please fix them</h1>
+	<small>11/23/2020</small><br>
+
+    <br><blockquote class="twitter-tweet"><p lang="en" dir="ltr">How many decades until software has semi-accurate progress bars?</p>&mdash; Austin Henley (@AustinZHenley) <a href="https://twitter.com/AustinZHenley/status/1280595239011520517?ref_src=twsrc%5Etfw">July 7, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><p><i>Update 11/27: See the discussion on <a href="https://news.ycombinator.com/item?id=25203038">Hacker News</a>.</i></p>
+
+    <p>Examples of inaccurate progress bars are everywhere. If systems can't accurately predict how long a task will take, then fine. Estimating is hard.
+        
+    <p>But why do they insist on <b>lying</b>?</p>
+        
+    <p>Progress bars are generally implemented by hard coding segments of work with a value. These values are specified by the programmer (and hopefully aren't completely made up). Finish this piece then add 3% to the progress bar. Download a file and add up to 10% based on how many bytes have been downloaded. Seems reasonable.</p>
+    
+    <p>But over the summer I updated one of my Apple products and it continued to tell me that there was about 8 minutes remaining... for over an hour! <b>Picking a random number would have been more accurate!</b></p>
+    
+    <p>Ok, updating a device is a complex scenario with a lot of things going on.</p>
+    
+    <p>Let's look at a simple example: downloading a photo from Dropbox. The progress bar is really just based on my internet speed, right?</p>
+    
+    <img src="images/lyingprogressbar.gif" class="center" style="max-width:80%;margin-bottom:15px;">
+    
+    <p>And yet, every single photo and video that I export from Dropbox finishes at 75%, regardless of how big the file is.</p>
+    
+    <p>Another example? Every time I upload a lecture video to YouTube, it goes back-and-forth from "0% processed" and "100% processed", repeatedly, until it is actually done. I've never seen it say any other number.</p>
+    
+    <h3>Proposed Solution #1: Don't lie</h3>
+    
+    <p>If you don't know how much time is remaining, then don't lie about it.</p>
+    
+    <p>Instead, you can show that the system is still working and keep the user updated with what the current task is. Just make sure the task changes every few seconds or minutes, depending on user expectations, so that they know it isn't frozen.</p>
+    
+    <h3>Proposed Solution #2: Tell me how long it took for someone else</h3>
+    
+    <p>A <i>lot</i> of people own an iPhone and there are relatively few models out there. How should Apple calculate the amount of time required to update iOS? By telling you how long it took other users!</p>
+    
+    <h3>Proposed Solution #3: Machine learning magic</h3>
+    
+    <p>Try out some of these smart people's ideas:</p>
+    
+    <blockquote class="twitter-tweet" style="margin-bottom:20px;"><p lang="en" dir="ltr">Not sure if fuzzing / magic numbers is where the action is at, but maybe with enough training data one could use dynamic analysis + machine learning to build a predictor? Sounds like a fun project for sure.</p>&mdash; Rohan Padhye (@moarbugs) <a href="https://twitter.com/moarbugs/status/1280602134493507584?ref_src=twsrc%5Etfw">July 7, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    
+    <br><hr><br>
+    
+    <p>Progress bars are an interesting topic in human-computer interaction. If you want to know more, there's an interesting podcast episode from 99% Invisible: <a href="https://99percentinvisible.org/episode/wait-wait-tell-me/">Wait Wait... Tell Me!</a></p>
+
+
+    <br><br><br><br>
+
+</body>
+</html>

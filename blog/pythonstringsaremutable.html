@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Python strings are immutable, but only sometimes - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Python strings are immutable, but only sometimes">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Python strings are immutable, but only sometimes">
+    <meta property="og:description" content="There is a common case when strings are actually mutable.">
+    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/cpythonappend.png">
+    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/pythonstringsaremutable.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Python strings are immutable, but only sometimes</h1>
+	<small>2/15/2021</small><br><br>
+
+<p><i>Update 2/16/2021: See the discussion of this post on <a href="https://news.ycombinator.com/item?id=26145775">Hacker News</a>.</i></p>
+
+<p>The standard wisdom is that Python strings are immutable. You can't change a string's value, only the reference to the string. Like so:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+x = "hello"
+x = "goodbye"  # New string!
+</pre>
+
+<p>Which implies that each time you make a change to a string variable, you are actually producing a brand new string. Because of this, tutorials out there warn you to avoid string concatenation inside a loop and advise using <i>join</i> instead for performance reasons. Even the official documentation says so!</p>
+
+<p><b>This is wrong.</b> <i>Sort of</i>.</p>
+
+<p>There is a common case for when strings in Python are actually mutable. I will show you an example by inspecting the string object's unique ID using the builtin <i>id()</i> function, which is just the memory address. The number is different for each object. (Objects can be shared though, such as with interning.)</p>
+
+<img src="images/mutablestring.png" class="center" style="max-width:50%;">
+
+<p>I concatenated two strings but the memory address did not change!</p>
+
+<p>For an extra sanity check, let's make our own "pointer" and see if it points to the original or modified string.</p>
+
+<img src="images/mutablestring2.png" class="center" style="max-width:50%;">
+
+<p>If strings were truly immutable, then the address we stored in <i>b</i> would point to the original string. However, we see that the strings printed are equivalent.</p>
+
+<p>We can try another test to see how often we get a new string object by doing 10,000 small concatenations.</p>
+
+<img src="images/concatenationmemory.png" class="center" style="max-width:90%;">
+
+<p>Only 46 of the 10,000 concatenations allocated a new string!</p>
+
+<p><b>So what is going on here?</b></p>
+    
+<p>CPython is clever. If there are no other references to the string, then it will attempt to mutate the string instead of allocating a new one. Though it will sometimes need to resize the buffer if the string grows too big, much like C++'s <i>vector</i> or C#'s <i>List</i>.</p>
+
+<p>We can see the first clue in the code for this in CPython's <a href="https://github.com/python/cpython/blob/1b57426e3a7842b4e6f9fc13ffb657c78e5443d4/Python/ceval.c#L5945">Python/ceval.c</a> file. It tries to reduce the reference count to 1 if possible when doing a string concatenation.</p>
+
+<img src="images/cpythonconcatenate.png" class="center" style="max-width:90%;">
+
+<p>Now take a look at <i>PyUnicode_Append()</i> in <a href="https://github.com/python/cpython/blob/fcbe0cb04d35189401c0c880ebfb4311e952d776/Objects/unicodeobject.c#L11747">Objects/unicodeobject.c</a>. If the string is modifiable (has only 1 reference and is not interned), then it will try to append in place! <i>unicode_resize()</i> will see if it will fit or if a new allocation needs to be made.</p>
+
+<img src="images/cpythonappend.png" class="center" style="max-width:90%;">
+
+<p>There we have it. Evidence that you <i>can</i> mutate a string in Python.</p>
+
+<hr>
+
+<p>Does this <i>really</i> count as mutability though? Not really. The string would be thrown away anyway so this is just an optimization to reuse the memory. The important takeaway here is that you are not allocating a new string every single time like the internet says.</p>
+
+
+<br><br>
+
+
+    <br><br><br><br>
+
+</body>
+</html>

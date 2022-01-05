@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Useful Functions for Game Development">
+    <meta name="author" content="">
+
+    <title>Useful functions for game development - Austin Z. Henley</title>
+
+    <link href="../bootstrap.min.css" rel="stylesheet">
+    <link href="../style.css" rel="stylesheet">
+	<style>img {max-width:100%} p {padding-bottom:3px}</style>
+
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+	<div class="jumbotron" style="padding-top:0px;padding-bottom:0px; background-color:transparent;">
+  	<div class="row">
+			<div class="col-md-6 text-right" style="padding-left:0px;margin-left:0px;">
+				<h3 style="margin-bottom:0;padding-bottom:0;">Austin Z. Henley</h3>
+				Assistant Professor
+			</div>
+			<div class="col-md-6 text-left" style="padding-left:6px;margin-left:0px;margin-top:0px;"><br>
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			</div>
+	  </div>	
+	</div>
+
+	<hr style="margin-top:-10px;margin-bottom:10px"/>
+	<b><ul style="text-align:center;">
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../index.html">Home</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../publications.html">Publications</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../teaching.html">Teaching</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../blog.html" style="text-decoration: underline;">Blog</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../Henley_Vita.pdf">CV</a></li>
+	</ul></b>
+	<hr style="margin-top:1px"/>
+	
+	<div class="row" style="margin-top:-8px">
+		<div class="col-md-12">
+
+
+<br><h3>Useful functions for game development</h3><small>9/21/2020</small><br><br>
+
+<img src="images/gridgame.png" class="center-block" style="max-width:60%;margin-bottom:19px;border:1px solid black">
+
+<p>When I was making <a href="8lessons8games.html">games</a>, I found myself using a lot of the same functions over and over. They are quite simple, but I thought it interesting how they popped up everywhere and how conveniently I could make complex behaviors by combining them. I ended up with about 40 functions in a utility class that I could reach into like a bag of tricks. You can find a handful of them below, converted to JavaScript, along with a short description and a visual of what they can do.</p>
+
+<h4 style="margin-top:22px;margin-bottom:7px;">run: move object forward</h4>
+
+<p>I used <b>run</b> to move objects in a given direction. I used it for virtually anything that moved relative to a variable direction: the player, enemies, projectiles, particles, and even floating text boxes.</p>
+
+<img src="images/run.gif" class="center-block" style="max-width:50%;margin-bottom:19px;">
+
+<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+// Moves obj towards its current rotation at its current speed.
+function run(obj) {
+  obj.x += Math.cos(obj.rotation)*obj.speed;
+  obj.y += Math.sin(obj.rotation)*obj.speed;
+}
+</pre>
+
+<p>A variation I used of this function is <b>project</b>, which returns the object's future location. This can be useful for collision detection.</p>
+
+<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+// Like run(), but returns an object and uses an independent rotation and distance.
+function project(obj, rot, dist) {
+  return {x: obj.x + Math.sin(rot)*dist,
+          y: obj.y + Math.cos(rot)*dist};
+}
+</pre>
+
+<h4 style="margin-top:28px;margin-bottom:7px;">rotateTo: rotate object towards another object</h4>
+
+<p>The run function requires the angle to be calculated, which I often did using <b>rotateTo</b>. It points one object towards another, such as pointing the player towards the mouse cursor.</p>
+
+<img src="images/rotateto.gif" class="center-block" style="max-width:50%;margin-bottom:19px;">
+
+<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+// Rotates obj to point at target.
+function rotateTo(obj, target) {
+  obj.rotation = Math.atan2(target.y - obj.y, target.x - obj.x);
+}
+</pre>
+
+<h4 style="margin-top:28px;margin-bottom:7px;">rotateToGradual: rotate object towards another object at a fixed speed</h4>
+
+<p>A more complicated use of rotateTo is for objects that home in on a target. I used <b>rotateToGradual</b> for enemies that are trying to tackle the player but also for missiles. The idea is similar to rotateTo, but it can only turn so much each frame. (There are several different ways to code this, but this is one  I used for homing missiles.)</p>
+
+<img src="images/rotatetogradual.gif" class="center-block" style="max-width:50%;margin-bottom:19px;">
+
+<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+// Gradually rotates obj to point at target using obj.turnSpeed.
+function rotateToGradual(obj, target) {
+  let goal = Math.atan2(target.y - obj.y, target.x - obj.x);
+  obj.rotation += Math.sin(goal - obj.rotation) * obj.turnSpeed;
+}
+</pre>
+
+<h4 style="margin-top:28px;margin-bottom:7px;">distance: calculate distance between two objects</h4>
+
+<p>A classic function indeed, but I found ways to use that I wouldn't have expected. For example, it can be used as a quick and dirty way to do collision detection in a top down shooter by checking if the <b>distance</b> from the target is less than the bullet radius.</p>
+
+<img src="images/distance.gif" class="center-block" style="max-width:50%;margin-bottom:19px;">
+
+<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+// Returns distance between two objects.
+function distance(objA, objB) {
+  return Math.sqrt(((objA.x - objB.x)*(objA.x - objB.x))
+          +((objA.y - objB.y)*(objA.y - objB.y)));
+}
+</pre>
+
+<h4 style="margin-top:28px;margin-bottom:7px;">overlapping: check whether two objects are overlapping</h4>
+
+<p>I used <b>overlapping</b> to see if two rectangular objects are intersecting as another fundamental way to perform simple collision detection.</p>
+
+<img src="images/overlapping.png" class="center-block" style="max-width:50%;margin-bottom:19px;">
+
+<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+// Returns true or false if overlapping.
+// NOTE: Assumes shapes are rectangular and not rotated.
+function overlapping(objA, objB) {
+  // Check x axis.
+  if(objA.x < (objB.x + objB.w) && (objA.x + objA.w) > objB.x) {
+    // Check y axis.
+    if((objA.y + objA.h) > objB.y && objA.y < (objB.y + objB.h)) {
+      return true;
+    }
+  }
+  return false;
+}
+</pre>
+
+<p>A minor variation is for checking whether a point is contained inside an object.</p>
+
+<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+// Check if point overlaps with rectangle.
+function intersectPointRectangle(px, py, rect) {
+  if(px >= rect.x && px <= rect.x + rect.w) {
+    if(py >= rect.y && py <= rect.y + rect.h) {
+      return true;
+    }
+  }
+  return false;
+}
+</pre>
+
+<h4 style="margin-top:28px;margin-bottom:7px;">snap: round value to the nearest interval</h4>
+
+<p>I needed to <b>snap</b> numbers to a specific step. This can be useful for snapping coordinate values to the nearest tile index or for making scores more pretty (e.g., by snapping it to the nearest 2 or 50)</p>
+
+<img src="images/snap.gif" class="center-block" style="max-width:50%;margin-bottom:19px;">
+
+<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+// Snaps the value x to the current increment of step. Ex: snap(144, 5) results in 145.
+function snap(x, step) {
+    return Math.round(x / step) * step;
+}
+</pre>
+
+
+<hr><br><br>
+
+<p>See? Simple, but useful.</p>
+
+<p>If you want more random game development goodness, check out:</p>
+
+<ul style="margin-top: -9px;">
+  <li>The 8 lessons I learned from releasing 8 video games (<a href="http://web.eecs.utk.edu/~azh/blog/8lessons8games.html">web</a>)</li>
+	<li>Game Design Patterns (<a href="https://amzn.to/2RcclCc">Amazon</a>, <a href="https://gameprogrammingpatterns.com/contents.html">web</a>)</li>
+  <li>Data Structures for Game Programmers (<a href="https://amzn.to/2qEb79b">Amazon</a>)</li>
+	<li>Programming Game AI by Example (<a href="https://amzn.to/2RDtk1K">Amazon</a>)</li>
+</ul>
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+
+<br><br><br><br>
+	
+
+		</div>
+	</div><br><br><br>
+			
+	</div>
+  
+
+</body></html>

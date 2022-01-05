@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Building solutions to problems that no one knows exist yet - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="How do you solve a problem that someone doesn't know they have?">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Building solutions to problems that no one knows exist yet">
+    <meta property="og:description" content="How do you solve a problem that someone doesn't know they have?">
+    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/whatstheproblem.png">
+    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/solvingunknownproblems.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Building solutions to problems that no one knows exist yet</h1>
+	<small>8/28/2021</small><br><br>
+
+    <img src="images/whatstheproblem.png" class="center" style="max-width:85%; margin-bottom:28px;">
+
+<p><small><i>See the discussion of this post on <a href="https://news.ycombinator.com/item?id=28371676">Hacker News</a>.</i></small></p>
+
+<p>I've found that the most rewarding problems to work on are the ones that people don't even know they have [yet].</p>
+
+<p>Academia is sometimes a good place for this type of work: investigate a fuzzy problem, nail down what the problem actually is, and devise solutions.</p>
+
+<p>But I've surprisingly had the most opportunities to work on these problems at <b>internships</b>!</p>
+
+<p>My research internships shocked me because they expected <i>me</i> to tell them what I was going to work on. They gave me a crazy amount of freedom in order to do this. I got shockingly comfortable with wandering the office buildings and asking senior employees in other divisions for their time. As long as I could periodically show value, my mentors gave me free reign. (I've previously written about the benefits of doing <a href="fiveinternships.html">5 internships during grad school</a>.)</p>
+
+<img src="images/wickedproblems.png" class="center" style="max-width:80%;border:1px solid #000000;">
+
+<p>I think this is a lot of what a startup does too. Not only are you coming up with the solution space, but you have to come up with the problem space too.</p>
+
+<p>I want to tell a story from one of my internships. I started down a route to solve a problem that the business believes they have, only to realize that there is a different and much bigger problem, but after several twists and turns I was able to come up with a collection of solutions.</p>
+
+<p>The story set the stage for how I approach problems for the rest of my career thus far.</p>
+
+
+<h3>A humble intern project</h3>
+
+<p>I was invited to join National Instruments in Austin, Texas to investigate <i>automated refactoring</i> in the LabVIEW programming language. There was some evidence that manually refactoring was difficult, so I was told that the language needs tooling for refactoring much like other languages (e.g., Eclipse supported dozens of automated refactorings for Java). The open question was how do known refactorings for traditional programming languages apply to a visual dataflow programming language.</p>
+
+<p>The first thing I did was go and talk to people using LabVIEW. Apparently this isn't a common approach to investigating problems? Anyway, I conducted 50-something interviews with engineers, designers, and managers across many different teams. Each time I started with open-ended questions like <i>"What did you usually work on?"</i> and <i>"What barriers have you faced while using LabVIEW this week?"</i> and <i>"What features could assist you in that task?"</i>. </p>
+
+<p>Over half the people I spoke to said something like <i>"I prefer to start from a blank slate"</i> rather than modify existing code. At one point it creeped me out how perfectly some of these people would say the same thing. A manager described modifying existing code as a <b><i>“million dollar problem”</i></b> because her team spends time each day rewriting similar but different programs from scratch, and then they ultimately <i>“throw away the code”</i>.</p>
+
+<p>I thought I was onto something.</p>
+
+
+<h3>Down the empirical rabbit hole</h3>
+
+<p>But when I asked <i>why</i> modifying code was so difficult, I didn't get much. Reasons included it is <i>"just easier"</i> to write code from scratch, it is too tedious or time consuming to edit, or it was difficult to understand how the code worked. It certainly is true that reading and writing visual code is different than traditional textual languages, but surely there was more to this problem.</p>
+
+<p>Next I brought a handful of LabVIEW programmers into a lab and recorded them as they worked on some open-ended refactoring tasks. I observed all of them show signs of frustration. It was indeed tedious manually refactoring the code, but not for the reasons I thought. One notable scenario that occurred several times is that they would be in the middle of a code change and need to see what the code looked like prior to them messing it up. Another is that they would repeatedly get confused about what each wire represents (wires in LabVIEW is how data is passed between functions and control structures). To try to understand what was going on in their head, I asked them to speak aloud as they worked and at the end of the session I played back their video to them and asked questions about each major code change they made (e.g., <i>"why did you abort making this change?"</i> or <i>"what about making this change was difficult?"</i>).</p>
+
+<img src="images/brokenwires.png" class="center" style="max-width:60%;">
+
+<p>The programmers used some pretty interesting strategies to overcome not remembering how the original code worked: they'd <b>excessively use undo/redo</b> to flip back and forth between the current state and the original state of the code (other researchers have found that Java developers do this backtracking behavior too! <a href="http://www.cs.cmu.edu/~NatProg/papers/p101-yoon-VLHCC2014.pdf">A lot</a>.), they'd <b>copy and paste the code block</b> prior to modifying it, or they'd <b>screenshot the code</b> to use as a reference! </p>
+
+<p>I also asked 9 other engineers if I could come sit behind them as they were coding. Oddly enough they agreed, and even seemed eager to have someone witness their coding frustrations. It revealed many small reasons why modifying code is tedious (e.g., it is easy to mistakenly swap two inputs and not realize it). They also taught me some more strategies, such as <b>duplicating their entire code project</b> before making a change so that they could compare the runtime behavior of the original version and the changed version. I again saw them screenshotting code and a few of them would <b>make notes on paper</b> prior to making changes.</p>
+
+<p>One person summed the problem up fairly well: <i>"“That is the hardest thing when you’re refactoring. You delete a bunch of stuff, then you’re, like, where did all of it go?"</i></p>
+
+
+<h3>Everyone is a collaborator</h3>
+
+<p>Rather than go off and come up with solutions to these problems in a vacuum, I wanted to work collaboratively with all of the engineers and participants I studied to come up with ideas. I presented my aggregate findings to a few of the teams and held a focus group to get their thoughts on solutions. </p>
+
+<p>The feedback was overwhelming. They were so eager and so excited to brainstorm about these problems and solutions. With their help, I ended up with 12 ideas for features with many pages of notes on how each one should work. What was great is that the features would work together to incrementally improve the programming experience of using LabVIEW without breaking their workflows.</p>
+
+<p>However, I was <i>just</i> an intern, and my time there was ticking away. None of the features were small, and the LabVIEW code editor's codebase is huge. It was time to rank the potential features by impact, feasibility, and interesting-ness. Three of them clearly stood out from the rest. If combined, I think the three features (plus all the studies that led to their conception) could have easily made a PhD dissertation.</p>
+
+
+<h3>Prototypes: Yestercode and CodeDeviant</h3>
+
+<p>In the end, I was only able to design, implement, and evaluate two of the features before I left the internship. First was Yestercode, a tool that automatically shows you a side-by-side of current code and recent code while you are actively editing. There is a timeline to select which version of code to compare to. It enables you to visually see your recent code changes without relying on undo-redo. Version control won't help in these situations since these are intermediate changes that don't get commited. In a lab study, participants were far less likely to introduce bugs, reported significantly lower cognitive load, and did not require additional time while making code changes with Yestercode. I really wish Yestercode's features were available in every code editor, so I wrote a blog post covering it in more detail: <a href="yestercode.html">Why is it so hard to see code from 5 minutes ago?</a></p>
+
+<img src="images/yestercode3.png" class="center" style="max-width:70%;">
+
+<p>The second tool was CodeDeviant, a tool that automatically logs your program's input and output values and notifies you if a refactoring changes a prior input/output mapping. That way programmers wouldn't need to duplicate their code project to compare runtime behavior or write down specific test cases on paper. In a lab study, participants were far more likely to find bugs while using CodeDeviant and did so in significantly less time. My earlier investigations found that unit testing was rarely used, so this essentially creates tests for them automatically.</p>
+
+<p>Both tools resulted in publications (see the 2016 Yestercode <a href="../pubs/Henley2016VLHCC_Yestercode.pdf">paper</a> and the 2018 CodeDeviant <a href="../pubs/Henley2018VLHCC_CodeDeviant.pdf">paper</a>), and Yestercode was even awarded an <b>IEEE Best Paper Award</b>!</p>
+
+<img src="images/yestercodeaward.jpg" class="center" style="max-width:60%;">
+
+
+<h3>Not all sunshine and rainbows</h3>
+
+<p>I'm skipping over a <b>lot</b> of headaches and dead ends. At each step of this process I felt like I had no idea what I was doing and had no clue whether there would be a good outcome. I worried constantly that I'd have nothing to show for my summer/fall and that I would be even further behind on my dissertation. It felt like I needed to provide value back for all those engineers' time that I consumed, that I was expected to come up with revolutionary new ideas for the product, and that I needed to publish multiple papers.</p>
+    
+<p>I drastically underestimated the complexity of the features and had to give up on several of the ideas. During a demo of one of my tool prototypes, a very senior engineer interrupted with <i>"This seems like a solution in search of a problem"</i>. Not a great feeling. I worked every Saturday and Sunday after that.</p>
+
+<p>It would take far, far more effort to get my tool concepts to be production ready. In fact, my prototypes were quite fragile. Every 45 minutes or so of running them I'd need to restart the entire application or else it would crash with seemingly random errors. I had to completely break the beautiful architecture that the smart software developers came up with, just so that I could force components to work in a way that they were never intended to. I hard coded ugly fixes for errors that cropped up during my demos and user studies. I wrapped virtually everything in a <i>try catch</i> block and ignored the exception. I've written previously about design patterns for hacking together prototypes quickly (see <a href="objectdictionaries.html">Object Dictionaries</a>, <a href="catchall.html">Catch All</a>, and <a href="facilitator.html">Facilitator</a>).</p>
+
+
+<h3>What about the automated refactoring tools?</h3>
+
+<p>Oh yeah, automated refactoring tools.</p> 
+
+<p>I never got to them.</p> 
+
+<p>A few basic automated refactorings could possibly help (LabVIEW already supports a few, like inline function and extract function), but the potential impact is <i>nothing</i> compared to the the features we came up with for modifying, comprehending, and validating code. Automated refactorings aren't used very often in other languages anyway (see <a href="https://people.engr.ncsu.edu/ermurph3/papers/tse11a.pdf">How We Refactor, and How We Know it</a>)</p>
+
+<p>When I left, I actually was thinking: if I came up with these features in as little time as I did, I wonder what else is out there waiting to be discovered!</p>
+
+<h3>How was this project possible?</h3>
+
+<p>I was given an <i>extreme</i> amount of freedom from my internship mentor who had a great appreciation for research and little care for asking permission. There is no way I could have done this if I was bound to a given team or project. My investigations spanned virtually every facet of the company, including sales, UX, QA, customer support, compiler developers, GUI developers, hardware engineers, and management. </p>
+
+<p><b><i>Can you imagine the buy-in I would have needed from executives had I been a regular employee that wanted to do this?</i></b></p>
+
+<p>I'm now fascinated with how to facilitate such freedom and creativity. Especially since I have a group of research students that I manage. How do organizations create an environment and culture that allows such behavior? I've only found a few books on the topic:</p>
+
+<ul>
+    <li>Creativity, Inc. (<a href="https://amzn.to/3Bo96MW">Amazon</a>)</li>
+    <li>Innovator's Dilemma (<a href="https://amzn.to/38n2odW">Amazon</a>)</li>
+    <li>Skunk Works (<a href="https://amzn.to/3gJ4mtx">Amazon</a>)</li>
+</ul>
+
+<p>Anyway, that is the story of one internship where I tried to solve problems that people didn't know they had yet.</p>
+
+<p>More stories to come.</p>
+
+<hr>
+
+<img src="images/nihalloween2015.jpg" class="center" style="max-width:65%;">
+
+<p>Thank you National Instruments, Andrew, and all the friends I made along the way.</p>
+
+<p>My internships really were dream jobs.</p>
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+<br><br><br><br>
+
+</body>
+</html>

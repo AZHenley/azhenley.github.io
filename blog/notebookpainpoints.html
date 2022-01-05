@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="What's wrong with computational notebooks?">
+    <meta name="author" content="">
+
+    <title>What's wrong with computational notebooks? - Austin Z. Henley</title>
+
+    <link href="../bootstrap.min.css" rel="stylesheet">
+    <link href="../style.css" rel="stylesheet">
+	<style>img {max-width:100%} p {padding-bottom:3px}</style>
+
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+	<div class="jumbotron" style="padding-top:0px;padding-bottom:0px; background-color:transparent;">
+  	<div class="row">
+			<div class="col-md-6 text-right" style="padding-left:0px;margin-left:0px;">
+				<h3 style="margin-bottom:0;padding-bottom:0;">Austin Z. Henley</h3>
+				Assistant Professor
+			</div>
+			<div class="col-md-6 text-left" style="padding-left:6px;margin-left:0px;margin-top:0px;"><br>
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			</div>
+	  </div>	
+	</div>
+
+	<hr style="margin-top:-10px;margin-bottom:10px"/>
+	<b><ul style="text-align:center;">
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../index.html">Home</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../publications.html">Publications</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../teaching.html">Teaching</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../blog.html" style="text-decoration: underline;">Blog</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../Henley_Vita.pdf">CV</a></li>
+	</ul></b>
+	<hr style="margin-top:1px"/>
+	
+	<div class="row" style="margin-top:-8px">
+		<div class="col-md-12">
+
+
+<br><h3>What's wrong with computational notebooks?</h3><small>1/19/2020</small><br><br>
+
+<p><i>This post is an informal summary of our recent CHI'20 paper, "What's Wrong with Computational Notebooks? Pain Points, Needs, and Design Opportunities". Check out the <a href="../pubs/Chattopadhyay2020CHI_NotebookPainpoints.pdf">preprint</a> for more details. Special thanks to Microsoft for supporting this work.</i></p>
+<p><i>Update 1/29: See the discussion of this post on <a href="https://news.ycombinator.com/item?id=22164916">Hacker News</a>.</i></p>
+<hr style="margin-top:8px;margin-bottom:12px;">
+
+<br><p>Computational notebooks, such as Jupyter Notebooks, Azure Notebooks, and Databricks, are wildly popular with data scientists. But as these notebooks are used for more and more complex tasks, data scientists run into more and more pain points. In this post I will very briefly summarize our method, findings, and some opportunities for tools.</p>
+
+<br><h4>Method</h4>
+
+<img src="images/painscale.png" class="center-block" style="max-width:60%;margin-bottom:12px;">
+
+<p>To understand the pain points, we conducted a mixed-methods study that involved (a) observing 5 data scientists as they worked with notebooks, (b) interviewing 15 data scientists, and (c) surveying 156 data scientists. We transcribed the recordings from the observations and interviews, performed qualitative analysis on the transcriptions, and then used the survey to validate and triangulate the findings with a broader population.</p>
+
+<br><h4>Findings: 9 pain points</h4>
+
+<img src="images/notebookpainpoints.png" class="center-block" style="max-width:60%;margin-bottom:12px;">
+
+<p>We identified the following 9 categories of painpoints based on our observations and interviews:</p>
+
+<ul>
+    <li style="margin-bottom:4px;"><b>Setup.</b> Participants stated they often downloaded data outside of the notebook from various data sources since interfacing with them programmatically was too much hassle. Not only that, but notebooks often crash with large data sets (possibly due to the notebooks running in a web browser). Once the data is loaded, it then has to be cleaned, which participants complained is a repetitive and time consuming task that involves copying and pasting code from their personal "library" of commonly used functions.</li>
+    <li style="margin-bottom:4px;"><b>Explore and analyze.</b> Modeling and visualizing data are common tasks but can become frustrating. For example, we observed one participant tweak the parameters of a plot more than 20 times in less than 5 minutes. Moreover, building models break the quick and iterative workflow of notebooks since it can take several minutes or longer to finish.</li>
+    <li style="margin-bottom:4px;"><b>Manage code.</b> Notebooks do not have all of the features of an IDE, like integrated documentation or sophisticated autocomplete, so participants often switch back and forth between an IDE (e.g., VS Code) and their notebook. One participant we observed kept both windows side-by-side and copy and pasted code between the two windows rapidly as they worked. Another major pain point is managing package dependencies. Participants also indicated that they develop their own processes for debugging and testing, and some expressed irritation with the lack of tool support.</li>
+    <li style="margin-bottom:4px;"><b>Reliability.</b> It is not uncommon for a notebook's kernel to crash in the middle of an operation, which may leave the notebook or data in an inconsistent state without proper feedback to the user. Participants commented that they find it easier to just restart and run the entire notebook again with hopes that it doesn't crash. Additionally, notebooks have limitations when it comes to big data, which requires users to move to a different tool set (e.g., Java or Python scripts).</li>
+    <li style="margin-bottom:4px;"><b>Archival.</b> Participants expressed much difficulty with using version control systems for notebooks. For example, the outputs are saved in the notebooks along with metadata, which will always indicate changes to the version control system. Searching and finding information from previous notebooks is also an unsolved challenge.</li>
+    <li style="margin-bottom:4px;"><b>Security.</b> Participants were concerned about sensitive data that may need to be masked from other users while still allowing them to execute the notebook. Notebooks also don't support restrictions such as read-only or run-only, thus requiring external tools to enforce access.</li>
+    <li style="margin-bottom:4px;"><b>Share and collaborate.</b> While it is easy to share the notebook file, it is often not easy to share the data. For example, the data may require access to a database. Participants said that they often need to create documentation to explain how to install and setup any necessary dependencies to run a notebook. Furthermore, there is missing support for sharing the notebook results with others, especially non-technical users, for the purposes of reports or presentations.</li>
+    <li style="margin-bottom:4px;"><b>Reproduce and reuse.</b> Due to the dependency issues and environment settings, it is unlikely that a notebook will work out of the box. Reusing even small portions of a notebook is difficult due to package dependencies and even dependencies on other cells within the notebook.</li>
+    <li><b>Notebooks as products.</b> If a large data set is used, as one might expect in production, then the notebook will lose the interactivity while it is executing. Also, notebooks encourage "quick and dirty" code that may require rewriting before it is production quality. For example, participants indicated that notebooks are not always designed to be executed top to bottom, which will require additional work to fix the execution order for a standalone artifact.</li>
+</ul>
+
+<br><h4>Opportunities for Tools</h4>
+
+<p>Our findings highlight numerous opportunities for tools. From my own observations and conversations with data scientists, I think there are three major areas that tools should support:</p>
+
+<ul>
+    <li style="margin-bottom:4px;"><b>Traditional development tools.</b> Notebooks are missing features that traditional IDEs have, such as autocomplete, documentation, debugging, unit testing, and refactoring. We observed participants repeatedly moving between tools to utilize these different features. Should IDE features be moved into notebooks or should notebooks be moved into IDEs?</li>
+    <li style="margin-bottom:4px;"><b>Cleanup and extraction.</b> There are opportunities for tools to aid in cleaning up notebooks before archiving, sharing, or productizing. Since a lot of notebooks are started for exploratory purposes, it can be a lot of work to clean them up or to extract specific portions.</li>
+    <li><b>Feedback of notebook state.</b> Notebooks could provide more feedback to the user. What is the current state of the notebook? Which cells are dependent on each other? Which cells should be re-run?</li>
+</ul>
+
+
+<br><p>Hopefully this paper provides evidence for the need for more research in this area! For a lot more details, take a look at the full <a href="../pubs/Chattopadhyay2020CHI_NotebookPainpoints.pdf">paper</a> and let me know if you have any questions.</p>
+
+
+<br><br><br><br>
+	
+
+		</div>
+	</div><br><br><br>
+			
+	</div>
+  
+
+</body></html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Design patterns for hacking together prototypes: Object Dictionaries - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Design patterns for hacking together prototypes: Object Dictionaries">
+	<meta name="author" content="Austin Z. Henley">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Design patterns for hacking together prototypes: Object Dictionaries</h1>
+	<small>9/30/2019</small><br><br>
+
+	<p>I've been in several situations where I needed to implement experimental features in software projects with millions of lines of code given very little time and no familiarity with the code. On reflection, I noticed that I was applying the same patterns to the projects which might be useful for others. This is the first post in a series about my design patterns for hacking together prototypes.</p>
+
+	<p>The projects included extending Microsoft's internal code reviewing tool and build system (see <a href="http://web.eecs.utk.edu/~azh/pubs/Henley2018CHI_CFar.pdf">CFar</a>) and National Instrument's LabVIEW development environment (see <a href="http://web.eecs.utk.edu/~azh/pubs/Henley2017CHI_CodeEditors.pdf">Patchworks LV</a>, <a href="http://web.eecs.utk.edu/~azh/pubs/Henley2016VLHCC_Yestercode.pdf">Yestercode</a>, and <a href="http://web.eecs.utk.edu/~azh/pubs/Henley2018VLHCC_CodeDeviant.pdf">CodeDeviant</a>). The goal of these projects was to quickly demonstrate and evaluate a proof of concept, not produce software for customers. My code was essentially "throw away."  These are not design patterns for production use!</p>
+	
+	<hr>
+	
+	<p><i>"Everything can be coerced into a dictionary." - me</i></p>
+	
+	<p>Architecting code for proper object ownership and access is hard. For example, when building Patchworks, multiple components of the system needed to update the contents of different UI elements that were related. Should we just pass object references to every component? Maybe for a simpler system. If we had the time to design this correctly, it would have layers of abstraction that would manage the communication between components and their object access. (Go start with <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">Model-View-Controller</a> if you want to be boring.)</p>
+	
+	<p>But we have millions of lines of code which we don't have the time to understand or change. So instead, we will utilize global lookup tables that take an object reference as the key and return an object reference as the value. I call these <b>object dictionaries</b>.</p> 
+	
+	<img src="images/patchworks.png" class="center" style="max-width:90%;">
+	
+	<p>Take a closer look at Patchworks. There is a grid of text editors (with more off-screen), each with an associated label and close button. If the user clicks one of the close buttons, how do we clear the correct text editor and label? Or if the user opens a file inside an editor, how do we update the corresponding label and make the close button visible? Our handy dandy lookup tables!</p>
+	
+	<pre class="prettyprint lang-cs">
+Dictionary&lt;Label, Editor&gt; labelToEditor;  // Get editor from label.
+Dictionary&lt;Button, Editor&gt; buttonToEditor;  // Get editor from button.
+Dictionary&lt;int, Editor&gt; indexToEditor;  // Get editor from index. E.g., 5 would return the 6th editor from the left.
+Dictionary&lt;Editor, Label&gt; editorToLabel;  // Get label from editor.
+Dictionary&lt;Editor, FilePath&gt; filesLoaded;  // Get the editor's currently opened file's path.</pre>
+	
+	<p>These dictionaries allow us to form relationships between objects. Given a reference to one type of object, we can get the corresponding reference to another type of object. So now when the user clicks a close button, we can use buttonToEditor with the button that was clicked as the key in order to get the corresponding text editor object.</p> 
+	
+	<p>Not only that, but we can use lookup tables to form all sorts of relationships between objects! For example, filesLoaded lets us associate an editor with the file's path that it currently has opened (I mean, who has time to design a class to do this!?). An example of using one of the dictionaries:</p>
+	
+	<pre class="prettyprint lang-cs">
+void closeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+  var relevantEditor = buttonToEditor[(Button) sender];  // Get editor relevant to clicking close.
+  relevantEditor.Text = "";  // Clear editor contents.
+  filesLoaded.Remove(relevantEditor);  // Update dictionaries...
+  ...
+}</pre>
+	
+	<p>To build these lookup tables, we set most of them up when we generate the GUI. For example, during the GUI's initialization, all of the editors, buttons, and labels are programmatically generated in a single loop. In this loop we can insert our dictionary entries. The filesLoaded dictionary is different in that we update it whenever a new file is opened or the close button is clicked. Be careful when you update an object since you may need to update several dictionaries too. This can start to get unwieldy.</p>
+	
+	<hr>
+	
+	<p>I've found myself using these ugly lookup tables of object references in virtually all of my prototypes. Of course, if the code exists long enough then I will refactor it into something a little more refined :) </p>
+	
+	<p>If you want to learn about <i>real</i> design patterns then I would recommend:
+	<ul>
+		<li>The classic "Gang of Four" book: <a href="https://amzn.to/2oJHCl9">Design Patterns: Elements of Reusable Object-Oriented Software</a></li>
+		<li>One of my favorite programming books that can be applied to any domain: <a href="https://amzn.to/2nVn5cQ">Data Structures for Game Programmers</a></li>
+		<li>A much shorter resource that again focuses on games: <a href="https://amzn.to/2oIeZ7S">Game Programming Patterns</a> (<a href="https://gameprogrammingpatterns.com/contents.html">free</a> version)</li>
+	</ul>
+	</p>
+	
+	
+	<br><small>There are Amazon affiliate links on this page.</small><br><br><br>
+  
+  <br><br><br><br>
+
+</body>
+</html>

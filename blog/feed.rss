@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="feed.css" media="screen"?>
+<rss version="2.0">
+  <channel>
+    <title>Austin Z. Henley's Blog</title>
+    <link>https://web.eecs.utk.edu/~azh/blog.html</link>
+    <description />
+    <language>en-us</language>
+    <copyright>Austin Z. Henley (2021)</copyright>
+    <item>
+      <title>Lessons from my PhD</title>
+      <pubDate>Mon, 27 Dec 2021 16:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/lessonsfrommyphd.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/lessonsfrommyphd.html">https://web.eecs.utk.edu/~azh/blog/lessonsfrommyphd.html</a>]]></description>
+    </item>
+    <item>
+      <title>"This project will only take 2 hours"</title>
+      <pubDate>Mon, 8 Nov 2021 13:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/thisprojectwillonlytake.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/thisprojectwillonlytake.html">https://web.eecs.utk.edu/~azh/blog/thisprojectwillonlytake.html</a>]]></description>
+    </item>
+    <item>
+      <title>Paradox of the perfect code editor</title>
+      <pubDate>Fri, 15 Oct 2021 13:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/perfecteditorparadox.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/perfecteditorparadox.html">https://web.eecs.utk.edu/~azh/blog/perfecteditorparadox.html</a>]]></description>
+    </item>
+    <item>
+      <title>When users never use the features they asked for</title>
+      <pubDate>Wed, 29 Sep 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/featurestheywanted.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/featurestheywanted.html">https://web.eecs.utk.edu/~azh/blog/featurestheywanted.html</a>]]></description>
+    </item>
+    <item>
+      <title>Building solutions to problems that no one knows exist yet</title>
+      <pubDate>Sat, 28 Aug 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/solvingunknownproblems.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/solvingunknownproblems.html">https://web.eecs.utk.edu/~azh/blog/solvingunknownproblems.html</a>]]></description>
+    </item>
+    <item>
+      <title>Technical blogs worth reading</title>
+      <pubDate>Thu, 29 Jul 2021 22:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/favblogs.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/favblogs.html">https://web.eecs.utk.edu/~azh/blog/favblogs.html</a>]]></description>
+    </item>
+    <item>
+      <title>Gamification, life, and the pursuit of a gold badge</title>
+      <pubDate>Thu, 24 Jun 2021 14:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/gamification.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/gamification.html">https://web.eecs.utk.edu/~azh/blog/gamification.html</a>]]></description>
+    </item>
+    <item>
+      <title>Stack Overflow knows your future problem</title>
+      <pubDate>Thu, 17 Jun 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/stackoverflow.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/stackoverflow.html">https://web.eecs.utk.edu/~azh/blog/stackoverflow.html</a>]]></description>
+    </item>
+    <item>
+      <title>Why I prefer making useless stuff</title>
+      <pubDate>Sat, 22 May 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/makinguselessstuff.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/makinguselessstuff.html">https://web.eecs.utk.edu/~azh/blog/makinguselessstuff.html</a>]]></description>
+    </item>
+    <item>
+      <title>An inquisitive code editor: Overcome bugs before you know you have them</title>
+      <pubDate>Tue, 11 May 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/inquisitivecodeeditor.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/inquisitivecodeeditor.html">https://web.eecs.utk.edu/~azh/blog/inquisitivecodeeditor.html</a>]]></description>
+    </item>
+    <item>
+      <title>A theory of how developers seek information</title>
+      <pubDate>Sat, 24 Apr 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/informationforaging.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/informationforaging.html">https://web.eecs.utk.edu/~azh/blog/informationforaging.html</a>]]></description>
+    </item>
+    <item>
+      <title>All my career rejections</title>
+      <pubDate>Sun, 21 Mar 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/allmyrejections.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/allmyrejections.html">https://web.eecs.utk.edu/~azh/blog/allmyrejections.html</a>]]></description>
+    </item>
+    <item>
+      <title>Navigate your code like it's 2021</title>
+      <pubDate>Wed, 3 Mar 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/coderibbon.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/coderibbon.html">https://web.eecs.utk.edu/~azh/blog/coderibbon.html</a>]]></description>
+    </item>
+    <item>
+      <title>Why is it so hard to see code from 5 minutes ago?</title>
+      <pubDate>Thu, 18 Feb 2021 21:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/yestercode.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/yestercode.html">https://web.eecs.utk.edu/~azh/blog/yestercode.html</a>]]></description>
+    </item>
+    <item>
+      <title>Python strings are immutable, but only sometimes</title>
+      <pubDate>Mon, 15 Feb 2021 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/pythonstringsaremutable.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/pythonstringsaremutable.html">https://web.eecs.utk.edu/~azh/blog/pythonstringsaremutable.html</a>]]></description>
+    </item>
+    <item>
+      <title>Can you make a basic web app without googling? I can't</title>
+      <pubDate>Fri, 29 Jan 2021 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/webappwithoutgoogling.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/webappwithoutgoogling.html">https://web.eecs.utk.edu/~azh/blog/webappwithoutgoogling.html</a>]]></description>
+    </item>
+    <item>
+      <title>More challenging projects every programmer should try</title>
+      <pubDate>Sun, 20 Dec 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/morechallengingprojects.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/morechallengingprojects.html">https://web.eecs.utk.edu/~azh/blog/morechallengingprojects.html</a>]]></description>
+    </item>
+    <item>
+      <title>Progress bars still lie: Please fix them</title>
+      <pubDate>Mon, 23 Nov 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/fixprogressbars.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/fixprogressbars.html">https://web.eecs.utk.edu/~azh/blog/fixprogressbars.html</a>]]></description>
+    </item>
+    <item>
+      <title>List of human-centered software engineering dissertations</title>
+      <pubDate>Sun, 22 Nov 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/hcsedissertations.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/hcsedissertations.html">https://web.eecs.utk.edu/~azh/blog/hcsedissertations.html</a>]]></description>
+    </item>
+    <item>
+      <title>Parsing RISC-V assembly</title>
+      <pubDate>Mon, 26 Oct 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/parsingriscv.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/parsingriscv.html">https://web.eecs.utk.edu/~azh/blog/parsingriscv.html</a>]]></description>
+    </item>
+    <item>
+      <title>Useful functions for game development</title>
+      <pubDate>Mon, 21 Sep 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/usefulfunctions.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/usefulfunctions.html">https://web.eecs.utk.edu/~azh/blog/usefulfunctions.html</a>]]></description>
+    </item>
+    <item>
+      <title>Implementing cosine in C from scratch</title>
+      <pubDate>Sun, 19 Jul 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/cosine.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/cosine.html">https://web.eecs.utk.edu/~azh/blog/cosine.html</a>]]></description>
+    </item>
+    <item>
+      <title>Let's make a Teeny Tiny compiler, part 3</title>
+      <pubDate>Sun, 5 Jul 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/teenytinycompiler3.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/teenytinycompiler3.html">https://web.eecs.utk.edu/~azh/blog/teenytinycompiler3.html</a>]]></description>
+    </item>
+    <item>
+      <title>Let's make a Teeny Tiny compiler, part 2</title>
+      <pubDate>Fri, 5 Jun 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/teenytinycompiler2.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/teenytinycompiler2.html">https://web.eecs.utk.edu/~azh/blog/teenytinycompiler2.html</a>]]></description>
+    </item>
+    <item>
+      <title>Let's make a Teeny Tiny compiler, part 1</title>
+      <pubDate>Tue, 5 May 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/teenytinycompiler1.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/teenytinycompiler1.html">https://web.eecs.utk.edu/~azh/blog/teenytinycompiler1.html</a>]]></description>
+    </item>
+    <item>
+      <title>Books I recommend to my software engineering students</title>
+      <pubDate>Sat, 29 Feb 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/booksformystudents.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/booksformystudents.html">https://web.eecs.utk.edu/~azh/blog/booksformystudents.html</a>]]></description>
+    </item>
+    <item>
+      <title>Hey Dropbox, why can't I compare file versions like this?</title>
+      <pubDate>Mon, 27 Jan 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/whycanticomparefileversions.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/whycanticomparefileversions.html">https://web.eecs.utk.edu/~azh/blog/whycanticomparefileversions.html</a>]]></description>
+    </item>
+    <item>
+      <title>What's wrong with computational notebooks?</title>
+      <pubDate>Sat, 18 Jan 2020 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/notebookpainpoints.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/notebookpainpoints.html">https://web.eecs.utk.edu/~azh/blog/notebookpainpoints.html</a>]]></description>
+    </item>
+    <item>
+      <title>Going viral on Reddit and Hacker News</title>
+      <pubDate>Sat, 28 Dec 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/goingviral.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/goingviral.html">https://web.eecs.utk.edu/~azh/blog/goingviral.html</a>]]></description>
+    </item>
+    <item>
+      <title>Challenging projects every programmer should try</title>
+      <pubDate>Wed, 11 Dec 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/challengingprojects.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/challengingprojects.html">https://web.eecs.utk.edu/~azh/blog/challengingprojects.html</a>]]></description>
+    </item>
+    <item>
+      <title>Design patterns for hacking together prototypes: Facilitator</title>
+      <pubDate>Sun, 27 Oct 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/facilitator.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/facilitator.html">https://web.eecs.utk.edu/~azh/blog/facilitator.html</a>]]></description>
+    </item>
+    <item>
+      <title>Design patterns for hacking together prototypes: Catch All</title>
+      <pubDate>Mon, 7 Oct 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/catchall.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/catchall.html">https://web.eecs.utk.edu/~azh/blog/catchall.html</a>]]></description>
+    </item>
+    <item>
+      <title>Design patterns for hacking together prototypes: Object Dictionaries</title>
+      <pubDate>Mon, 30 Sep 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/objectdictionaries.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/objectdictionaries.html">https://web.eecs.utk.edu/~azh/blog/objectdictionaries.html</a>]]></description>
+    </item>
+    <item>
+      <title>Is optional null better?</title>
+      <pubDate>Wed, 4 Sep 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/optionalnull.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <category>Development</category>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/optionalnull.html">https://web.eecs.utk.edu/~azh/blog/optionalnull.html</a>]]></description>
+    </item>
+    <item>
+      <title>The 8 lessons I learned from releasing 8 video games</title>
+      <pubDate>Wed, 17 Jul 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/8lessons8games.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <category>Development</category>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/8lessons8games.html">https://web.eecs.utk.edu/~azh/blog/8lessons8games.html</a>]]></description>
+    </item>
+    <item>
+      <title>Quick start guide to research on human factors of software engineering</title>
+      <pubDate>Sun, 7 Jul 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/guidehciseresearch.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <category>Development</category>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/guidehciseresearch.html">https://web.eecs.utk.edu/~azh/blog/guidehciseresearch.html</a>]]></description>
+    </item>
+    <item>
+      <title>Type inference has usability problems</title>
+      <pubDate>Thu, 27 Jun 2019 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/typeinference.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <category>Development</category>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/typeinference.html">https://web.eecs.utk.edu/~azh/blog/typeinference.html</a>]]></description>
+    </item>
+    <item>
+      <title>What I got from 5 internships during grad school</title>
+      <pubDate>Sun, 9 Sep 2018 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/fiveinternships.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <category>Development</category>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/fiveinternships.html">https://web.eecs.utk.edu/~azh/blog/fiveinternships.html</a>]]></description>
+    </item>
+    <item>
+      <title>Faculty interview questions I asked and got asked</title>
+      <pubDate>Mon, 14 May 2018 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/facultyinterviewquestions.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <category>Development</category>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/facultyinterviewquestions.html">https://web.eecs.utk.edu/~azh/blog/facultyinterviewquestions.html</a>]]></description>
+    </item>
+    <item>
+      <title>My favorite Wikipedia articles about science</title>
+      <pubDate>Fri, 11 Nov 2016 11:00:01 -0400</pubDate>
+      <link>https://web.eecs.utk.edu/~azh/blog/favwikiarticles.html</link>
+      <author>azh@utk.edu (Austin Z. Henley)</author>
+      <category>Development</category>
+      <description><![CDATA[<a href="https://web.eecs.utk.edu/~azh/blog/favwikiarticles.html">https://web.eecs.utk.edu/~azh/blog/favwikiarticles.html</a>]]></description>
+    </item>
+  </channel>
+</rss>

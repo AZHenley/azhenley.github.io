@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+	<meta charset="UTF-8">
+	<meta name="description" content="Let's make a teeny tiny compiler, part 1">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Let's make a Teeny Tiny compiler, part 1">
+    <meta property="og:description" content="Make your own compiler using Python.">
+    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/knightdragon.jpg">
+    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/teenytinycompiler1.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+
+    <title>Let's make a Teeny Tiny compiler, part 1 - Austin Z. Henley</title>
+
+    <link href="../bootstrap.min.css" rel="stylesheet">
+    <link href="../style.css" rel="stylesheet">
+	<style>img {max-width:100%} p {padding-bottom:3px}</style>
+
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+	<div class="jumbotron" style="padding-top:0px;padding-bottom:0px; background-color:transparent;">
+  	<div class="row">
+			<div class="col-md-6 text-right" style="padding-left:0px;margin-left:0px;">
+				<h3 style="margin-bottom:0;padding-bottom:0;">Austin Z. Henley</h3>
+				Assistant Professor
+			</div>
+			<div class="col-md-6 text-left" style="padding-left:6px;margin-left:0px;margin-top:0px;"><br>
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			</div>
+	  </div>	
+	</div>
+
+	<hr style="margin-top:-10px;margin-bottom:10px"/>
+	<b><ul style="text-align:center;">
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../index.html">Home</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../publications.html">Publications</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../teaching.html">Teaching</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../blog.html" style="text-decoration: underline;">Blog</a></li> |
+	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../Henley_Vita.pdf">CV</a></li>
+	</ul></b>
+	<hr style="margin-top:1px"/>
+	
+	<div class="row" style="margin-top:-8px">
+		<div class="col-md-12">
+
+
+<br><h3>Let's make a Teeny Tiny compiler, part 1</h3><small>5/5/2020</small><br><br>
+
+<img src="images/knightdragon.jpg" class="center-block" style="max-width:60%;margin-bottom:19px;border:1px solid black">
+
+<p><i>This is the first post in a three part series. Check out <a href="http://web.eecs.utk.edu/~azh/blog/teenytinycompiler2.html">part 2</a> and <a href="http://web.eecs.utk.edu/~azh/blog/teenytinycompiler3.html">part 3</a> when you are ready.</i></p>
+
+<p>It is a beautiful day outside, so let's make a compiler. You don't need any knowledge of how compilers work to follow along. We are going to use Python to implement our own programming language, Teeny Tiny, that will compile to C code. It will take about 500 lines of code and provide the initial infrastructure needed to customize and extend the compiler into your own billion dollar production-ready compiler.</p>
+
+<p>This tutorial is a series of posts that go step by step in building a working compiler. All of the source code can be found in the GitHub <a href="https://github.com/AZHenley/teenytinycompiler">repo</a>. If you follow along with all the posts, I guesstimate that it will take you only a few hours.
+
+<p>The Teeny Tiny language we are going to implement is a dialect of <a href="https://en.wikipedia.org/wiki/BASIC">BASIC</a>. The syntax is clean and simple. If you prefer a <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>-like syntax then it will be trivial to modify the compiler at the end.  Here is an example program in our Teeny Tiny language:</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+PRINT "How many fibonacci numbers do you want?"
+INPUT nums
+
+LET a = 0
+LET b = 1
+WHILE nums > 0 REPEAT
+    PRINT a
+    LET c = a + b
+    LET a = b
+    LET b = c
+    LET nums = nums - 1
+ENDWHILE	
+</pre>
+
+<p>This program prints out terms of the fibonacci sequence based on the user's input: 0 1 1 2 3 5 13...</p>
+
+<p>Our language will allow a variety of the basic operations that you'd expect from a programming language. In particular, it will support:</p>
+
+<ul style="margin-top: -9px;">
+	<li>Numerical variables</li>
+	<li>Basic arithmetic</li>
+	<li>If statements</li>
+	<li>While loops</li>
+	<li>Print text and numbers</li>
+	<li>Input numbers</li>
+	<li>Labels and goto</li>
+	<li>Comments</li>
+</ul>
+
+<p>Although this is a standard subset of features, you may notice that there are no functions, no arrays, no way to read/write from a file, and not even an else statement. But with just this small set of constructs, you can actually do a lot. It will also setup the compiler in such a way that many other features will be straight forward to add later.</p>
+
+<h4 style="margin-top:22px;margin-bottom:15px;">Compiler Overview</h4>
+
+<img src="images/compilersteps.png" class="center-block" style="max-width:75%;margin-bottom:14px;">
+
+<p>Our compiler will follow a three step process that is illustrated above. First, given the inputted source code, it will break the code up into <i>tokens</i>. These are like words and punctuation in English. Second, it will <i>parse</i> the tokens to make sure they are in an order that is allowed in our language. Just like English sentences follow specific structures of verbs and nouns. Third, it will <i>emit</i> the C code that our language will translate to.</p>
+
+<p>We will use these three steps as the main organization for our code. The lexer, parser, and emitter will each have their own Python code file. This tutorial is broken up into 3 parts based on these steps as well. If you were to extend the compiler, there are some additional steps you would add, but we will hold off on discussing those.</p>
+
+<p></p>
+
+<h4 style="margin-top:22px;margin-bottom:15px;">Lexer Overview</h4>
+
+<p>The first module of our compiler is called the <i>lexer</i>. Given a string of Teeny Tiny code, it will iterate character by character to do two things: decide where each token starts/stops and what type of token it is. If the lexer is unable to do this, then it will report an error for an invalid token.</p>
+
+<img src="images/tokens.png" class="center-block" style="max-width:50%;margin-bottom:14px;">
+
+<p>The figure demonstrates an example input and output of the lexer. Given the Teeny Tiny code, the lexer must determine where the tokens are along with the type (e.g., keyword). You can see that spaces aren't recognized as tokens, but the lexer will use them as one way to know when a token ends.</p>
+
+<p>Let's finally get into some code, starting with the structure of the lexer in the file <b>lex.py</b>:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+class Lexer:
+    def __init__(self, input):
+        pass
+
+    # Process the next character.
+    def nextChar(self):
+        pass
+
+    # Return the lookahead character.
+    def peek(self):
+        pass
+
+    # Invalid token found, print error message and exit.
+    def abort(self, message):
+        pass
+		
+    # Skip whitespace except newlines, which we will use to indicate the end of a statement.
+    def skipWhitespace(self):
+        pass
+		
+    # Skip comments in the code.
+    def skipComment(self):
+        pass
+
+    # Return the next token.
+    def getToken(self):
+        pass
+</pre>
+
+<p>I like to sketch out all the functions that I think I will need, then go back and fill them in. The function <b>getToken</b> will be the meat of the lexer. It will be called each time the compiler is ready for the next token and it will do the work of classifying tokens. <b>nextChar</b> and <b>peek</b> are helper functions for looking at the next character. <b>skipWhitespace</b> consumes the spaces and tabs that we don't care about. <b>abort</b> is what we will use to report an invalid token.</p>
+
+<p>The lexer needs to keep track of the current position in the input string and the character at that position. We will initialize these in the constructor:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    def __init__(self, input):
+        self.source = input + '\n' # Source code to lex as a string. Append a newline to simplify lexing/parsing the last token/statement.
+        self.curChar = ''   # Current character in the string.
+        self.curPos = -1    # Current position in the string.
+        self.nextChar()
+</pre>
+
+<p>The lexer needs the input code and we append a newline to it (this just simplifies some checks later on). <b>curChar</b> is what the lexer will constantly check to decide what kind of token it is. Why not just do <i>source[curPos]</i>? Because that would litter the code with bounds checking. Instead we do this in <b>nextChar</b>:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    # Process the next character.
+    def nextChar(self):
+        self.curPos += 1
+        if self.curPos >= len(self.source):
+            self.curChar = '\0'  # EOF
+        else:
+            self.curChar = self.source[self.curPos]
+</pre>
+
+<p>This increments the lexer's current position and updates the current character. If we reach the end of the input, set the character to the end-of-file marker. This is the only place we will modify curPos and curChar. But sometimes we want to look ahead to the next character without updating curPos:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    # Return the lookahead character.
+    def peek(self):
+        if self.curPos + 1 >= len(self.source):
+            return '\0'
+        return self.source[self.curPos+1]
+</pre>
+
+<p>We should make sure these functions work. Let's test them by create a new file <b>teenytiny.py</b>:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+from lex import *
+
+def main():
+	input = "LET foobar = 123"
+	lexer = Lexer(input)
+
+	while lexer.peek() != '\0':
+		print(lexer.curChar)
+		lexer.nextChar()
+
+main()
+</pre>
+
+<p>Run this and the output should be every character of the input string, <i>LET foobar = 123</i>, on a new line:</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+L
+E 
+T 
+
+f 
+o 
+o 
+b 
+a 
+r 
+
+= 
+
+1 
+2 
+3 
+
+</pre>
+
+<h4 style="margin-top:22px;margin-bottom:15px;">Classifying Tokens</h4>
+
+<p>But we don't just want characters, we want tokens! We need to plan how combining individual characters together makes a token, which works much like a state machine. Here are the main lexer rules for the Teeny Tiny language:</p>
+
+<ul style="margin-top: -9px;">
+	<li>Operator. One or two consecutive characters that matches: + - * / = == != > &lt; >= &lt;=</li>
+	<li>String. Double quotation followed by zero or more characters and a double quotation. Such as: "hello, world!" and ""</li>
+	<li>Number. One or more numeric characters followed by an optional decimal point and one or more numeric characters. Such as: 15 and 3.14</li>
+	<li>Identifier. An alphabetical character followed by zero or more alphanumeric characters.</li>
+	<li>Keyword. Exact text match of: LABEL, GOTO, PRINT, INPUT, LET, IF, THEN, ENDIF, WHILE, REPEAT, ENDWHILE</li>
+</ul>
+
+<p>Next we will start our <b>getToken</b> function in our <b>Lexer</b> class:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    # Return the next token.
+    def getToken(self):
+        # Check the first character of this token to see if we can decide what it is.
+        # If it is a multiple character operator (e.g., !=), number, identifier, or keyword then we will process the rest.
+        if self.curChar == '+':
+            pass	# Plus token.
+        elif self.curChar == '-':
+            pass	# Minus token.
+        elif self.curChar == '*':
+            pass	# Asterisk token.
+        elif self.curChar == '/':
+            pass	# Slash token.
+        elif self.curChar == '\n':
+            pass	# Newline token.
+        elif self.curChar == '\0':
+            pass	# EOF token.
+        else:
+            # Unknown token!
+            pass
+			
+        self.nextChar()
+</pre>
+
+<p>This will detect a few possible tokens, but doesn't do anything useful yet. What we need next is a <b>Token</b> class to keep track of what type of token it is and the exact text from the code. Place this in <b>Lex.py</b> for now:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+# Token contains the original text and the type of token.
+class Token:   
+    def __init__(self, tokenText, tokenKind):
+        self.text = tokenText   # The token's actual text. Used for identifiers, strings, and numbers.
+        self.kind = tokenKind   # The TokenType that this token is classified as.
+</pre>
+
+<p>To specify what type a token is, we will create the <b>TokenType</b> class as an enum. It looks long, but it just specifies every possible token our language allows. Add <i>import enum</i> to the top of <b>Lex.py</b> and add this class:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+# TokenType is our enum for all the types of tokens.
+class TokenType(enum.Enum):
+	EOF = -1
+	NEWLINE = 0
+	NUMBER = 1
+	IDENT = 2
+	STRING = 3
+	# Keywords.
+	LABEL = 101
+	GOTO = 102
+	PRINT = 103
+	INPUT = 104
+	LET = 105
+	IF = 106
+	THEN = 107
+	ENDIF = 108
+	WHILE = 109
+	REPEAT = 110
+	ENDWHILE = 111
+	# Operators.
+	EQ = 201  
+	PLUS = 202
+	MINUS = 203
+	ASTERISK = 204
+	SLASH = 205
+	EQEQ = 206
+	NOTEQ = 207
+	LT = 208
+	LTEQ = 209
+	GT = 210
+	GTEQ = 211
+</pre>
+
+<p>Now we can expand <b>getToken</b> to actually do something when it detects a specific token:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    # Return the next token.
+    def getToken(self):
+        token = None
+
+        # Check the first character of this token to see if we can decide what it is.
+        # If it is a multiple character operator (e.g., !=), number, identifier, or keyword then we will process the rest.
+        if self.curChar == '+':
+            token = Token(self.curChar, TokenType.PLUS)
+        elif self.curChar == '-':
+            token = Token(self.curChar, TokenType.MINUS)
+        elif self.curChar == '*':
+            token = Token(self.curChar, TokenType.ASTERISK)
+        elif self.curChar == '/':
+            token = Token(self.curChar, TokenType.SLASH)
+        elif self.curChar == '\n':
+            token = Token(self.curChar, TokenType.NEWLINE)
+        elif self.curChar == '\0':
+            token = Token('', TokenType.EOF)
+        else:
+            # Unknown token!
+            pass
+			
+        self.nextChar()
+        return token
+</pre>
+
+<p>This code sets up the lexer to detect the basic arithmetic operators along with new lines and the end of file marker. The <i>else</i> clause is for capturing everything that won't be allowed.</p>
+
+<p>Let's change <b>main</b> to see whether this works or not so far:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+def main():
+    input = "+- */"
+    lexer = Lexer(input)
+
+    token = lexer.getToken()
+    while token.kind != TokenType.EOF:
+        print(token.kind)
+        token = lexer.getToken()
+</pre>
+
+<p>If you run this, you should see something like:</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+TokenType.PLUS
+TokenType.MINUS
+Traceback (most recent call last):
+  File "e:/projects/teenytiny/part1/teenytiny.py", line 12, in <module>
+    main()
+  File "e:/projects/teenytiny/part1/teenytiny.py", line 8, in main
+    while token.kind != TokenType.EOF:
+AttributeError: 'NoneType' object has no attribute 'kind'
+</pre>
+
+<p>Uhoh! Something went wrong. The only way <b>getToken</b> returns <i>None</i> is if the <i>else</i> branch is taken. We should handle this a little better. Add <i>import sys</i> to the top of <b>lex.py</b> and define the <b>abort</b> function like:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    # Invalid token found, print error message and exit.
+    def abort(self, message):
+        sys.exit("Lexing error. " + message)
+</pre>
+
+<p>And replace the <i>else</i> in <b>getToken</b> with:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+        else:
+            # Unknown token!
+            self.abort("Unknown token: " + self.curChar)
+</pre>
+
+<p>Now run the program again...</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+TokenType.PLUS
+TokenType.MINUS
+Lexing error. Unknown token: 
+</pre>
+
+<p>There is still an issue, but now we can make a little more sense of it. It looks like something went wrong after the first two tokens. The unknown token is invisible. Looking back at the input string, you may notice we aren't handling whitespace! We need to implement the <b>skipWhitespace</b> function:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    # Skip whitespace except newlines, which we will use to indicate the end of a statement.
+    def skipWhitespace(self):
+        while self.curChar == ' ' or self.curChar == '\t' or self.curChar == '\r':
+            self.nextChar()
+</pre>
+
+<p>Now put <i>self.skipWhitespace()</i> as the first line of <b>getToken</b>. Run the program and you should see the output:</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+TokenType.PLUS
+TokenType.MINUS
+TokenType.ASTERISK
+TokenType.SLASH
+TokenType.NEWLINE
+</pre>
+
+<p>Progress!</p>
+
+<p>At this point, we can move on to lexing the operators that are made up of two characters, such as <i>==</i> and <i>>=</i>. All of these operators will be lexed in the same fashion: check the first character, then peek at the second character to see what it is before deciding what to do. Add this after the <i>elif</i> for the <i>SLASH</i> token in <b>getToken</b>:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+        elif self.curChar == '=':
+            # Check whether this token is = or ==
+            if self.peek() == '=':
+                lastChar = self.curChar
+                self.nextChar()
+                token = Token(lastChar + self.curChar, TokenType.EQEQ)
+            else:
+                token = Token(self.curChar, TokenType.EQ)
+</pre>
+
+<p>Using the <b>peek</b> function allows us to look at what the next character will be without discarding the <i>curChar</i>. Here is the code for the remaining operators which work the same way:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+        elif self.curChar == '>':
+            # Check whether this is token is > or >=
+            if self.peek() == '=':
+                lastChar = self.curChar
+                self.nextChar()
+                token = Token(lastChar + self.curChar, TokenType.GTEQ)
+            else:
+                token = Token(self.curChar, TokenType.GT)
+        elif self.curChar == '<':
+                # Check whether this is token is < or <=
+                if self.peek() == '=':
+                    lastChar = self.curChar
+                    self.nextChar()
+                    token = Token(lastChar + self.curChar, TokenType.LTEQ)
+                else:
+                    token = Token(self.curChar, TokenType.LT)
+        elif self.curChar == '!':
+            if self.peek() == '=':
+                lastChar = self.curChar
+                self.nextChar()
+                token = Token(lastChar + self.curChar, TokenType.NOTEQ)
+            else:
+                self.abort("Expected !=, got !" + self.peek())
+</pre>
+
+<p>The only operator that is a bit different is <i>!=</i>. That is because the <i>!</i> character is not valid on its own, so it must be followed by <i>=</i>. The other characters are valid on their own, but the lexer is greedy and will accept it as one of the multi-character operators if possible.</p>
+
+<p>We can test these operators by updating the input to <i>"+- */ >>= = !="</i> which should give you the following output when you run the program:</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+TokenType.PLUS
+TokenType.MINUS
+TokenType.ASTERISK
+TokenType.SLASH
+TokenType.GT
+TokenType.GTEQ
+TokenType.EQ
+TokenType.NOTEQ
+TokenType.NEWLINE
+</pre>
+
+<p>The program now accepts all of the language's operators. So what is left? We need to add support for comments, strings, numbers, identifiers, and keywords. Let's work through these one by one and test as we go.</p>
+
+<p>The <i>#</i> character will indicate the start of a comment. Whenever the lexer sees it, we know to ignore all the text after it until a newline. Comments are not tokens, but the lexer will discard all this text so that it can find the next thing we care about. It is also important that we don't throw away the newline at the end of the comment since that is its own token and may still be needed. Fill in <b>skipComment</b>:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    # Skip comments in the code.
+    def skipComment(self):
+        if self.curChar == '#':
+            while self.curChar != '\n':
+                self.nextChar()
+</pre>
+
+<p>Easy enough! Now call it from <b>nextToken</b>, such that the first few lines of the function look like:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    # Return the next token.
+    def getToken(self):
+        self.skipWhitespace()
+        self.skipComment()
+        token = None
+	...
+</pre>
+
+<p>Test it out with the input <i>"+- # This is a comment!\n */"</i> and you should see:</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+TokenType.PLUS
+TokenType.MINUS
+TokenType.NEWLINE
+TokenType.ASTERISK
+TokenType.SLASH
+TokenType.NEWLINE
+</pre>
+
+<p>Notice that the comment is completely ignored!</p>
+
+<p>Our language supports printing a string, which starts with a double quotation mark and continues until another quotation mark. We won't allow some special characters to make it easier to compile to C later on. Add the following code to <b>getToken</b>'s big block of else if statements:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+        elif self.curChar == '\"':
+            # Get characters between quotations.
+            self.nextChar()
+            startPos = self.curPos
+
+            while self.curChar != '\"':
+                # Don't allow special characters in the string. No escape characters, newlines, tabs, or %.
+                # We will be using C's printf on this string.
+                if self.curChar == '\r' or self.curChar == '\n' or self.curChar == '\t' or self.curChar == '\\' or self.curChar == '%':
+                    self.abort("Illegal character in string.")
+                self.nextChar()
+
+            tokText = self.source[startPos : self.curPos] # Get the substring.
+            token = Token(tokText, TokenType.STRING)
+</pre>
+
+<p>You'll see the code is just a while loop that continues until the second quotation mark. It'll abort with an error message if any of the invalid characters are found. Something different from the other tokens we have covered so far: we set the token's text to the content of the string (minus the quotation marks).</p>
+
+<p>Update the input again with <i>"+- \"This is a string\" # This is a comment!\n */"</i> and run the program:</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+TokenType.PLUS
+TokenType.MINUS
+TokenType.STRING
+TokenType.NEWLINE
+TokenType.ASTERISK
+TokenType.SLASH
+TokenType.NEWLINE
+</pre>
+
+<p>Moving right along to numbers. Our language defines a number as one or more digits (0-9) followed by an optional decimal point that must be followed by at least one digit. So 48 and 3.14 are allowed but .9 and 1. are not allowed. We will use the <b>peek</b> function again to look ahead one character. Similar to the string token, we keep track of the start and end points of the numbers so that we can set the token's text to the actual number.</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+        elif self.curChar.isdigit():
+            # Leading character is a digit, so this must be a number.
+            # Get all consecutive digits and decimal if there is one.
+            startPos = self.curPos
+            while self.peek().isdigit():
+                self.nextChar()
+            if self.peek() == '.': # Decimal!
+                self.nextChar()
+
+                # Must have at least one digit after decimal.
+                if not self.peek().isdigit(): 
+                    # Error!
+                    self.abort("Illegal character in number.")
+                while self.peek().isdigit():
+                    self.nextChar()
+
+            tokText = self.source[startPos : self.curPos + 1] # Get the substring.
+            token = Token(tokText, TokenType.NUMBER)
+</pre>
+
+<p>Test it out with the input <i>"+-123 9.8654*/"</i> and you should see:</p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+TokenType.PLUS
+TokenType.MINUS
+TokenType.NUMBER
+TokenType.NUMBER
+TokenType.ASTERISK
+TokenType.SLASH
+TokenType.NEWLINE
+</pre>
+
+<p>Great, we are almost done with the lexer!</p>
+
+<p>The last big thing is to handle identifiers and keywords. The rules for an identifier is anything that starts with a alphabetic characters followed by zero or more alphanumeric characters. But before we call it a <i>TokenType.IDENT</i>, we have to make sure it isn't one of our keywords. Add this to <b>getToken</b>:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+        elif self.curChar.isalpha():
+            # Leading character is a letter, so this must be an identifier or a keyword.
+            # Get all consecutive alpha numeric characters.
+            startPos = self.curPos
+            while self.peek().isalnum():
+                self.nextChar()
+
+            # Check if the token is in the list of keywords.
+            tokText = self.source[startPos : self.curPos + 1] # Get the substring.
+            keyword = Token.checkIfKeyword(tokText)
+            if keyword == None: # Identifier
+                token = Token(tokText, TokenType.IDENT)
+            else:   # Keyword
+                token = Token(tokText, keyword)
+</pre>
+
+<p>Fairly similar to the other tokens. But we need to define <b>checkIfKeyword</b> in the <b>Token</b> class:</p>
+
+<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+    @staticmethod
+    def checkIfKeyword(tokenText):
+        for kind in TokenType:
+            # Relies on all keyword enum values being 1XX.
+            if kind.name == tokenText and kind.value >= 100 and kind.value &lt; 200:
+                return kind
+        return None
+</pre>
+
+<p>This just checks whether the token is in the list of keywords, which we have arbitrarily set to having 101-199 as their enum values.</p>
+
+<p>Alright, test identifiers and keywords with the input string <i>"IF+-123 foo*THEN/"</i></p>
+
+<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+TokenType.IF
+TokenType.PLUS
+TokenType.MINUS
+TokenType.NUMBER
+TokenType.IDENT
+TokenType.ASTERISK
+TokenType.THEN
+TokenType.SLASH
+TokenType.NEWLINE
+</pre>
+
+<p>And what the output looks like from the terminal:</p>
+
+<img src="images/teenytinyoutput1.png" class="center-block" style="max-width:75%;margin-top:-13px;margin-bottom:-5px;">
+
+<p>There we have it. Our lexer can correctly identify every token that our language needs! We have successfully completed the first module of our compiler.</p>
+    
+<p>If you think this is underwhelming, don't give up yet! I think the lexer is actually the most tedious yet least interesting part of compilers. Next up we will <i>parse</i> the code, that is make sure the tokens are in an order that makes sense, and then we will <i>emit</i> code.</p>
+
+<p>The source code so far can be found in its entirety in the Github <a href="https://github.com/AZHenley/teenytinycompiler">repo</a>.</p>
+
+<hr><br><br>
+
+<p>Continue on to <a href="teenytinycompiler2.html">part 2</a> of this tutorial. Other recommended reading:</p>
+
+<ul style="margin-top: -9px;">
+	<li>Lexical analysis (<a href="https://en.wikipedia.org/wiki/Lexical_analysis">Wikipedia</a>)</li>
+	<li>Writing an Interpreter in Go (<a href="https://amzn.to/2Saf28j">Amazon</a>)</li>
+	<li>Crafting Interpreters (<a href="https://amzn.to/3l8FePX">Amazon</a>, <a href="https://craftinginterpreters.com/contents.html">web</a>)</li>
+</ul>
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+
+<br><br><br><br>
+	
+
+		</div>
+	</div><br><br><br>
+			
+	</div>
+  
+
+</body></html>

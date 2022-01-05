@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Design patterns for hacking together prototypes: Catch All - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Design patterns for hacking together prototypes: Catch All">
+	<meta name="author" content="Austin Z. Henley">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Design patterns for hacking together prototypes: Catch All</h1>
+	<small>10/7/2019</small><br><br>
+
+<p>This is the second post in my series on design patterns that I use for quickly implementing features in large software projects that I'm unfamiliar with. Read the <a href="objectdictionaries.html">first post</a> about my Object Dictionary pattern for more context.</p>
+
+<hr>
+
+<p>When demo'ing experimental features to customers or running research studies, the software should never crash. Ever. But of course, it <i>always</i> does. In particular, the software I was working on included complex GUI systems and I would inevitably create a mess of the async tasks. Not fun to debug.</p>
+
+<p>Since I didn't have time to test or fix all the issues properly, I resorted to this <b>Catch All</b> pattern. I essentially wrap all of the major components of the system with a <i>try{} catch{}</i>, and then do one of four things:
+<ol>
+    <li>Retry the user's action programatically. <small><i>Worth a shot.</i></small></li>
+    <li>Improvise and make something happen. <small><i>Good!</i></small></li>
+    <li>Reset to some previous state and hope it doesn't happen again. <small><i>Not bad.</i></small></li>
+    <li>Ignore the error and do nothing. <small><i>Last resort.</i></small></li>
+</ol></p>
+
+
+<h3>#1. Retry the user's action</h3>
+
+<p>In some cases, we can simply catch the exception and retry whatever failed. To do this, you must have already identified the bug, put a try catch block quite low in the call stack, and know which action to retry. This helped me with race conditions, but I couldn't fix most bugs with this. It is worth trying though.</p>
+
+
+<h3>#2. Improvise and do something</h3>
+
+<p>While testing the systems, I often found a handful of conditions that would cause a crash. Assuming I couldn't fix them in time, I would try to find ways to work around the issue. For some bugs, I knew exactly what the user was doing and can guess what the desired outcome should be. In these specific cases, we can improvise so that it looks like the system did <i>something</i>!</p>
+
+<img src="images/yestercodepaste.jpg" class="center" style="max-width: 70%;"><br>
+
+<p>For example, Yestercode would crash every once in a while if the user tried to copy and paste an object from it's "history view". No idea why. To get around this, I would keep track of the last selected object in the history view. If an exception ever came from doing a paste action, I would fetch the reference of the last selected object in the history view and paste that instead. Clearly, this is not fool proof. There are probably many reasons why a paste could fail, but I was assuming it was because of my buggy feature involving the history view. Good enough!</p>
+
+
+<h3>#3. Reset to previous state</h3>
+
+<p>There will also be bugs that we really don't know why they are happening, but we know what they are affecting. Our second to last effort is to simply revert the bad state to some prior good state. This is similar to the <a href="https://en.wikipedia.org/wiki/Memento_pattern">memento pattern</a>.</p>
+
+<p>If the system's component with the bad state was quite small and isolated, then we can periodically copy the component. When the exception occurs, we replace the component's reference with our copy.</p>
+
+<p>However, this is likely to cause cascading problems (e.g., other references to the component aren't updated or we don't have the latest good state) so I use this approach sparingly. Luckily, it is very easy to implement. In one case, I found out that me doing this broke most of the menu actions in LabVIEW, but no one noticed!</p>
+
+
+<h3>#4. Ignore and do nothing</h3>
+
+<p>As a last resort, we want to do anything to prevent the program from crashing. This will hide any bugs we didn't know about and it is sometimes a sufficient cover up for certain actions. This means wrapping a few components like:</p>
+
+<pre class="prettyprint lang-cs">
+try {
+  UpdateComponent();
+} catch {
+  // Cross our fingers!
+}</pre>
+
+<p>As an example, about 1 in 20 times the drag-and-drop in Patchworks would cause a crash. I couldn't track down the exact issue, so instead I caught the exception and did nothing. It is as if the drag-and-drop event never happen. The program did not crash.</p>
+
+<p>To the user, it was rare enough that they would actually question whether they dragged the item correctly. Occasionally they might quietly say, "that was weird", but then they forget about it and move on. If you are giving a demo, you can just say "oops".</p>
+
+<hr>
+
+<p>By applying these four strategies to catching exceptions, your program should be pretty well protected against violently crashing. You still need to do a lot of testing and debugging, but hopefully they will protect your demo from being a catastrophe. Remember, <b>don't try these at work!</b></p>
+
+<ul>
+<li>Read about real design patterns: <a href="https://amzn.to/2oJHCl9">Design Patterns: Elements of Reusable Object-Oriented Software</a></li>
+<li>Other useful tips: <a href="http://pgbovine.net/running-user-studies.htm">PG's Super Paranoid Guide to Running User Studies (and Giving Live Demos)</a></li>
+</ul>
+
+
+<br><small>There are Amazon affiliate links on this page.</small><br><br><br>
+  
+  <br><br><br><br>
+
+</body>
+</html>

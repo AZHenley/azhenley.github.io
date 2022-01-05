@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Is optional null better? - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Is optional null in programming languages better?">
+	<meta name="author" content="Austin Z. Henley">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Is optional null better?</h1>
+	<small>9/4/2019</small><br><br>
+
+  <p>There is a lot of disdain for null in programming languages. Tony Hoare has famously called it his <a href="https://en.wikipedia.org/wiki/Tony_Hoare#Apologies_and_retractions">billion dollar mistake</a> and plenty of others have stated how <a href="https://softwareengineering.stackexchange.com/q/12777/37315">evil</a> null is.</p>
+
+  <p>In response, there has been a movement for languages to make reference types non-nullable by default. <small>(I'm going to call this optional null for brevity.)</small> For example, <a href="https://developer.apple.com/documentation/swift/optional">Swift</a> and <a href="https://kotlinlang.org/docs/reference/null-safety.html">Kotlin</a> as well as upcoming versions of <a href="https://devblogs.microsoft.com/dotnet/try-out-nullable-reference-types/">C#</a> and <a href="https://github.com/dart-lang/language/issues/110">Dart</a> make it so that reference types can't have null values unless explicitly allowing for it.</p>
+  
+  <p>It looks like this:</p>
+  
+  <pre class="prettyprint lang-cs">
+    Item? item; // Can be null!
+    Group group = new Group(); // Can't be null!
+    Dictionary&lt;int, string&gt;? lookup; // Can be null!</pre>
+  
+  <p>Placing a question mark after the variable's type indicates that the variable can be null. Without it, it cannot be null.</p>
+  
+  <p>But given all the standard arguments against null and the problems it causes, is this optional null much of an improvement?</p>
+  
+  <p>The benefit of optional null is that you can explicitly express when null should or should not be allowed. Kind of like const by default, the type checker is now helping you. You won't have a pesky null value showing up when you <i>think</i> it isn't possible and you can remove null checks that are littering your code since it can't happen.</p>
+  
+  <p>So what are the potential downsides?</p>
+  
+  <ul>
+      <li>It makes the language more complicated. Probably a minor issue, but I have seen quite a few Stack Overflow questions about unwrapping optionals in Swift. Similarly, some of the early C# examples look hideous.</li>
+      <li>If I was using null as a corner case or error, then I now need a new way to represent this. I could wrap my reference objects in a Tuple and pass some sort of error object with it that I check in the relevant locations... exactly like I was doing with null. At least now the error has contextual meaning associated with it, unlike null. </li>
+      <li>I rarely have issues with null. Why are we still discussing this?</li>
+      <li>There are plenty of situations where I [think] I need null. This won't help with that, obviously, so the problem of null still remains.</li>
+  </ul>
+  
+  <p>I'm just now starting to use optional null so I'm unsure what I will think of it in a year. At the moment I don't see it solving my problems. If only I could get rid of null entirely!</p>
+  
+  <br><br><br><br>
+
+</body>
+</html>

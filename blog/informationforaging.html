@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>A theory of how developers seek information - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I can predict what piece of code a developer will look at next with high accuracy.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="A theory of how developers seek information">
+    <meta property="og:description" content="I can predict what piece of code a developer will look at next with high accuracy.">
+    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/informationforagingtheory.jpg">
+    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/informationforaging.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">A theory of how developers seek information</h1>
+	<small>4/24/2021</small><br><br>
+
+    <img src="images/informationforagingtheory.jpg" class="center" style="max-width:85%; border:1px solid;">
+
+<p><small><i>See the discussion of this post on <a href="https://news.ycombinator.com/item?id=26974992">Hacker News</a>.</i></small></p>
+
+<p>Researchers have been developing a theory, Information Foraging Theory (IFT), of how people seek information, whether it be on the web, in a filing cabinet, or even in <i>source code</i>. It follows a metaphor that stems from animals looking for food in the wild.</p>
+
+<h3>The basics</h3>
+
+<p>A person, known as the <i>predator</i>, seeks information, known as the <i>prey</i>, in an <i>information environment</i> made up of <i>patches</i>, which could be code files, program output, log data, a stack trace, debugger information, etc. The predator navigates within and between patches using <i>links</i> (e.g., a shortcut to jump to a function's definition or a button in a menu) that have some <i>cost</i> (e.g., effort and time) until the predator's <i>information goals</i> are satisfied.</p>
+
+<p>In a patch there are <i>information features</i> (e.g., words and graphics), which may include the prey. Each information has a <i>value</i> to the predator (possibly a zero value!) and a <i>cost</i> (e.g., the time to process the information). Some information features act as <i>cues</i> that provide a clue as to what a link may lead to.</p>
+
+<h3>An example: VS Code</h3>
+
+<img src="images/informationpatches.png" class="center" style="max-width:65%;">
+
+<p>Above you can see a screenshot of VS Code with some of the information patches annotated. The editor displays a <b>lot</b> of information. The annotations are highlighting the file listing, an outline view of the current code file, a small region of a code file, the output from the compiler, and a minimap of the current file.</p>
+
+<p>I can navigate within the current code file by scrolling or using Ctrl+F. I can navigate to other patches by clicking on other tabs, buttons, or invoking the <i>Go to Definition</i> shortcut. Furthermore, I could produce new patches by performing a search that will yield a listing of results or by enabling the debugger to display runtime information.</p>
+
+<h3>Deciding where to forage</h3>
+
+<p>The predator always has three choices: forage <i>within</i> a patch, navigate <i>between</i> patches, or <i>enrich</i> the environment. Foraging within the patch involves processing the information features at their current location. Navigating between patches involves traversing a link to go to a different patch that can hopefully satisfy the predator's goals. The third option involves the predator changing the environment, such as bookmarking a code location or performing a text search, which produces a new patch with search results.</p>
+
+<p>The predator is always trying to maximize the amount of information gained relative to the cost. Given that <i>v</i> is the value and <i>c</i> is the cost, then the <i>optimal choice = max <sup>v</sup>&frasl;<sub>c</sub></i>.</p>
+
+<p>However, the predator often does not know the value or cost of foraging, so they must make decisions based on their own estimations. That is described as <i>selected choice = max <sup>E(v)</sup>&frasl;<sub>E(c)</sub></i>.</p>
+
+<p>These expected value and cost estimates are based on <i>information scent</i>, which is their perceived chance of finding relevant information based on information features and cues. At any given point, the predator is following the path with the highest scent to maximize the expected value gained while minimizing the cost of foraging.</p>
+
+<p>How predators evaluate links is formalized as:</p>
+
+<figure><img src="images/iftformula.png" class="center" style="max-width:30%;"><figcaption style="text-align:center;"><small>Image from David Piorkowski's <a href="https://ir.library.oregonstate.edu/concern/graduate_thesis_or_dissertations/r207ts097?locale=en">dissertation</a>.</small></figcaption></figure>
+
+<p>The predator is seeking <i>G</i> and has access to <i>L</i> links. Each link has a set of associated cues <i>J<sub>l</sub></i> where <i>W<sub>j</sub></i> is the amount of attention given by the predator, and <i>S<sub>ji</sub></i> is the scent.</p>
+
+<p>If you want to know more about the formal theory, take a look at Pirolli's book, <i>Information Foraging Theory: Adaptive Interaction with Information</i> (<a href="https://amzn.to/32Kj7F3">Amazon</a>).</p>
+
+<h3>Interesting research findings</h3>
+
+<p>Over a dozen studies have been published in the last fifteen years that look at IFT in the context of software development. Below are summaries and links to papers that I found particularly interesting:</p>
+
+<ul>
+    <li style="margin-bottom:-9px;">Developers overestimate the value and underestimate the cost of foraging: about 50% of navigations yielded less information than expected and 40% required more effort than predicted. <ul><li><a href="https://dl.acm.org/doi/abs/10.1145/2950290.2950302">Foraging and navigations, fundamentally: developers' predictions of value and cost</a></li></ul></li>
+    <li style="margin-bottom:-9px;">A predictive model based on IFT can accurately predict where a developer will navigate next. <ul><li><a href="https://dl.acm.org/doi/abs/10.1145/2207676.2208608">Reactive information foraging: an empirical investigation of theory-based recommender systems for programmers</a></li></ul></li>
+    <li style="margin-bottom:-9px;">Developers spend about 50% of their time foraging for information during  debugging tasks. <ul><li><a href="https://dl.acm.org/doi/abs/10.1145/2470654.2466418">The whats and hows of programmers' foraging diets</a></li></ul></li>
+    <li style="margin-bottom:-9px;">Novice developers have considerable difficulty in foraging among different versions of the same code. <ul><li><a href="https://dl.acm.org/doi/abs/10.1145/2858036.2858469">Foraging Among an Overabundance of Similar Variants</a></li></ul></li>
+    <li style="margin-bottom:-9px;">Foraging behavior is drastically different based on whether the developer is trying to comprehend code versus trying to fix a bug. <ul><li><a href="https://ieeexplore.ieee.org/abstract/document/7332447">To fix or to learn? How production bias affects developers' information foraging during debugging</a></li></ul></li>
+</ul>
+
+<hr>
+
+<p>There are endless implications for development tools from these studies. In fact, I've recently written about a tool for navigating code (see <a href="coderibbon.html">Navigate your code like it's 2021</a>) and a tool for viewing older versions of code (see <a href="yestercode.html">Why is it so hard to see code from 5 minutes ago?</a>).</p>
+
+<p>There is much more work to do. Happy foraging!</p>
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+
+    <br><br><br><br>
+
+</body>
+</html>

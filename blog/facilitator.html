@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Design patterns for hacking together prototypes: Facilitator - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Design patterns for hacking together prototypes: Facilitator">
+	<meta name="author" content="Austin Z. Henley">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Design patterns for hacking together prototypes: Facilitator</h1>
+	<small>10/27/2019</small><br><br>
+
+	<p>This is the third post in my series on <i>horrible</i> design patterns that I use for quickly implementing experimental features in large software projects that I'm unfamiliar with. Check out the other posts on <a href="objectdictionaries.html">Object Dictionaries</a> and <a href="catchall.html">Catch All</a>.</p> 
+
+	<hr
+	
+	<p>While extending large systems, I often need to pass data between two or more components that weren't designed to do so. Ideally, I would give the components a reference to one another. However, dozens and dozens of layers of abstraction make it infeasible to do so in a "proper" manner.</p> 
+	
+	<p>For example, to implement <a href="http://web.eecs.utk.edu/~azh/pubs/Henley2016VLHCC_Yestercode.pdf">Yestercode</a> I needed to actively communicate between the system's undo manager, compiler, and visual code editor. All three components were fairly complex and obviously weren't architected for passing information amongst each other like I wanted.</p>
+	
+	<p>Here comes the <b>Facilitator</b> pattern!</p>
+	
+	<img src="images/facilitator.jpg" class="center" style="max-width:70%;">
+	
+	<p>The Facilitator is a hodgepodge of other design patterns. It involves a global object that will maintain references to any components that need to communicate as well as a set of variables for message passing. This enables Component A to get a reference to Component B through the Facilitator and for "passing" information by setting and getting member variables in the Facilitator. Since I often ran into timing issues with this pattern, I used boolean flags for signifying when an event completed which a component was dependent on (oh, the joys of async!). Here is some pseudo code based on my earlier example:</p>
+	
+<pre class="prettyprint lang-cs">
+class Facilitator {
+  // References to the components that need to communicate.
+  UndoManager undoManager;
+  Compiler compiler;
+  CodeEditor editor;
+
+  // Information to be passed.
+  UserEvent lastAction;
+  ASTNode changedCode;
+  VisualElement selectedElement;
+
+  // Flags for ensuring certain events have completed.
+  bool undoCompleted = False;
+  bool compileCompleted = False;
+  bool drawingCompleted = False;
+}</pre>
+	
+	<p>Now I can start hacking on the individual components. To use this pattern, I update each component's constructor to pass a reference of itself to the Facilitator. Then I hijack a variety of existing events in each component where I need to pass or retrieve information using the Facilitator. For example, whenever an action is logged by the UndoManager, I need to pass that info to the Facilitator while using a boolean flag to ensure the UndoManager's async task is completed, then fire off my own event that will pass the info on to the editor.</p>
+	
+	<hr>
+	
+	<p>Easy enough! This is just a hacky solution to <i></i>facilitate</i> data passing between components that originally weren't designed to do so. Once again, <b>don't try this at work!</b></p>
+	
+	<p>Read about real design patterns: <a href="https://amzn.to/2oJHCl9">Design Patterns: Elements of Reusable Object-Oriented Software</a>.</p>
+	
+	<br><small>There are Amazon affiliate links on this page.</small><br><br><br>
+  
+  <br><br><br><br>
+
+</body>
+</html>

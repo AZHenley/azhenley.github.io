@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>"This project will only take 2 hours" - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Whenever I think something is simple, I try to walkthrough it and come up with all of the reasons why it isn't.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content='"This project will only take 2 hours"'>
+    <meta property="og:description" content="Whenever I think something is simple, I try to walkthrough it and come up with all of the reasons why it isn't.">
+    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/reddittroll.png">
+    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/thisprojectwillonlytake.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">"This project will only take 2 hours"</h1>
+	<small>11/8/2021</small><br><br>
+
+    <img src="images/reddittroll.png" class="center" style="max-width:75%; margin-bottom:28px; border:1px solid #000000;">
+
+    <p><small><i>See the discussion of this post on <a href="https://www.reddit.com/r/programming/comments/qpkx8n/this_project_will_only_take_2_hours/">Reddit</a>, <a href="https://lobste.rs/s/b6oms9/this_project_will_only_take_2_hours">Lobste.rs</a>, and <a href="https://news.ycombinator.com/item?id=29161194">Hacker News</a>.</i></small></p>
+
+<p>A few students came to me asking if I had any ideas for a software project that they could work on outside of class.</p>
+
+<p>I explained an idea for a utility that I had been wanting: A desktop program that monitors my clipboard for URLs and logs them automatically.</p>
+
+<p>This program would help me since I often have a hard time tracking down links that I send to people across all the different messenger apps I have installed. The idea was inspired by @tylerangert's <a href="https://twitter.com/tylerangert/status/1416068827218161665?s=21">tweet</a> a few months ago.</p>
+
+<p>The students then discussed how they would implement the idea and asked a few clarification questions, before one stated:</p>
+
+<p><i><b>"This project will only take 2 hours."</b></i></p>
+
+<p>After seeing the look on my face, another student said, "I think it would be more like 4 hours. I've never used the clipboard system call before."</p>
+
+<hr>
+
+<p>I too run into the issue of underestimating the complexity of projects on first glance. I do it a lot actually.</p>
+
+<p>I've started using it as a thought experiment exercise for project management. Whenever I think something is <b>extremely simple</b>, I walk through it step by step to uncover the complexities, design decisions, use cases, and potential features that I missed.</p>
+
+<p>The goal isn't to fall into a feature rabbit hole, but rather to understand your assumptions about the project. If I don't do this exercise and I try to build it, then I will often run into two or three crux issues that I could have easily known about from the start. Don't go implement every feature idea you come up with from this exercise!</p>
+
+<p>Let's go through the exercise with the clipboard URL logger.</p>
+
+
+<h3>Is it always logging?</h3>
+
+<p>Users generally don't like the idea of having something <i>always</i> running. Especially not when it monitors/logs something.</p>
+
+<img src="images/pauseresume.png" class="center" style="max-width:50%;">
+
+<p>In that case it probably needs <b>pause/resume</b> capability. These could be actions easily accessible from the task bar icon. Also, how about an option to <b>temporarily pause</b> it for 5 minutes? If not, then I'll probably forget to resume it.</p>
+    
+<p>Make sure there is a <b>visual indicator</b> of when it is paused.</p>
+
+<p>Since it is an application that runs in the background, many users would expect it to <b>run on startup</b>.</p>
+
+<p>Design question: Combining the pausing feature and the run on startup feature, if I pause it then restart my computer, is it still paused?</p>
+
+
+<h3>What is in the log file?</h3>
+
+<p>What should the log file contain? A raw text file of URLs separated by newlines? That is the most straightforward way of solving the original problem (i.e., losing URLs I send people). It also makes it easy to search and grep.</p>
+
+<p>Is there any other information that could be useful? <b>Timestamps</b>! Looking at a raw list of URLs probably wouldn't be particularly helpful when I think about it. (I tested the idea by exporting my browser history to a text file with only the URLs.) I want to be able to answer, <i>"What was that website I sent last night?"</i>. Figuring out the best timestamp format is up for debate too. Maybe ISO 8601?</p>
+
+<p>Since reading URLs are difficult and don't convey what is on the other side, you might want the <b>website title and description</b>. In fact, if you paste a link into your favorite messaging app, it usually displays that info along with an image from the page. That means the application needs to do a HTTP GET, parse the HTML, and extract the meta data.</p>
+
+<p>I would also expect to know <b>where the URL was copied from</b>. I.e., whatever application is in focus when the clipboard is modified. It probably isn't feasible though to track everywhere it is pasted (maybe it is actually...).</p>
+
+
+<h3>How is the log file formatted?</h3>
+
+<p>We want people to be able to view the data using their favorite text editor, so raw text it is.</p>
+
+<p>But how should it be formatted? A fixed number of lines per entry? Like:</p>
+
+<pre style="color:darkgreen;">
+    http://austinhenley.com 
+    Austin Z. Henley's Homepage
+    Copied from Microsoft Outlook
+    Sat Nov 06 2021 11:53
+</pre>
+
+<p>Or maybe it should be CSV? Well, URLs could have commas so we would need to be a bit more selective about the character we use as a separator. Decisions, decisions!</p>
+
+
+<h3>How do you know a URL has been copied?</h3>
+
+<p>We haven't even talked about the core features yet! Windows and MacOS provided calls for accessing the clipboard, but <b>when do you access the clipboard</b>? Do you poll it every X seconds? Is there a event you can listen for? Are there cases when a copy event might be missed?</p>
+
+<img src="images/urlregex.png" class="center" style="max-width:30%;">
+
+<p>Then once you get access to the clipboard content, <b>how do you identify URLs</b>? Maybe you find a Stack Overflow <a href="https://stackoverflow.com/q/161738/938695">question</a> asking for a regex to find URLs. Does it match <i>foobar.co</i>? Or does it require "http" or "https" at the start? Do you do a HTTP GET to check that it exists? What instances will be <b>false positives</b>?</p>
+
+
+<h3>What about privacy concerns?</h3>
+
+<p>It would be expected for some users to want their log <b>encrypted</b> or at least obfuscated. This adds some additional steps for viewing or grepping the list, but it might be a worthy tradeoff.</p>
+
+<p>I want the ability to <b>exclude specific URLs</b>. Users can provide a list of terms that if any one term is present in a URL, it is not logged. For example, maybe I would include "utk.edu" such that any work related links are omitted from my log.</p>
+
+<p>Design question: How does the user create/edit/view this list? Is it a text file at specific path or does the application provide a settings UI that includes this?</p>
+
+<p>Oh, here is a conundrum... is the exclude list viewable by anyone and stored in plaintext? That list may contain sensitive or private terms that you wouldn't see others to see! There needs to be a way for the exclude list to be private, such as making it <b>write only or require a password</b>. Each of which adds some additional design questions.</p>
+
+
+<h3>How is the log file managed?</h3>
+
+<p>There are a plethora of design questions about how the log file is managed by the application. Will it continuously log to the same file? Should it create a new file after a certain period of time or after it reaches some size threshold?</p>
+
+<p>Will it ever purge the history? Perhaps there can be a setting to delete the log(s) periodically, plus the ability to clear it at any given time.</p>
+
+
+<h3>Can I view or search the log?</h3>
+
+<p>We have been making the assumption that the user will view the log using other programs. But it could be annoying to navigate to the file and open it up. At least add a menu item that will open the log in the default text editor.</p>
+
+<img src="images/chromehistory.png" class="center" style="max-width:85%;">
+
+<p>We could also take it a step further and provide a <b>basic viewer with search</b>. Much like Google Chrome's history view. That way each entry can be formatted, which would make it much easier to read than plaintext. Now we might as well add the ability to delete entries in the log too. You could get carried away adding features here, but I don't think users would use more advanced features in the viewer rather than using their favorite editor or command line tool.</p>
+
+
+<h3>Can I sync to the cloud?</h3>
+
+<p>Every modern app needs cloud functionality, right?! How much effort would it be to upload the log data to a variety of web services, such as Google Keep, Apple Notes, Dropbox, GitHub, etc.?</p>
+
+<p>I'm a big fan of applications that support <b>sync'ing across machines</b> since I go back and forth between a Windows desktop and a MacBook Pro.</p>
+
+<p>To do that, it probably needs <b>user profiles</b> with the ability to logout and change users even on single machine. That means the logic managing the log now needs to consider what user is logged in!</p>
+
+<p>Ok, sync'ing is beyond our original scope...</p>
+
+<h3>Is it ready for real-world use?</h3>
+
+<p>Let's say all of our assumptions about what features users will want are true. Is the application ready to be released and used?</p>
+
+<p>Is it easy to download, install, and configure? Are there any instructions or a demo video? Can someone learn to use it without explanation?</p>
+
+<p>Has it been thoroughly tested? What operating systems are supported? What versions of those operating systems? Any dependencies? Does it play nicely with other software?</p>
+
+<p>When can it fail? When it crashes, does it present a user readable error?</p>
+
+
+<hr>
+
+<p>The list could continue on and on. Even implementing 20% of these features would make a fairly cool application! Then you have to get feedback and figure out if you built the right thing. Check out two of my other related posts:</p>
+
+<ul>
+    <li><a href="featurestheywanted.html">When users never use the features they asked for</a></li>
+    <li><a href="solvingunknownproblems.html">Building solutions to problems that no one knows exist yet</a></li>
+</ul>
+
+<p>So... still think it will only take 2 hours?</p>
+
+<br><br><br><br>
+
+</body>
+</html>

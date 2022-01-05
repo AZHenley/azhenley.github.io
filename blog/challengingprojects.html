@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Challenging projects every programmer should try - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Challenging projects every programmer should try.">
+	<meta name="author" content="Austin Z. Henley">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Challenging projects every programmer should try">
+    <meta property="og:description" content="Challenging projects every programmer should try">
+    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/peaybasic.png">
+    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/challengingprojects.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Challenging projects every programmer should try</h1>
+	<small>12/11/2019</small><br><br>
+
+<p><i>Update 12/14/2019: This post spurred a lot of discussion on <a href="https://news.ycombinator.com/item?id=21790779">Hacker News</a> and <a href="https://www.reddit.com/r/programming/comments/ean6ch/challenging_projects_every_programmer_should_try/">Reddit</a>. I collected some of the suggested projects and put them in a list at the end of this post.</i></p>
+
+<p><b>Check out the sequel to this post: <a href="morechallengingprojects.html">More challenging projects every programmer should try</a>.</b></p>
+
+<p>I talk to a lot of students and professional developers that often want to start a side project, but aren't sure what to build. Below is a handful of software projects that taught me a lot. In fact, they're great because you could build them multiple times and learn new things each time. So whenever I don't know what to build or I want to learn a new programming language or framework, I start with one of these:</p>
+
+<ul>
+    <li>Text editor</li>
+    <li>2D game - Space Invaders</li>
+    <li>Compiler - Tiny BASIC</li>
+    <li>Mini operating system</li>
+    <li>Spreadsheet <small>(<i>hard!</i>)</small></li>
+    <li>Video game console emulator <small>(<i>hard!</i>)</small></li>
+</ul>
+
+
+<br><h3>Text Editor</h3>
+
+<p>We use text editors everyday, but do you know how it really works? Ignoring all of the fancy features that your favorite editor has, how would you implement a textbox that supports a movable text cursor and selecting, inserting, and deleting text? No, you can't use the builtin textbox component from your favorite GUI framework!</p>
+
+<p>The biggest challenge is figuring out how to store the text document in memory. My first thought was to use an array, but that has horrible performance if the user inserts text anywhere other than the end of the document. Luckily, there are some nice data structures to learn to solve this.</p>
+
+<p>Another hurdle was learning how a text cursor behaves in popular editors. For example, if I press the up arrow key with the cursor in the middle of the document, where will the cursor move? Same column? Not if that line is shorter. Keep pressing up. The cursor will snap back to the original column once a line is long enough. It turns out that the cursor has a memory for the column and tries to get back to it. It is these details that I never noticed until I tried to implement it.</p>
+
+<img src="images/textcursor.gif" class="center" style="max-width:60%">
+
+<p>After implementing the basic editor, I challenge you to implement two more features: undo/redo and word wrapping. Implementing undo/redo in an efficient way was mind blowing to me! I first tried keeping an array of previous states, then tried the Memento pattern, before finally settling on the Command pattern. Word wrapping forces you to separate the <i>visual</i> aspects of a text line from the memory aspects.</p>
+
+
+<p>Things to learn:</p>
+<ul>
+    <li>Data structures for storing the text: array, <a href="https://en.wikipedia.org/wiki/Rope_(data_structure)">rope</a>, <a href="https://en.wikipedia.org/wiki/Gap_buffer">gap buffer</a>, <a href="https://en.wikipedia.org/wiki/Piece_table">piece table</a>.</li>
+    <li>Behavior and implementation of the text cursor.</li>
+    <li>Design patterns for undo/redo: <a href="https://en.wikipedia.org/wiki/Memento_pattern">memento</a>, <a href="https://en.wikipedia.org/wiki/Command_pattern">command</a>.</li>
+    <li>Abstractions to separate the visual and memory aspects of the text.</li>
+</ul>
+
+
+<p>Further reading:</p>
+<ul>
+    <li>Text Editor: Data Structures (<a href="https://www.averylaird.com/programming/the%20text%20editor/2017/09/30/the-piece-table/">web</a>)</li>
+    <li>Design and Implementation of a Win32 Text Editor (<a href="http://www.catch22.net/tuts/neatpad#">web</a>)</li>
+    <li>Data Structures and Algorithms in Java (<a href="https://amzn.to/36k1kEv">Amazon</a>)</li>
+</ul>
+
+
+<br><h3>2D game - Space Invaders</h3>
+
+<p>Even the most simple games require some unique data structures and design patterns. The idea here is to implement a well-defined game from start to finish without getting bogged down on the other fun stuff (e.g., game design and art). Also, it is best if you use a barebones 2D graphics library (e.g., SDL, SFML, PyGame), not a big game engine that'll hide all of the interesting bits from you.</p>
+
+<img src="images/spaceinvaders.png" class="center" style="max-width:60%;">
+
+<p>First, you'll have to learn to draw to the screen. I had no idea how this worked. You are actually clearing the screen then drawing each portion of the screen in rapid succession, many times a second, to create the effect that objects are moving.</p>
+
+<p>Second, you'll learn all about the game loop. A game is effectively looping between drawing, getting user input, and processing the game logic.</p>
+
+<p>Third, you'll learn how to process user input. I never paid attention to the subtlties of initially pressing, holding, and releasing keys or mouse buttons, let alone handling things like a double click. And how often do you check for user input? If you are constantly checking then that means the rest of the game is frozen!</p>
+
+<p>Fourth, you'll learn how to create and manage all of your game objects and their state. For example, how do you generate a dynamic number of enemies? The factory pattern helps a lot.</p>
+
+<p>Fifth, you'll learn how to apply the game's logic. When do bullet positions get updated? When do more enemies come onscreen? How do you know when an enemy is destroyed? When is the game over? I had never used the modulo operator prior to making games but it is littered all over my games' code.</p> 
+
+<p>Once you get the basic game working, add a title screen menu, a game over screen, make sure the game runs at the same speed even on different computers, and explore how to implement more interesting enemies with AI. Still not enough? Add shader effects, sound, and online multiplayer!</p>
+
+
+<p>Things to learn:</p>
+<ul>
+    <li>Drawing to the screen.</li>
+    <li>Handling user input.</li>
+    <li>Game loop.</li>
+    <li>Creating and managing a dynamic number of objects (e.g., <a href="https://en.wikipedia.org/wiki/Factory_(object-oriented_programming)">factory pattern</a>).</li>
+    <li>State machines for enemy AI.</li>
+    <li>Playing sound.</li>
+    <li>Using shaders.</li>
+    <li>Networking for online features.</li>
+</ul>
+
+
+<p>Further reading:</p>
+<ul>
+    <li>Game Programming Patterns (<a href="https://amzn.to/2RDtk1K">Amazon</a>, <a href="https://gameprogrammingpatterns.com/contents.html">web</a>)</li>
+    <li>Data Structures for Game Programmers (<a href="https://amzn.to/2qEb79b">Amazon</a>)</li>
+    <li>Programming Game AI by Example (<a href="https://amzn.to/2RDtk1K">Amazon</a>)</li>
+    <li>The 8 lessons I learned from releasing 8 video games (<a href="8lessons8games.html">web</a>)</li>
+</ul>
+
+
+<br><h3>Compiler - Tiny BASIC</h3>
+
+<p>The most-eye opening projects I have worked on are compilers. Even now, if I have a free Sunday afternoon to do some coding, chances are it is a compiler. It is a great feeling when you create something that enables others to create more things. By implementing one I had to learn so much more about the intricacies of compilers that I normally would never think about (e.g., when do expressions get implicitly type converted).</p>
+
+<p>I suggest writing the compiler from scratch for a very small BASIC-like language (see <a href="https://en.wikipedia.org/wiki/Tiny_BASIC">Tiny BASIC</a>) and compile to any other language that you know well. For example, you could write a Tiny BASIC compiler in Python that outputs C# code. It does <b>not</b> have to output assembly or C! Avoiding those will let you focus on the compiler itself.</p>
+
+<img src="images/peaybasic.png" class="center" style="max-width:60%;">
+
+<p>The first hurdle is figuring out how to lex (or tokenize) the input code. Then you will parse the code, that is check the structure of the input and produce a tree representation of the code. The recursive descent parsing technique is beautiful! Next you will semantically check the input, ensuring the code makes sense and that the type rules are being followed. Finally, you can generate output!</p>
+
+<p>This project has a ton of existing resources to help you, and a simple compiler can be completed in a few days. Don't let the jargon scare you. Plus the possibilities are endless to what you can add! Once you have the basic compiler working, you can add a standard library (in PeayBASIC I added simple 2D graphics functionality), optimization passes, and improve the error messages. Finally, you should write some example programs in your own language to show off to the world!</p>
+
+<p>Things to learn:</p>
+<ul>
+    <li><a href="https://en.wikipedia.org/wiki/Lexical_analysis">Lexical analysis</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Parsing">Syntactic analysis</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Recursive_descent_parser">Recursive descent parsing</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">Abstract syntax tree</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Semantic_analysis_(compilers)">Semantic analysis</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Optimizing_compiler">Optimization passes</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Code_generation_(compiler)">Code generation</a></li>
+</ul>
+
+<p>Further reading:</p>
+<ul>
+    <li><i>My tutorial:</i> Let's make a Teeny Tiny compiler (<a href="teenytinycompiler1.html">web</a>)</li>
+    <li>Crafting Interpreters (<a href="https://amzn.to/3l8FePX">Amazon</a>, <a href="https://www.craftinginterpreters.com/contents.html">web</a>)</li>
+    <li>Write an Interpreter in Go (<a href="https://amzn.to/2PA5LEh">Amazon</a>)</li>
+    <li>Let's Build a Compiler (<a href="https://compilers.iecc.com/crenshaw/">web</a>)</li>
+    <li>PeayBASIC source code (<a href="https://github.com/AZHenley/PeayBASIC">GitHub</a>)</li>
+</ul>
+
+
+<br><h3>Mini Operating System</h3>
+
+<p>Over the years I have found myself applying fundamental concepts from operating systems to a variety of domains, like games and even predictive models of human behavior. In a classroom setting the algorithms and data structures used by operating systems might seem abstract or useless, but they really are useful. Implementing an operating system also helped me understand far more about what is going on under the hood.</p>
+
+<img src="images/marzos.png" class="center" style="max-width:60%;">
+
+<p>There is a bit of a learning curve and some barriers to get started since it is dependent on hardware. However, by following a book or tutorial then you should be able to get a bootable OS working that can run your own programs. I highly recommend my colleague's free online book, <a href="http://osblog.stephenmarz.com/index.html">Making a RISC-V Operating System using Rust</a>.</p>
+
+<p>Things to learn:</p>
+<ul>
+    <li><a href="https://en.wikipedia.org/wiki/Cross_compiler">Cross compiling</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Booting#Modern_boot_loaders">Bootloading</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/BIOS_interrupt_call">BIOS interrupts</a></li>
+    <li>x86 modes</li>
+    <li>Memory management and paging</li>
+    <li><a href="https://en.wikipedia.org/wiki/Scheduling_(computing)">Scheduling</a> (e.g., round robin)</li>
+    <li><a href="https://en.wikipedia.org/wiki/File_system">File systems</a> (e.g., FAT)</li>
+
+</ul>
+
+
+<p>Further reading:</p>
+<ul>
+    <li>OSDev.org's wiki of resources (<a href="https://wiki.osdev.org/Main_Page">web</a>)</li>
+    <li>Making a RISC-V Operating System using Rust (<a href="http://osblog.stephenmarz.com/index.html">web</a>)</li>
+    <li>Operating System Concepts (<a href="https://amzn.to/2E9mMjy">Amazon</a>)</li>
+</ul>
+
+
+<br><hr><br><p><i>Still not difficult enough for you? Try these two projects:</i></p>
+
+
+<h3>Spreadsheet</h3>
+
+<p>A spreadsheet application, like Excel, combines some of the challenges from a text editor with those of a compiler. You'll have to learn how to represent the cell contents in memory and implement an interpreter for the programming language used for equations.</p>
+
+<p>Further reading:</p>
+<ul>
+    <li>Directed acyclic graph (<a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">web</a>)</li>
+    <li>Reactive programming paradigm (<a href="https://en.wikipedia.org/wiki/Reactive_programming">web</a>)</li>
+    <li>Spreadsheet Implementation Technology (<a href="https://amzn.to/38k5m1o">Amazon</a>)</li>
+</ul>
+
+
+<br><h3>Video game console emulator</h3>
+
+<p>Writing an emulator (or virtual machine) for a video game console combines the challenges of writing a compiler, an operating system, and a compiler all into one. It is quite rewarding to play a real game made by someone else with your emulator!</p> 
+
+<p>Emulating a real video game console means writing a virtual machine that pretends to function just like the actual CPU and other hardware components. This allows you to run games designed for the video game console with your emulator.</p>
+
+<p>I recommend starting by emulating CHIP-8, which is a simple, fictitious console, before moving on to a real video game console. The NES, SNES, Gameboy, and Gameboy Advance are all quite feasible to emulate, with a far amount of documentation and open source emulators already, though they each have their own quirks to make things interesting (e.g., certain games may rely on undocumented bugs/features of the specific hardware). There is also the PICO-8, which has become a very profitable "fantasy" console.</p>
+
+<p>Further reading:</p>
+<ul>
+    <li>Writing a Chip-8 emulator (<a href="https://aymanbagabas.com/2018/09/17/chip-8-emulator.html">web</a>)</li>
+    <li>JavaScript Chip-8 Emulator (<a href="http://blog.alexanderdickson.com/javascript-chip-8-emulator">web</a></li>
+    <li>How to Emulate a Game Boy (<a href="https://blog.ryanlevick.com/DMG-01/public/book/">web</a>)</li>
+    <li>PyBoy source code (<a href="https://github.com/Baekalfen/PyBoy">GitHub</a>)</li>
+</ul>
+
+<hr><br>
+
+<p>Please let me know if you have any other project ideas! Here is a list of suggestions from <a href="https://news.ycombinator.com/item?id=21790779">Hacker News</a>, <a href="https://www.reddit.com/r/programming/comments/ean6ch/challenging_projects_every_programmer_should_try/">Reddit</a>, Twitter, and emails I received:</p>
+
+<ul>
+    <li>Database from scratch</li>
+    <li>Ray tracer</li>
+    <li>MS Paint clone</li>
+    <li>Vector graphics editor</li>
+    <li>Image decoder</li>
+    <li>Chatroom web app</li>
+    <li>Digits of pi calculator</li>
+    <li>Common terminal utilities (e.g., grep)</li>
+    <li>FTP client and server</li>
+</ul>
+
+<hr>
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small>
+
+
+    <br><br><br><br>
+
+</body>
+</html>

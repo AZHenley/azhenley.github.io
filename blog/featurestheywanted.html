@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>When users never use the features they asked for - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="There was a ton of evidence that showed the need for this feature. But people aren't using it.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="When users never use the features they asked for">
+    <meta property="og:description" content="There was a ton of evidence that showed the need for this feature. But people aren't using it.">
+    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/askingusers.png">
+    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/featurestheywanted.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">When users never use the features they asked for</h1>
+	<small>9/29/2021</small><br><br>
+
+    <img src="images/askingusers.png" class="center" style="max-width:85%; margin-bottom:28px;">
+
+
+<p><small><i>See the discussion of this post on <a href="https://news.ycombinator.com/item?id=28699637">Hacker News</a>.</i></small></p>
+
+
+<p>It is well-known in user research that if you ask a user if they want a new feature, that they will often scream, <b><i>"YES"</i></b>. Why wouldn't someone want <i>more</i> features after all? Although they may not actually use it. And you may not know that until after it is released.</p>
+
+<p>This is a story of a time I built exactly what developers told me they wanted, and then they didn't use it. But this time it isn't that simple. I had a lot of evidence showing the need for these features. So why weren't they using it?!</p>
+
+
+<h3>Chasing the dream</h3>
+
+<p>It had been my dream to work at Microsoft one day. I first got into programming two decades ago using Visual Studio. I started with Visual Basic 6, then moved to Visual C++ 6, and then Visual C# 2008. At one of my early software jobs, my manager asked me during my performance review meeting: <i>"where would you rather work than here?"</i> I said Microsoft.</p>
+
+<p>During grad school, I saw that Microsoft was publishing a lot of the great papers in my area. It even seemed as though all of the famed professors spent at least a summer there as an intern. I didn't know how to get into their realm though. I had a few conversations with Microsoft researchers at conferences but I still wasn't on their radar.</p>
+
+<p>So one night, during a rebellious fit, I sent cold emails to two groups I wanted to work with. I had my first video interview a few days later and a few more the following week.</p>
+
+<p>I got a research internship at Microsoft.</p>
+
+<img src="images/microsoftsign.jpg" class="center" style="max-width:60%;">
+
+<p>The position was a hybrid role working with researchers and a dev tools team. Specifically, working on an internal tool and service used to conduct code reviews within the company. Something like 30,000 people used the tool each week.</p>
+
+<p>I initially spent a lot of time understanding the code review process. I shadowed developers as they performed code reviews, I analyzed telemetry data from the code reviewing web service, I recorded developers' screens as they performed code reviews, and I interviewed developers about code reviews. In fact, I even did a literature review of research papers about code reviews before I started the internship so that I could show up the first day ready to go.</p>
+
+<p>Now I <i>just</i> needed to build a tool to solve the problem that we were confident they had.</p>
+
+
+<h3>We built what they asked for</h3>
+
+<p>The goal was to create an <b>automated code reviewer</b> that provides program analysis feedback in code reviews. That way the entire team can see the feedback, instead of only the author of the code changes, and they can spend their time on design discussions, instead of superficial nitpicking. Additionally, it would streamline the process of requesting a build, running the program analyzers, and running tests, which can take many hours, and for some teams this is all done very late in the review process. The automated reviewer would stay involved throughout the entire review process and update the feedback automatically.</p>
+
+<p>Building the initial prototype took considerably longer than we had originally expected. I was supposed to use some existing infrastructure as a foundation and just make a few tweaks for our use case. It would take two weeks max, or so we thought. Turns out there were a few hiccups: everyone involved in that project we wanted to use had left the company, we had no idea how to build the source code, it had something like 500,000 lines of code, and the one person we found that knew anything about the project was 13 hours ahead and stopped replying to our emails.</p>
+
+<p>Hmmm. Guess I am rewriting what we need from scratch. The weeks of my internship are counting down already.</p>
+
+<p>A month later, I demo'ed a prototype of our automated code reviewer to a few managers and developers. They gave positive feedback and agreed to let us pilot the tool on their teams. I wrote up a short tutorial on how to use it and sent it out to the teams. I spent the weekend making bug fixes and setting it up for "real world" use.</p>
+
+<p>We deployed our tool.</p>
+
+<img src="images/cfar.png" class="center" style="max-width:70%;">
+
+<p>Almost no one used it. The handful that did use it, used it once or twice and barely interacted with it. After a few days, zero people were using it.</p>
+
+<p>Why did they tell me they wanted these features?!?!</p>
+
+
+<h3>User research does not have a finish line</h3>
+
+<p>I felt defeated. My summer was winding down fast. The project had already hit a dozen different snags along the way. I was ready to throw in the towel. But at least I got to put Microsoft on my resume now, right?</p>
+
+<p>I took the weekend off. I tried not to think about it.</p>
+
+<figure>
+<img src="images/microsoftmilk.png" class="center" style="max-width:85%;">
+<figcaption style="text-align:center;"><small><i>Each morning I drank an americano and a delicious chocolate milk at the office before most people arrived. Spoiler: I continued this tradition in 2019 when I came back as a Visiting Researcher.</i></small></figcaption>
+</figure>
+
+<p>Then the motivation hit. Just like that night I sent the cold emails to get the internship in the first place. So I got to the office at 6am on Monday <small>(moving from Central Time Zone to the west coast has its advantages)</small> and started sketching out a plan. When my mentors arrived, I told them to give me the week. I was going to figure this out.</p>
+
+<p>This wasn't the users' fault. They didn't lie to me. They <i>did</i> have this problem and they <i>did</i> want a solution. I was just missing something. All I had to do was go back to observing them. The answer was out there!</p>
+
+<p>I conducted a small <b>lab study</b> to again see how people were conducting code reviews. But I also asked them to do a code review using my tool. I gave them almost no instructions on how to use it. I watched step by step.</p>
+
+<p>I emailed the few developers that had originally used my tool to try to start a conversation about their thoughts on the tool.</p>
+
+
+<h3>The turning point</h3>
+
+<p>A problem became evident. I had been looking at the wrong place the entire time! It wasn't even about the features that our tool provided. It was how <b>the tool fits into their workflow</b>. Or in this case, how the tool required a minor, but explicit change to their workflow just to get started. Many of the developers didn't even know our tool existed. I had never thought this would be an issue. We had never discussed it before. It was just assumed... I mean, how else would they use our tool?</p>
+
+<p>After brainstorming with my mentors, they were quick to come up with a solution. We shift a portion of the tool from being a desktop application to a web service that listens for code reviews, then it automatically initiates our features without any explicit command. That way the developers' workflow is entirely unchanged! Oh, the power of default options.</p>
+
+<p>We were very short on time, but it was a fairly small task to go and create a web service to do this. There was an existing API that took care of the hard parts.</p>
+
+<p>This time we wanted to be more careful with the deployment. The developers might give us a second shot, but I doubt they'd give us a third. Our plan was to deploy to a small team that was located in the same building as us and get feedback from them quickly. We made it clear to them that they were a high priority to us and that we were all ears to what they had to say about the tool.</p>
+
+<p style="color:#ff8c00; text-align:center; font-size:larger"><i>"Too many useless comments."</i></p>
+
+<p>They used it. But it frustrated them. It was overloading them with information and getting in their way. I received an angry email or two. There was no way we could have seen this coming... based on the use cases we were testing during development. But had we been closer to our customers, we would have. <b>I <i>should</i> have seen this coming.</b> Another lesson learned.</p>
+
+<p>We put in some hard restrictions into our tool so that it couldn't bombard any more code reviews with information. We filtered out analysis warnings that were likely to be less relevant or low priority, aggregated reoccurring warnings, and set a maximum limit to the number of warnings that would be displayed. We also added status updates from the automated reviewer, so that users would know exactly what state the system is in. In hindsight, everything the developers wanted was completely reasonable and logical. Obvious even.</p>
+
+<p>It was time to re-deploy to all of the teams that had initially agreed to use our tool.</p>
+
+<p>We quadruple checked that everything was ready. And quadruple checked again. We sent out an email to the managers to tell them that we would be turning on our tool for all of their code reviews by default.</p>
+
+
+<h3>The final attempt</h3>
+
+<p>I clicked a button to deploy it.</p>
+
+<p>There was just over a week left of my internship. There was no time to pivot if things went south again. I really only had time to fix minor bugs, collect more qualitative data, and go around presenting my project to more teams. The plan was to collect usage data for a few months after I'm back at university, then submit a paper somewhere.</p>
+
+<figure>
+<img src="images/msrpresentation2016.jpg" class="center" style="max-width:50%;">
+<figcaption style="text-align:center;"><small><i>End of internship presentation in Building 99.</i></small></figcaption>
+</figure>
+
+<p>Fingers crossed the tool helps the developers with their code reviews over a long period of time.</p>
+
+<p>Fast forward to a few months later, we hit another problem. Analyzing the usage data isn't as straight forward as we had hoped. We made some false assumptions about the data being logged. And since I'm no longer an employee of Microsoft, I'm having to write database queries over email and wait until someone has free time to run them and send me back the anonymized, aggregate results.</p>
+
+<p>People did use it! We deployed it to 98 software engineers across three teams for 15 weeks. It was used for 354 code reviews by 41 different authors and 883 unique reviewers. It posted 149 analysis comments into the code reviews (plus status updates from the build and testing frameworks). It would have posted considerably more comments, but specific analysis warnings can be suppressed by a team.</p>
+
+<p style="color:blue; text-align:center; font-size:larger"><i>"Having some comments helped start the conversations that might be missed until last minute, so their addition is a net positive."</i></p>
+
+<p>By analyzing the usage data and emailing out a survey, we found evidence that our tool increased communication, productivity, and review quality. Users reported overwhelming praise, along with feature requests and scenarios that could be improved.</p>
+
+<img src="images/cfarpaper.png" class="center" style="max-width:45%; border:1px solid #000000;">
+
+<p>In the end, we published a fantastic <a href="../pubs/Henley2018CHI_CFar.pdf">paper</a> at a top conference. Not only that, but several teams at Microsoft reached out to me to understand the design rationale of the tool since they wanted to re-create it for their own organizations.</p>
+
+
+<hr>
+
+<p>Writing this story makes all of the problems and solutions sound so obvious. Hindsight...</p>
+
+<p>Let's review a few of the lessons I learned:</p>
+
+<ul>
+    <li>Keep your users in the loop, always. Do not go build in isolation.</li>
+    <li>Don't underestimate engineering challenges that you only have an external view of.</li>
+    <li>Voice your concerns to your team regularly and often. They might be to solve them far more quickly than you or they might be able to identify what will turn into a major roadblock.</li>
+    <li>Be ready to pivot.</li>
+    <li>Users say things for a reason, but there may be more to it than face value.</li>
+    <li>If you make assumptions about your users, they will find a way to surprise you.</li>
+    <li>Features will go unused if they aren't easy to use, no matter how great they are.</li>
+    <li>A user's workflow is everything. <small>(I keep relearning this lesson...)</small></li>
+    <li>Users are far more clever than you think.</li>
+</ul>
+
+<img src="images/microsoftfarewell.jpg" class="center" style="max-width:65%;">
+
+<p>Thank you Maria and Kivanc for the fabulous summer!</p>
+
+<hr>
+
+<p>There are a few books I'd recommend to my former self:</p>
+
+<ul>
+    <li>The Design of Everyday Things (<a href="https://amzn.to/3kU7UvK">Amazon</a>; my favorite book!)</li>
+    <li>Usability Engineering by Jakob Nielsen (<a href="https://amzn.to/3ikICVD">Amazon</a>; get a used copy)</li>
+    <li>The Customer-Driven Playbook (<a href="https://amzn.to/3oiA7OJ">Amazon</a>; written by Microsoft employees)</li>
+    <li>The Lean Product Playbook (<a href="https://amzn.to/3CVzi2q">Amazon</a>)</li>
+</ul>
+
+<p>If you found this story interesting, read another internship story of mine: <a href="solvingunknownproblems.html">Building solutions to problems that no one knows exist yet</a>.</p>
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+<br><br><br><br>
+
+</body>
+</html>

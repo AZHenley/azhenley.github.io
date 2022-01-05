@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>More challenging projects every programmer should try - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="More challenging projects every programmer should try.">
+	<meta name="author" content="Austin Z. Henley">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="More challenging projects every programmer should try">
+  <meta property="og:description" content="More challenging projects every programmer should try.">
+  <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/raytracer.png">
+  <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/morechallengingprojects.html"> 
+  <meta name="twitter:card" content="summary_large_image"> 
+
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">More challenging projects every programmer should try</h1>
+	<small>12/20/2020</small><br><br>
+
+<p><i>Update 12/29/2020: See the discussion of this post on <a href="https://news.ycombinator.com/item?id=25489879">Hacker News</a>.</i></p>
+
+<p>One year ago, I posted <a href="challengingprojects.html">Challenging projects every programmer should try</a>. It included a text editor, Space Invaders, a BASIC compiler, a small operating system, a spreadsheet, and a video game console emulator. It <i>blew up</i> across the internet, amassing over 100,000 views in a month (read more about it <a href="goingviral.html">going viral</a>).</p>
+
+<p>I'm now expanding the list with more "modern" projects:</p>
+
+<ul>
+    <li>Ray tracer</li>
+    <li>Key-value store web API</li>
+    <li>Web browser</li>
+    <li>Stock trading bot</li>
+</ul>
+
+
+<h3>Ray tracer</h3>
+
+<p>Yes, 3D graphics! After the original list of challenging projects, I got a lot of comments suggesting a ray tracer. I agree with them. In fact, it was one of the first things I tried making while learning C# back in 2009. Don't worry if you don't understand all the math or jargon right away, just keep trying to make progress. There are a lot of resources about ray tracers, and you'll have motivating visuals to reward you along the way.</p>
+
+<img src="images/raytracer.png" class="center" style="max-width:90%;">
+
+<p>Ray tracers can produce some truly beautiful images, even with 300 lines of code! First, you might go down the rabbit hole of supporting all sorts of reflections, lights, and materials. Or you'll realize that a single image can take several minutes to render so you'll begin optimizing. For example, you might parallelize the ray tracer with threads, reduce the number of intersection candidates, or use a profiler to track how many objects are being allocated and find the bottlenecks (I had some bad code initially...).</p>
+
+<p><b>Be creative!</b> I didn't want to go the route of making yet another half-optimized ray tracer nor did I want to pursue hyper-realistic refractions. Instead, I purposely lowered the resolution so that I could make real-time animations. A gif of a spinning torus with falling particles can get you quite a few likes on Twitter. I think there is a lot of opportunity for indie games to go this route and have a unique, artsy style. Look out for my 8-bit retro-looking video game in the future!</p>
+
+<p>Further reading:</p>
+<ul>
+    <li>Ray Tracing in One Weekend (<a href="https://raytracing.github.io/">web</a>)</li>
+    <li>Very Gentle Introduction to Computer Graphics Programming (<a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/get-started">web</a>)</li>
+    <li>Computer Graphics from Scratch (<a href="https://www.gabrielgambetta.com/computer-graphics-from-scratch/introduction.html">web</a>)</li>
+    <li>Ray Tracing from Scratch in Python (<a href=https://medium.com/swlh/ray-tracing-from-scratch-in-python-41670e6a96f9">web</a>)</li>
+    <li>Optimizing a Simple Ray-Tracer Written in Go (<a href="https://dzone.com/articles/optimizing-a-simple-ray-tracer-written-in-go-part">web</a>)</li>
+    <li>Real-Time Ray Tracing in JavaScript (<a href="https://johanneshoff.com/raytrace-mirror/">web</a>)</li>
+    <li>Bounding volume hierarchy (<a href="https://en.wikipedia.org/wiki/Bounding_volume_hierarchy">Wikipedia</a>)</li>
+    <li>Ray Tracing Gems (<a href="https://amzn.to/374vhM4">Amazon</a>)</li>
+    <li>The Ray Tracer Challenge (<a href="https://amzn.to/2VZCirf">Amazon</a>)</li>
+    <li>Real-Time Rendering (<a href="https://amzn.to/3mbkILo">Amazon</a>)</li>
+</ul>
+
+
+<h3>Key-value store web API</h3>
+
+<p>A key-value store is really just a dictionary. Give it a key, get back a value. You can add new keys, remove keys, or update values. Viola, you have created a NoSQL database! But you can take it a step further and offer it as a web API, so that all your future web apps can utilize your database service.</p>
+
+<p>I really like this project because it is <i>really</i> simple to create the basic "database". You can start by using the dictionary data structure that comes with whatever programming language you're using and slap a web API on top of it. But like all these ideas, there is a lot more that can be added: optimizations for high performance, security and multiple users, atomic transactions, data types, batch operations, persistance, failure recovery, and the ability to run it across multiple servers. Soon enough you'll have a billion dollar product like <a href="https://en.wikipedia.org/wiki/Redis">Redis</a> or <a href="https://en.wikipedia.org/wiki/Amazon_DynamoDB">Amazon DynamoDB</a>.</p>
+
+<p>Seriously, fire up your code editor and use your favorite language to try this one. I did it with both Go and Racket to get a feel of the differences. It was <i>quite</i> enlightening. The performance was good enough with my Go version on small tests right out of the box.</p>
+
+<p>Further reading:</p>
+<ul>
+    <li>Key-value database (<a href="https://en.wikipedia.org/wiki/Key%E2%80%93value_database">Wikipedia</a>)</li>
+    <li>B-tree data structure (<a href="https://en.wikipedia.org/wiki/B-tree">Wikipedia</a>)</li>
+    <li>Atomicity (<a href="https://en.wikipedia.org/wiki/Atomicity_(database_systems)">Wikipedia</a>)</li>
+    <li>How I built a key value store in Go (<a href="https://medium.com/@naqvi.jafar91/how-i-built-a-key-value-store-in-go-bd89f68062a8">web</a>)</li>
+    <li>Badger: Fast key-value DB in Go (<a href="https://github.com/dgraph-io/badger">GitHub</a>)</li>
+    <li>If you want to dive deeper with databases: Database Design for Mere Mortals (<a href="https://amzn.to/3m8r5is">Amazon</a>)</li>
+</ul>
+
+
+<h3>Web browser</h3>
+
+<p>My first ever interview for a software development position opened with, "What happens when you type Yelp.com into your web browser and press enter?" I didn't do well and was rejected. Thus began my journey to really know how everything works. The part I found most interesting was how a browser turns HTML and CSS into a rendered web page. (Side note: this is a popular interview question that I was just too ignorant to know about, and there is a phenomenal resource that goes into way too much detail to answer <a href="https://github.com/alex/what-happens-when">what-happens-when</a>.)</p>
+
+<p>Don't get your hopes up yet about designing some killer user interface that will squash Safari or Brave. Oh, no. You have much to do before you get to that point! Let's scope it down by saying that you are given an HTTP library and an HTML parser, but you have to implement your own renderer. You can't use a WebBrowser widget or anything like WebKit. What do you do???</p>
+
+<img src="images/cliwebbrowser.png" class="center" style="max-width:80%;">
+
+<p>My suggestion is to start by making a <a href="https://en.wikipedia.org/wiki/Text-based_web_browser">text-based web browser</a>. In fact, you might as well ignore virtually all formatting. Ignore all JavaScript and CSS. The steps would be to perform an HTTP GET with a given URL, parse the HTML to find text that should be displayed, and put it on the screen. That is it.</p>
+
+<p>Once you get just plain text, there is no short of features that you can pile on. You can add tabs, history, back and forward buttons, etc. But at some point you might want more than text... and I wish you luck. Rendering the visual elements of web pages beyond text is something I will probably never try :) but perhaps one day, when I find infinite time. Take it a step at a time, focusing on a single HTML tag and attribute. Let me know how it goes if you attempt this!</p>
+
+<p>Further reading:</p>
+<ul>
+    <li>Browsh: A text-based browser (<a href="https://github.com/browsh-org/browsh">GitHub</a>)</li>
+    <li>What-happens-when (<a href="https://github.com/alex/what-happens-when">GitHub</a>)</li>
+    <li>HTML standard (<a href="https://html.spec.whatwg.org/">web</a>)</li>
+    <li>Mozilla documentation for HTTP (<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">web</a>)</li>
+    <li>Let's build a browser engine! (<a href="https://limpet.net/mbrubeck/2014/08/08/toy-layout-engine-1.html">web</a>)</li>
+    <li>Web Browser Engineering (<a href="https://browser.engineering/">web</a>)</li>
+</ul>
+
+
+<h3>Stock trading bot</h3>
+
+<p>Alright, here is your opportunity to build something that theoretically <i>could</i> make you rich: a stock trading bot! Like all my projects ideas, it is quite simple to build a basic trading bot, but then there are endless features and improvements you can add. You don't even need to know anything about investments to get started. Along the way you will at least learn how to utilize different web APIs, process data, and apply an existing or create your own trading strategy. You can test it out on heaps of historical data or just let it play with monopoly money.</p>
+
+<p>Not enough? Apply machine learning or setup a Twitch <a href="https://socialblade.com/blog/twitch-stockstream-bot/">stream</a> that lets strangers take control of your money.</p>
+
+<img src="images/stockbot.png" class="center" style="max-width:60%;">
+
+<p>Here is the route for a basic trading bot. First, identify a few big companies that interest you for your bot to trade (e.g., Apple, Tesla, and Target). Second, decide on a condition for when to buy and when to sell. For example, if the current price reaches a 52-week low, then buy. If it reaches a 52-week high, then sell. (Do <b>not</b> use this strategy with real money! It is dumb.) Third, figure out how to use a free API to get stock data. There are some nice libraries out there that make it easy. Fourth, setup a testing environment with monopoly money (and without a stock broker). Let it run!</p>
+
+<p>Now for the endless fun... automate testing on historical data over long periods of time, implement dozens of trading algorithms and compare them, add visualizations, connect to a real stock broker using their API, try out some machine learning or evolutionary algorithms, and spam Twitter with all your successes.</p>
+
+<p>Further reading:</p>
+<ul>
+    <li>Trade signal (<a href="https://www.investopedia.com/terms/t/trade-signal.asp">web</a>)</li>
+    <li>trump2cash: A trading bot (<a href="https://github.com/maxbbraun/trump2cash">GitHub</a>)</li>
+    <li>Q learning (<a href="https://en.wikipedia.org/wiki/Q-learning">Wikipedia</a>)</li>
+    <li>How to Build a Stock Trading Bot from Scratch (<a href="https://towardsdatascience.com/how-to-get-started-building-a-stock-cryptocurrency-forex-trading-program-2abbf0a4729f">web</a>)</li>
+    <li>Build an AI Stock Trading Bot for Free (<a href="https://medium.com/swlh/build-an-ai-stock-trading-bot-for-free-4a46bec2a18">web</a>)</li>
+    <li>How to Build an Algorithmic Trading Bot with Python (<a href="https://www.activestate.com/blog/how-to-build-an-algorithmic-trading-bot/">web</a>)</li>
+    <li>Robinhood API guide (<a href="https://algotrading101.com/learn/robinhood-api-guide/">web</a>)</li>
+</ul>
+
+
+<hr>
+
+<p>Please share your progress as you implement these projects, and let me know of any other ideas you have!</p>
+
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small>
+
+
+    <br><br><br><br>
+
+</body>
+</html>

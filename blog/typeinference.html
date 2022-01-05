@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Type inference has usability problems - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Type inference has usability problems.">
+	<meta name="author" content="Austin Z. Henley">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>Assistant Professor</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a> |
+		  <a href="../Henley_Vita.pdf">CV</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">Type inference has usability problems</h1>
+	<small>6/27/2019</small><br><br>
+
+    <p><b>TL;DR:</b> Type inference is pushed by many tools and languages, but there is little evidence that it is beneficial. I argue that it may hinder comprehension and increase cognitive load.</p>
+
+    <p><i>To see the discussion about this article, see the <a href="https://news.ycombinator.com/item?id=20296123">post</a> on Hacker News.</i></p>
+    
+    <p>Many programming languages provide type inference. A new wave of hip languages have it baked in: <a href="https://golang.org/">Go</a>, <a href="https://www.rust-lang.org/">Rust</a>, <a href="https://swift.org/">Swift</a>, <a href="https://www.scala-lang.org/">Scala</a>, <a href="https://kotlinlang.org/">Kotlin</a>, <a href="https://ziglang.org/">Zig</a>, <a href="https://nim-lang.org/">Nim</a>, etc. In fact, even older languages have added it later on: <a href="https://en.wikipedia.org/wiki/C%2B%2B11#Type_inference">C++11</a>, <a href="https://en.wikipedia.org/wiki/C_Sharp_3.0#Local_variable_type_inference">C# 3.0</a>, and <a href="https://en.wikipedia.org/wiki/Java_version_history#Java_10">Java 10</a>.</p>
+    
+    <p>Type inference refers to <i>"the automatic detection of the data type of an expression"</i> according to <a href="https://en.wikipedia.org/wiki/Type_inference">Wikipedia</a>. Essentially, it means you don't have to explicitly declare a variable's type when it can be inferred from an assignment. So instead of:</p>
+    
+    <pre class="prettyprint lang-cs">
+int x = 5;
+List&lt;String> names = new List&lt;String>();
+</pre>
+    
+    <p>You can do:</p>
+    
+    <pre class="prettyprint lang-cs">
+var x = 5;
+var names = new List&lt;String>();
+</pre>
+    
+    <p>So what are the benefits? Well, <a href="https://en.wikipedia.org/wiki/Type_inference">Wikipedia</a> claims type inference <i>"makes many programming tasks easier"</i> but there is no citation for that. The code snippet above using type inference does look a bit cleaner at first glance. Hmmm. We will come back to this.</p>
+    
+    <p>You might think, <i>"ok, I'll just not use it"</i> if it is bad. But if you try to avoid it in Go, you will get warnings! Go's linter says that you <i>"should omit type X from declaration of var Y; it will be inferred from the right-hand side"</i>. Moreover, all of the examples from <a href="https://golang.org/doc/effective_go.html">Effective Go</a> follow this practice.
+    </p>
+    
+    <img src="images/golinteromittype.png" class="center" style="max-width: 90%;">
+    
+    
+    <h3>The Cost of Type Inference</h3>
+    
+    <p>While reading code, it is often necessary for me to understand the types of each expression. So if I'm using type inference, how do I know the type of a given variable? It is easy if it is a literal. If a variable or function is named well then it is also straight forward, usually. If it isn't obvious, I may need to navigate to a function declaration to see the return type. Worst case I make a bad assumption. A few examples from production code:</p>
+    
+    <pre class="prettyprint lang-cs">
+var fieldName = "BuildingCode"; // Easy.
+var entries = new Dictionary&lt;String, String>(); // Easy.
+var currentID = searchLog(fieldName)[0]; // I can make a good guess.
+var site = repo.GetSites().Where(x => x.SiteType == SiteTypes.Server); // I can make a decent guess.
+var pdfMap = new Lazy&lt;T>( () => { MapEngine.CreateMap(this.x, this.y, this.zoom) } ); // Not what I expected.
+</pre>
+    
+    <p>Tools help a lot with this. In most code editors you can hover the mouse over a variable name and it will show a tooltip with the type. You can also use a nice shortcut to jump to a function or class declaration to really dive in.</p>
+    
+    <p>However, these seemingly quick actions may have an additional cost: <a href="https://en.wikipedia.org/wiki/Cognitive_load">cognitive load</a>, which refers to the mental effort required. Imagine you're told to calculate <i>3+9+15+18+5</i>. This is trivial on paper. But if asked verbally, even this simple arithmetic can be taxing since you must actively remember the expression <i>and</i> perform the calculations.</p>
+    
+    <p>There are already a lot of details to consider when comprehending code. I don't want to make this even more difficult on myself by having to remember variable types or have to constantly navigate away to look it up.</p>
+    
+    <p>And what if you aren't using your code editor? What if you are viewing the code on GitHub? No type information for you!</p>
+    
+    <img src="images/githubdiff.png" class="center" style="max-width: 90%;"><br>
+    
+    <h3>Use it sparingly?</h3>
+    
+    <p>You certainly don't always have to use type inference. Others have come up with best practices for when to use type inference (e.g., <a href="https://www.intertech.com/Blog/the-use-and-abuse-of-the-c-var-keyword/">these</a> and <a href="https://softwareengineering.stackexchange.com/a/42893/37315">these</a>). <a href="https://softwareengineering.stackexchange.com/a/271940/37315">Another</a> developer listed the benefits of explicit typing to include code-as-documentation and enabling them to follow a Test Driven Development-like process. 
+    
+    <p>Microsoft seems to have even switched their stance on using type inference all over the place in C#. Since 2017, Visual Studio will give a suggestion to <i>"use explicit type instead of 'var'"</i>. In fact, <a href="https://docs.microsoft.com/en-us/visualstudio/ide/reference/convert-var-to-explicit-type?view=vs-2019">MSDN</a> explains to use the explicit type <i>"to improve the code's readability"</i> and to reserve using type inference for anonymous types.</p> 
+    
+    <img src="images/vsuseexplicittype.png" class="center" style="max-width: 90%;"><br>
+    
+    
+    <h3>Supposed Benefits: Readability and Saving Keystrokes</h3>
+    
+    <p>People have <a href="https://typeinference.com/typing/2015/10/05/type_inference.html">argued</a> that type inference actually improves readability by removing redundant information from the code that gets in the way. Besides, if you do need to inspect the type, it only takes a second or two to see.</p>
+    
+    <p>A more motivating <a href="https://softwareengineering.stackexchange.com/a/257454/37315">example</a> for type inference:</p>
+    
+    <pre class="prettyprint lang-cs">
+for (Map.Entry&lt;Integer, Map&lt;Integer, SomeObject&lt;SomeObject, T>>> row : table.entrySet()) {
+    Integer rowKey = entry.getKey();
+    Map&lt;Integer, SomeObject&lt;SomeObject, T>> rowValue = entry.getValue();
+    for (Map.Entry&lt;Integer, SomeObject&lt;SomeObject, T>> col : rowValue.entrySet()) {
+        Integer colKey = col.getKey();
+        SomeObject&lt;SomeObject, T> colValue = col.getValue();
+        doSomethingWith&lt;SomeObject&lt;SomeObject, T>>(rowKey, colKey, colValue);
+    }
+}
+</pre>
+    
+    <p>My response? <i>Go refactor your hideous code.</i></p>
+    
+    <p>A weaker argument I have heard is that you have less code to type with type inference! Because my typing speed is definitely the bottleneck when coding.</p>
+    
+    
+    <h3>A Call for Empirical Studies</h3>
+    
+    <p>Before every language designer blindly accepts type inference as a good thing, I propose that some research be conducted. Yes, it will take some effort but luckily, researchers in the PL, SE, and HCI communities are quite clever and are always looking for interesting projects!</p>
+    
+    <p>I hope to post my ideas for study designs in the future. I'm also crafting the <a href="http://knoxlang.org">Knox programming language</a> to experiment with explicitness over brevity (<small>It is very early in development!</small>).</p>
+
+
+    <br><br><br><br>
+
+</body>
+</html>
