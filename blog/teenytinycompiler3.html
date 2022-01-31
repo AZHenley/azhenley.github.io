@@ -1,64 +1,54 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<html>
+<head>
+	<title>Let's make a Teeny Tiny compiler, part 3 - Austin Z. Henley</title>
 	<meta charset="UTF-8">
-	<meta name="description" content="Let's make a teeny tiny compiler, part 3">
+	<meta name="description" content="Make your own BASIC to C compiler in Python.">
 	<meta name="author" content="Austin Z. Henley">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="Let's make a Teeny Tiny compiler, part 3">
-    <meta property="og:description" content="Make your own compiler using Python.">
-    <meta property="og:image" content="https://web.eecs.utk.edu/~azh/blog/images/knightdragon3.jpg">
-    <meta property="og:url" content="https://web.eecs.utk.edu/~azh/blog/teenytinycompiler3.html"> 
+    <meta property="og:description" content="Make your own BASIC to C compiler in Python.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/knightdragon3.jpg">
+    <meta property="og:url" content="https://austinhenley.com/blog/teenytinycompiler3.html"> 
     <meta name="twitter:card" content="summary_large_image"> 
-
-    <title>Let's make a Teeny Tiny compiler, part 3 - Austin Z. Henley</title>
-
-    <link href="../bootstrap.min.css" rel="stylesheet">
-    <link href="../style.css" rel="stylesheet">
-	<style>img {max-width:100%} p {padding-bottom:3px}</style>
-
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
 	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-
-  </head>
-
-  <body>
-
-    <div class="container">
-
-	<div class="jumbotron" style="padding-top:0px;padding-bottom:0px; background-color:transparent;">
-  	<div class="row">
-			<div class="col-md-6 text-right" style="padding-left:0px;margin-left:0px;">
-				<h3 style="margin-bottom:0;padding-bottom:0;">Austin Z. Henley</h3>
-				Assistant Professor
-			</div>
-			<div class="col-md-6 text-left" style="padding-left:6px;margin-left:0px;margin-top:0px;"><br>
-				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
 				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
 				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
 			</div>
-	  </div>	
-	</div>
+		  </div>
+		</div>
+	  </div>
 
-	<hr style="margin-top:-10px;margin-bottom:10px"/>
-	<b><ul style="text-align:center;">
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../index.html">Home</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../publications.html">Publications</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../teaching.html">Teaching</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../blog.html" style="text-decoration: underline;">Blog</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../Henley_Vita.pdf">CV</a></li>
-	</ul></b>
-	<hr style="margin-top:1px"/>
-	
-	<div class="row" style="margin-top:-8px">
-		<div class="col-md-12">
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+	  <hr />
 
+	<h1 class="blogtitle">Let's make a Teeny Tiny compiler, part 3</h1>
+	<small>7/5/2020</small><br><br>
 
-<br><h3>Let's make a Teeny Tiny compiler, part 3</h3><small>7/5/2020</small><br><br>
+<img src="images/knightdragon3.jpg" class="center" style="max-width:60%;border:1px solid black;">
 
-<img src="images/knightdragon3.jpg" class="center-block" style="max-width:60%;margin-bottom:19px;border:1px solid black">
-
-<p>We are finally here. It is time to create the emitter for our Teeny Tiny compiler, which will give us the foundation to a working compiler. The fame and fortune is so close! Previously, we implemented the lexer (<a href="http://web.eecs.utk.edu/~azh/blog/teenytinycompiler1.html">part 1</a>) and the parser (<a href="http://web.eecs.utk.edu/~azh/blog/teenytinycompiler2.html">part 2</a>). The source code from this tutorial can be found in the GitHub <a href="https://github.com/AZHenley/teenytinycompiler">repo</a>.</p>
+<p>We are finally here. It is time to create the emitter for our Teeny Tiny compiler, which will give us the foundation to a working compiler. The fame and fortune is so close! Previously, we implemented the lexer (<a href="teenytinycompiler1.html">part 1</a>) and the parser (<a href="teenytinycompiler2.html">part 2</a>). The source code from this tutorial can be found in the GitHub <a href="https://github.com/AZHenley/teenytinycompiler">repo</a>.</p>
 
 <p>The emitter is the component that will produce the compiled code. In this case, our compiler will be producing C code. Luckily, we designed our parser in such a way that will make emitting C code quite easy! Since C is so ubiquitous, we will rely on your favorite C compiler (e.g., GCC or Clang) to produce the executable for us. This means our compiler will be platform independent without dealing with assembly code or complex compiler frameworks.</p>
 
@@ -66,10 +56,9 @@
 
 <p>Let's take a look at an example of Teeny Tiny code and the equivalent C code that we would like for our compiler to emit. The example is a program that calculates <i>nums</i> values of the Fibonacci sequence.</p>
 
-<div class="container">
-    <div class="row">
-        <div class="col-xs-6">
-<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+<div style="display:flex;">
+    <div style="flex:1;">
+<pre class="prettyprint" >
 PRINT "How many fibonacci numbers do you want?"
 INPUT nums
 PRINT ""
@@ -84,9 +73,9 @@ WHILE nums > 0 REPEAT
     LET nums = nums - 1
 ENDWHILE
 </pre>
-        </div>
-        <div class="col-xs-6">
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+    </div>
+    <div style="flex:1;">
+<pre class="prettyprint lang-c" >
 #include &lt;stdio.h>
 
 int main(void){
@@ -109,27 +98,26 @@ int main(void){
     return 0;
 }
 </pre>
-        </div>
     </div>
 </div>
 
 <p>The above code <i>almost</i> translates line by line. Like <i>PRINT</i> turns into <i>printf</i>, <i>INPUT</i> to <i>scanf</i>, etc. You'll also notice there are other differences. The C code has a main function, includes a library, and returns 0 at the end. You'll also see that the C code has different syntax for variable declarations versus variable assignments (unlike our LET statement syntax which combines declarations and assignments) and that they are all declared at the top (this is an old C convention). It is these differences that our compiler needs to know about so that they can be handled accordingly. There are a few more that will come up later, but never fear, we can address them!</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Emitter Overview</h4>
+<h3>Emitter Overview</h3>
 
 <p>So how does this emitter work??? In each function of the parser, we will call the emitter to produce the appropriate C code. The emitter is effectively just appending a bunch of strings together while following along the parse tree. For each grammar rule of Teeny Tiny, we will figure out how it should map to C code.</p>
 
 <p>Below is an illustration of compiling a single line of Teeny Tiny code. It shows each step of how the lexer, parser, and emitter work together. The left shows the input code with the relevant token highlighted, the center shows the parse tree with the current element highlighted, and the right side shows the emitted code with the newly appended text highlighted.</p>
 
-<img src="images/teenyemitter.gif" class="center-block" style="max-width:90%;margin-bottom:24px;margin-top:24px;">
+<img src="images/teenyemitter.gif" class="center" style="max-width:90%">
 
 <p>Try watching the animation a few times. The emitter is utilizing the parse tree to emit the C code in fragments. This will all make more sense when we get to the code.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Code Setup</h4>
+<h3>Code Setup</h3>
 
 <p>First, we will update <b>main</b> in <b>teenytiny.py</b> to use the emitter that we will soon build:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
 from lex import *
 from emit import *
 from parse import *
@@ -158,7 +146,7 @@ main()
 
 <p>The compiler still expects a filename as a command line argument to open for input. But now the parser object will control the lexer and the emitter. So next, we have to go on and implement the emitter. Create <b>emit.py</b> with the following code:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
 # Emitter object keeps track of the generated code and outputs it.
 class Emitter:
     def __init__(self, fullPath):
@@ -184,7 +172,7 @@ class Emitter:
 
 <p>We then have to make a small change to the parser's <b>__init__</b> in <b>parse.py</b> to use the emitter:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
     def __init__(self, lexer, emitter):
         self.lexer = lexer
         self.emitter = emitter
@@ -201,13 +189,13 @@ class Emitter:
 
 <p>That really is all the emitter entails. Now we just have to call it with the appropriate C code from the parser.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Emitting Statements</h4>
+<h3>Emitting Statements</h3>
 
 <p>We will now be modifying the existing functions in <b>parse.py</b>. We will be calling the emitter functions from inside the parser (and removing the print statements that we used for testing in part 2).</p>
 
 <p>Going through the functions in order, let's look at <b>program</b>. To translate an empty Teeny Tiny program, we need some boilerplate C code. Really, we only need a main function but we will go ahead and include <i>stdio.h</i> so that <i>printf</i> and <i>scanf</i> are available. Update <b>program</b> with:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
     # program ::= {statement}
     def program(self):
         self.emitter.headerLine("#include &lt;stdio.h>")
@@ -237,7 +225,7 @@ class Emitter:
 
 <p>Let's test our emitter thus far. Assuming your <b>hello.teeny</b> with the Fibonacci code example still exists from last time, run <i>python3 teenytiny.py hello.teeny</i>. If things go as planned, the last line in the terminal should be "Compiling completed." and <b>out.c</b> should have been created. Check the contents of the emitted code and you should see:</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c" >
 #include &lt;stdio.h>
 int main(void){
 return 0;
@@ -250,7 +238,7 @@ return 0;
 
 <p>Next we will update <i>PRINT</i> inside the <b>statement</b> function of <b>parse.py</b>. Recall that there are two cases for the print statement: printing a string and printing the result of an expression. Here is the code:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
         # "PRINT" (expression | string)
         if self.checkToken(TokenType.PRINT):
             self.nextToken()
@@ -271,7 +259,7 @@ return 0;
 
 <p>Run your compiler with <b>hello.teeny</b> again and check <b>out.c</b>:</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c" >
 #include &lt;stdio.h>
 int main(void){
 printf("How many fibonacci numbers do you want?\n");
@@ -285,7 +273,7 @@ return 0;
 
 <p>Continuing through the parser, let's replace the code for <i>IF</i> and <i>WHILE</i> statements. They look almost identical:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
         # "IF" comparison "THEN" block "ENDIF"
         elif self.checkToken(TokenType.IF):
             self.nextToken()
@@ -325,7 +313,7 @@ return 0;
 
 <p>The <i>LABEL</i> and <i>GOTO</i> code is fairly straightforward:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
         # "LABEL" ident
         elif self.checkToken(TokenType.LABEL):
             self.nextToken()
@@ -350,7 +338,7 @@ return 0;
 
 <p>The <i>LET</i> code is a bit different. It will sometimes call <b>emitter.headerLine</b>. Why? Because the first time a variable is referenced in Teeny Tiny it should emit a variable declaration in C, and place it at the top of the main function (this is an old C convention). As I alluded to earlier, this is one of the major differences in syntax between Teeny Tiny and C, so our compiler has to do a little more work to translate. Teeny Tiny doesn't differentiate between variable declarations and assignments, but C does. Here is the code:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
         # "LET" ident = expression
         elif self.checkToken(TokenType.LET):
             self.nextToken()
@@ -370,7 +358,7 @@ return 0;
 
 <p>Ok ok, compile <b>hello.teeny</b> and inspect <b>out.c</b>...</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c" >
 #include &lt;stdio.h>
 int main(void){
 float a;
@@ -399,7 +387,7 @@ return 0;
 
 <p>Let's venture forth with the code. It looks a bit ugly, but it is really just some boilerplate for handling invalid input. Here it is:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
         # "INPUT" ident
         elif self.checkToken(TokenType.INPUT):
             self.nextToken()
@@ -420,13 +408,13 @@ return 0;
 
 <p>Go ahead and test this. All of our statements now emit C code!</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Emitting Expressions</h4>
+<h3>Emitting Expressions</h3>
 
 <p>The last remaining thing to emit code for are expressions. This is actually very little work since Teeny Tiny code requires essentially no changes in order to be valid C code, so just emit it as is. What I mean is that <i>index * offset + 1</i> in Teeny Tiny is also <i>index * offset + 1</i> in C.</p>
 
 <p>We will first take care of <b>comparison</b>, which will only emit the specific operator.</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
     # comparison ::= expression (("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
     def comparison(self):
         self.expression()
@@ -444,7 +432,7 @@ return 0;
 
 <p>In fact, this is so simple that <b>expression</b>, <b>term</b>, and <b>unary</b> also work the same way: just emit the operator.</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
     # expression ::= term {( "-" | "+" ) term}
     def expression(self):
         self.term()
@@ -476,7 +464,7 @@ return 0;
 
 <p>We have emitted code from all of our grammar functions except <b>primary</b>. Once we reach this point, the only thing to emit is either the number literal or the variable identifier, like so:</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python" >
     # primary ::= number | ident
     def primary(self):
         if self.checkToken(TokenType.NUMBER): 
@@ -498,7 +486,7 @@ return 0;
 
 <p>That is it! Teeny Tiny compiles to C code now! Let's test it with a new example, <b>average.tiny</b>:</p>
 
-<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint" >
 # Compute average of given values.
 
 LET a = 0
@@ -522,14 +510,14 @@ PRINT s / a
 
 <p>When you run Teeny Tiny on this, all you should see is:</p>
 
-<pre class="prettyprint" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint" >
 Teeny Tiny Compiler
 Compiling completed.
 </pre>
 
 <p>If you take a look at <b>out.c</b>, you'll see this glorious code:</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c" >
 #include <stdio.h>
 int main(void){
 float a;
@@ -563,13 +551,13 @@ return 0;
 
 <p>Run it through a C compiler. Wow. Look at that. We made a real compiler. Move over Borland!</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Compiling Teeny Tiny</h4>
+<h3>Compiling Teeny Tiny</h3>
 
 <p>You may notice that it is bit tedious to use Teeny Tiny. First, we have to run the Python script. Second, we run the C compiler. Third, we execute the program. There really shouldn't be so many steps. You could build this all into Teeny Tiny or you could write a script to automate it.</p>
 
 <p>My friend, <a href="https://blog.stephenmarz.com/">Stephen Marz</a>, made a Bash script that I find helpful:</p>
 
-<pre class="prettyprint lang-bash" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-bash" >
 PYTHON="python3"
 COMPILER="teenytiny.py"
 CC="gcc"
@@ -601,9 +589,9 @@ fi
 
 <p>You can run it by doing <i>bash build.sh hello.teeny</i> in the terminal, and then you run the executable like <i>./hello</i> .</p>
 
-<img src="images/teenytinyoutput3.png" class="center-block" style="max-width:80%;margin-top:-13px;margin-bottom:-5px;">
+<img src="images/teenytinyoutput3.png" class="center" style="max-width:80%;">
 
-<h4 style="margin-top:22px;margin-bottom:15px;">The project continues...</h4>
+<h3>The project continues...</h3>
 
 <p>Your Teeny Tiny compiler is working! Given code written in our own language, the compiler will produce working C code that can be compiled and executed. This is quite the feat. If you add a few more features, you could make a Teeny Tiny compiler that is written in Teeny Tiny code! Compilers all the way down.</p>
 
@@ -633,26 +621,20 @@ fi
 
 <p>Most notable is the abstract syntax tree (AST) representation. This is one of the major things that this tutorial left out that basically all compilers use. It is an intermediate representation of the code that enables you to perform all sorts of analyses and optimizations on the code before the emitting stage. Fortunately, the way we built our compiler means that it is extremely easy to produce an AST!</p>
 
-<hr><br><br>
+<hr>
 
 <p>Reach out to me and let me know what I should write about next because I doubt I'm done with the Teeny Tiny project. Until then, I also highly recommend reading these longer tutorials:</p>
 
-<ul style="margin-top: -9px;">
+<ul>
 	<li>Writing an Interpreter in Go (<a href="https://amzn.to/2Saf28j">Amazon</a>)</li>
     <li>Crafting Interpreters (<a href="https://amzn.to/3l8FePX">Amazon</a>, <a href="https://craftinginterpreters.com/contents.html">web</a>)</li>
 </ul>
 
 
-<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+<br><br><small>There are Amazon affiliate links on this page.</small>
 
 
-<br><br><br><br>
-	
+    <br><br><br><br>
 
-		</div>
-	</div><br><br><br>
-			
-	</div>
-  
-
-</body></html>
+</body>
+</html>

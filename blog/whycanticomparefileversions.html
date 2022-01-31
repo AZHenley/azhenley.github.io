@@ -1,109 +1,96 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Hey Dropbox, why can't I compare file versions like this?">
-    <meta name="author" content="">
-
-    <title>Hey Dropbox, why can't I compare file versions like this? - Austin Z. Henley</title>
-
-    <link href="../bootstrap.min.css" rel="stylesheet">
-    <link href="../style.css" rel="stylesheet">
-	<style>img {max-width:100%} p {padding-bottom:3px}</style>
-
+<html>
+<head>
+	<title>Hey Dropbox, why can't I compare file versions like this? - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I wish I could compare file versions like it is a YouTube video.">
+	<meta name="author" content="Austin Z. Henley">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Hey Dropbox, why can't I compare file versions like this?">
+    <meta property="og:description" content="I wish I could compare file versions like it is a YouTube video.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/yester.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/whycanticomparefileverrsions.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
 	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-
-  </head>
-
-  <body>
-
-    <div class="container">
-
-	<div class="jumbotron" style="padding-top:0px;padding-bottom:0px; background-color:transparent;">
-  	<div class="row">
-			<div class="col-md-6 text-right" style="padding-left:0px;margin-left:0px;">
-				<h3 style="margin-bottom:0;padding-bottom:0;">Austin Z. Henley</h3>
-				Assistant Professor
-			</div>
-			<div class="col-md-6 text-left" style="padding-left:6px;margin-left:0px;margin-top:0px;"><br>
-				<a href="mailto:azh@utk.edu">azh@utk.edu</a><br>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
 				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
 				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
 			</div>
-	  </div>	
-	</div>
+		  </div>
+		</div>
+	  </div>
 
-	<hr style="margin-top:-10px;margin-bottom:10px"/>
-	<b><ul style="text-align:center;">
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../index.html">Home</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../publications.html">Publications</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../teaching.html">Teaching</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../blog.html" style="text-decoration: underline;">Blog</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../Henley_Vita.pdf">CV</a></li>
-	</ul></b>
-	<hr style="margin-top:1px"/>
-	
-	<div class="row" style="margin-top:-8px">
-		<div class="col-md-12">
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+	  <hr />
 
-
-<br><h3>Hey Dropbox, why can't I compare file versions like this?</h3><small>1/27/2020</small><br><br>
+	<h1 class="blogtitle">Hey Dropbox, why can't I compare file versions like this?</h1>
+	<small>1/27/2020</small><br><br>
 
 <p><i>Update 2/4: See the discussion of this post on <a href="https://news.ycombinator.com/item?id=22221265">Hacker News</a>.</i></p>
 
 <figure>
-<img src="images/yester.gif" class="center-block" style="max-width:80%;margin-bottom:15px;">
-<figcaption style="margin-top:-5px; margin-bottom:6px;"><small><i><center>Mockup of a tool that lets me see what has changed in a Word document using a timeline. Pink indicates changes.</center></i></small></figcaption>
-</figure><br>
+<img src="images/yester.gif" class="center" style="max-width:80%;">
+<figcaption style="margin-top:7px;"><small><i><center>Mockup of a tool that lets me see what has changed in a Word document using a timeline. Pink indicates changes.</center></i></small></figcaption>
+</figure>
 
-<p style="margin-bottom:14px;">This is how I wish I could view changes to a document over time. But let's start from the beginning.</p>
+<p>This is how I wish I could view changes to a document over time. But let's start from the beginning.</p>
 
-<p style="margin-bottom:14px;">I keep everything in Dropbox. It's great. It was actually the first software that I ever paid for (<small>besides video games</small>). I think these automatically syncing cloud storage tools are one of the biggest advancements in software in a long time.</p>
+<p>I keep everything in Dropbox. It's great. It was actually the first software that I ever paid for (<small>besides video games</small>). I think these automatically syncing cloud storage tools are one of the biggest advancements in software in a long time.</p>
 
 <p>But there is one major issue of file management that it doesn't effectively help me with:</p>
 
-<img src="images/fileversions.png" class="center-block" style="max-width:50%;margin-bottom:19px;">
+<img src="images/fileversions.png" class="center" style="max-width:50%;">
 
-<p style="margin-bottom:14px;">Does this look familiar? I sometimes duplicate files before I make big changes so that I can quickly go back in case I mess it up. I've even observed professional software engineers doing this with code files!</p>
+<p>Does this look familiar? I sometimes duplicate files before I make big changes so that I can quickly go back in case I mess it up. I've even observed professional software engineers doing this with code files!</p>
 
-<p style="margin-bottom:14px;">You might be thinking, but Dropbox and Google Docs automatically record each version and let you view them! Here is the version history of a PowerPoint slide deck I used for a lecture:</p>
+<p>You might be thinking, but Dropbox and Google Docs automatically record each version and let you view them! Here is the version history of a PowerPoint slide deck I used for a lecture:</p>
 
-<img src="images/dropboxversions.png" class="center-block" style="max-width:80%;margin-bottom:19px;">
+<img src="images/dropboxversions.png" class="center" style="max-width:80%;">
 
 <p>...but this is useless. Timestamps??? Tell me <b>what</b> changed! Let me <i>see</i> the changes over time. Word has a change tracking feature, but my PhD in computer science isn't enough for me to figure it out.</p>
 
-<p style="margin-bottom:14px;">But but but Austin, you should be using a proper version control system! Just use Git and GitHub!</p>
+<p>But but but Austin, you should be using a proper version control system! Just use Git and GitHub!</p>
 
-<img src="images/githubbinarydiff.png" class="center-block" style="max-width:60%;margin-bottom:19px;">
+<img src="images/githubbinarydiff.png" class="center" style="max-width:60%;">
 
-<p style="margin-bottom:14px;">As you can see from this GitHub diff, popular file formats, like Word and PowerPoint, are not well supported.</p>
+<p>As you can see from this GitHub diff, popular file formats, like Word and PowerPoint, are not well supported.</p>
 
-<p style="margin-bottom:14px;">Not only that, but requiring me to know which versions of my document to commit violates the <a href="https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations">cognitive dimension</a> of premature commitment. Meaning that I often don't know when a version of a file will be important until I've already changed it (which is one reason why undo/redo is so popular). Luckily the cloud storage tools are smart enough to record changes and keep track of versions for us!</p>
+<p>Not only that, but requiring me to know which versions of my document to commit violates the <a href="https://en.wikipedia.org/wiki/Cognitive_dimensions_of_notations">cognitive dimension</a> of premature commitment. Meaning that I often don't know when a version of a file will be important until I've already changed it (which is one reason why undo/redo is so popular). Luckily the cloud storage tools are smart enough to record changes and keep track of versions for us!</p>
 
-<p style="margin-bottom:14px;">But the tools don't let us compare the versions.</p>
+<p>But the tools don't let us compare the versions.</p>
 
-<p style="margin-bottom:14px;">That is why I built this prototype several years ago that I call Yester.</p>
+<p>That is why I built this prototype several years ago that I call Yester.</p>
 
-<img src="images/yester.png" class="center-block" style="max-width:90%;margin-bottom:17px;">
+<img src="images/yester.png" class="center" style="max-width:90%;">
 
-<p style="margin-bottom:14px;">It lets me <i>scrub</i> through the timeline, just like a YouTube video. It supports a side-by-side view of the current version with the currently selected previous version. The prototype uses the Dropbox API to get all of the versions of a file. If I ever have more time I'd love to turn it into an Electron app with support for Word, Excel, PowerPoint, and PDFs that would be free for the world to use.</p>
+<p>It lets me <i>scrub</i> through the timeline, just like a YouTube video. It supports a side-by-side view of the current version with the currently selected previous version. The prototype uses the Dropbox API to get all of the versions of a file. If I ever have more time I'd love to turn it into an Electron app with support for Word, Excel, PowerPoint, and PDFs that would be free for the world to use.</p>
 
-<p style="margin-bottom:14px;">So why isn't this built directly into Dropbox, Google Docs, and Microsoft Office?</p>
+<p>So why isn't this built directly into Dropbox, Google Docs, and Microsoft Office?</p>
 
 <p>If Drew Houston is reading this: I have many more ideas on how to make file management better. Reach out to me and we can discuss them :)</p>
 
 
-
 <br><br><br><br>
-	
 
-		</div>
-	</div><br><br><br>
-			
-	</div>
-  
-
-</body></html>
+</body>
+</html>
