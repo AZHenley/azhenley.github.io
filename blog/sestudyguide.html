@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>A study guide for software engineering students - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="A long list of topics for undergraduate software engineering.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="A study guide for software engineering students">
+    <meta property="og:description" content="A long list of topics for undergraduate software engineering.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/sebookstack.jpg">
+    <meta property="og:url" content="https://austinhenley/blog/sestudyguide.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			  </p>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">A study guide for software engineering students</h1>
+	<small>3/14/2022</small><br><br>
+
+    <img src="images/sebooks.jpg" class="center" style="max-width:60%; margin-bottom:28px; border:1px solid #000000;">
+
+<p>While teaching undergraduate software engineering for four years, I came up with a long list of topics I <i>wished</i> the students were exposed to. In reality, my courses only covered a small subset in detail. Most software engineering textbooks aren't very good and rarely convey day-to-day life as a developer. </p>
+
+<p>But I must warn you: People on the internet are <b>extremely opinionated</b> about these topics. For example, you might see people say <i>"design patterns are the devil"</i> or <i>"my incarnation of Scrum is the only correct way"</i> or <i>"all you actually need is to be a good coder"</i>. Be careful. It is helpful to know about the topics and the debates around them.</p>
+
+<p>My study guide is divided into three categories: the <b>process</b>, the <b>tools</b>, and the <b>code</b>. Plus a bonus fourth category: the <b>life</b>. You'll need to use a variety of resources to learn each topic.</p>
+
+<h3>The Process</h3>
+<ul>
+    <li>Waterfall model</li> 
+    <li>Iterative and incremental</li>
+    <li>Agile, Scrum, XP, Test-Driven Development, etc.</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>Historical context</li>
+    </ul>
+    <li>Standups</li>
+    <li>Iterations</li>
+    <li>Requirements</li>
+    <li>User stories</li>
+    <li>Code reviewing</li>
+    <li>Testing</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>Whitebox testing</li>
+        <li>Blackbox testing</li>
+        <li>Regression testing</li>
+        <li>Usability testing</li>
+    </ul>
+    <li>Understanding failures</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>Case studies of famous software failures</li>
+        <li>Chaos engineering</li>
+    </ul>
+    <li>Popular books:</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+     <li>The Mythical Man-Month (<a href="https://amzn.to/3t92ZLx">Amazon</a>)</li>
+     <li>The Pragmatic Programmer (<a href="https://amzn.to/3KJS94z">Amazon</a>)</li>
+     <li>Peopleware (<a href="https://amzn.to/3KL5dX5">Amazon</a>)</li>      
+    </ul>
+</ul>
+
+
+<h3>The Tools</h3>
+<ul>
+    <li>Version control</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>Distributed vs centralized</li>
+        <li>git</li>
+        <li>GitHub</li>
+    </ul>
+    <li>Issue tracker</li>
+    <li>Code reviewing tool</li>
+    <li>Build system</li>
+    <li>Unit test framework</li>
+    <li>CI/CD</li>
+    <li>Program analyzer</li>
+    <li>Linter</li>
+    <li>Debugger</li>
+    <li>Telemetry</li>
+    <li>Type checker</li>
+    <li>Refactoring tool</li>
+    <li>Package management</li>
+    <li>Documentation generation</li>
+    <li>Containers</li>
+    <li>Regular expressions</li>
+    <li>API client</li>
+    <li>DBMS</li>
+    <li>Sysadmin and command line</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>Bash</li>
+        <li>Common Unix/Linux programs</li>
+        <ul style="margin-top:0px;margin-bottom:0px;">
+            <li>Basic: cd, ls, pwd, cat, touch, rm, chmod, ssh</li>
+            <li>Intermediate: grep, awk, sed</li>
+            <li>Advanced: How to exit vi</li>
+        </ul>
+    </ul>
+</ul>
+
+
+<h3>The Code</h3>
+<ul>
+    <li>Architecture and organization</li>
+    <li>Design patterns</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>What they are, pros, and cons</li>
+        <li>Ex: singleton, factory, observer</li>
+        <li>Model-view-controller</li>
+    </ul>
+    <li>Readability and modularity</li>
+    <li>Technical debt</li>
+    <li>Heuristics for clean code</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>SOLID</li>
+        <li>DRY</li>
+    </ul>
+    <li>Encapsulation</li>
+    <li>Coupling and cohesion</li>
+    <li>Separation of concerns</li>
+    <li>OOP</li>
+    <li>Metrics</li>
+    <li>Error handling</li>
+    <li>Documentation</li>
+    <li>Popular books:</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+    <li>Clean Code (<a href="https://amzn.to/3CG7gZV">Amazon</a>)</li>
+    <li>Code Complete (<a href="https://amzn.to/3I9oLmD">Amazon</a>)</li>
+    </ul>
+</ul>
+
+
+<h3>The Life</h3>
+<ul>
+    <li>Ethics</li>
+    <li>Interviewing</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>Leetcode</li>
+        <li>Levels.fyi</li>
+        <li>Cracking the Coding Interview (<a href="https://amzn.to/3q11Qn2">Amazon</a>)</li>
+        <li>Elements of Programming Interviews (<a href="https://amzn.to/3JgvVqA">Amazon</a>)</li>
+        <li>System Design Interview (<a href="https://amzn.to/3Jbw7Hg">Amazon</a>)</li>
+    </ul>
+    <li>Performance reviews</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>Contributions (LoC, bug fixes, code reviews, mentorship, leadership, innovation)</li> 
+    </ul>
+    <li>Open source</li>
+    <li>Software licenses</li>
+    <li>Staying up to date</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>Hacker News</li>
+        <li>Reddit</li>
+        <li>Twitter</li>
+        <li>Professional conferences</li>
+        <li>Blogs</li>
+        <li>Side projects</li>
+    </ul>
+    <li>Portfolio</li>
+    <li>Interacting with team</li>
+    <ul style="margin-top:0px;margin-bottom:0px;">
+        <li>PM, UX, SRE, management</li>
+    </ul>
+</ul>
+
+
+<p>If I missed something or you disagree, please <a href="https://twitter.com/austinzhenley">tweet</a> me. 😎</p>
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+<br><br><br><br>
+
+</body>
+</html>
