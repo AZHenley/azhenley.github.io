@@ -183,7 +183,7 @@ double cos_taylor_literal_4terms_naive(double x) {
 
 <p>This seemed surprisingly accurate when I started testing it with input values like <i>0.1</i> and <i>0.235</i>. My enthusiasm faded when I graphed it next to math.h:</p>
 
-<img src="images/cosinegraph1.png" class="center" style="max-width:80%;margin-bottom:19px;margin-top:11px;border:1px solid black;">
+<img src="images/cosinegraph1.png" class="center" style="max-width:80%;">
 
 <p>The magenta line is math.h while green is my function. It looks fairly accurate between -pi and +pi, but then explodes.</p>
 
@@ -207,7 +207,7 @@ double cos_taylor_literal_6terms_naive(double x) {
 
 <p>The first optimization I tried was <i>range reduction</i>. The bigger the input value, the less accurate this method is. Since cosine repeats every 2pi, we want to just do <i>x = x % (2*pi);</i>. However, in C the modulus operator doesn't work on floating point numbers, so we made our own.</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 #define modd(x, y) ((x) - (int)((x) / (y)) * (y))
 
 double cos_taylor_literal_6terms_2pi(double x)
@@ -219,7 +219,7 @@ double cos_taylor_literal_6terms_2pi(double x)
 
 <p>This is better for values over 2pi, but it is still very inaccurate leading up to 2pi. We can do better since the cosine values are equivalent every multiple of pi, except that the sign flips. To do that we can mod by 2pi, subtract pi if the value is greater than pi, calculate the Taylor series, and then apply the correct sign. So we are really only calculating cosine from 0 to pi.</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 double cos_taylor_literal_6terms_pi(double x)
 {
     x = modd(x, CONST_2PI);
@@ -237,7 +237,7 @@ double cos_taylor_literal_6terms_pi(double x)
 
 <p>The next optimization involved removing some of the redundant calculations. You'll notice the <i>x*x</i> everywhere in the code. All I did was reduce some of the multiplications with <i>double xx = x * x;</i>.</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 double cos_taylor_literal_6terms(double x)
 {
     x = modd(x, CONST_2PI);
@@ -257,7 +257,7 @@ double cos_taylor_literal_6terms(double x)
 
 <p>I still wasn't sure how many terms to use. So I tried it up to 10 terms to see how it improves accuracy:</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 double cos_taylor_literal_10terms(double x)
 {
     x = modd(x, CONST_2PI);
@@ -279,11 +279,11 @@ double cos_taylor_literal_10terms(double x)
 
 <p>Adding more terms with this approach looked a bit ridiculous, so I moved on.</p>
 
-<h3 style="margin-top:22px;margin-bottom:15px;">Third attempt: Taylor series with running product</h3>
+<h3>Third attempt: Taylor series with running product</h3>
 
 <p>After showing my progress to <a href="http://stephenmarz.com">Dr. Marz</a>, he did some algebra magic and sent me over his modified version. His method removes a lot of redundant calculations by storing them and has the added benefit of allowing you to specify how many terms in you want. For particular applications, this could be handy so that you can have varying degrees of precision/speed as a parameter.</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 double cos_taylor_running_yterms(double x, int y)
 {
     int div = (int)(x / CONST_PI);
@@ -313,13 +313,13 @@ double cos_taylor_running_yterms(double x, int y)
 
 <p>There are definitely diminishing returns with adding more terms. At 16 terms the worst case accuracy is off by 0.0000000000000009 but takes 2.57 seconds for the runtime benchmark. It isn't slow by any means at all, but compared to math.h... it is.</p>
 
-<h3 style="margin-top:22px;margin-bottom:15px;">Fourth attempt: Lookup table</h3>
+<h3>Fourth attempt: Lookup table</h3>
 
 <p>The other option I wanted to try is a lookup table. The idea is to precompute a bunch of values and hardcode them in an array. Lookup tables have existed looong before computers, so this isn't a novel technique. In this case, I'm hoping that giving up a bit of memory will provide a huge runtime win while still being accurate enough.</p>
 
 <p>To generate the lookup table, Dr. Marz wrote a Python script that generates a C header file containing an array where each element is a cosine value that's calculated using math.h. Very smart!</p>
 
-<pre class="prettyprint lang-python" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-python">
 from math import cos, pi
 
 def main(f, PRECISION, NAME):
