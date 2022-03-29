@@ -1,61 +1,53 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Have you ever wondered how the math library's trigonometric functions are implemented?">
-    <meta name="author" content="Austin Z. Henley">
+<html>
+<head>
+	<title>Implementing cosine in C from scratch - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="How does the math library's trigonometric function work?"">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="Implementing cosine in C from scratch">
-    <meta property="og:description" content="Have you ever wondered how the math library's trigonometric functions are implemented?">
+    <meta property="og:description" content="How does the math library's trigonometric function work?">
     <meta property="og:image" content="https://austinhenley.com/blog/images/cosine.jpg">
     <meta property="og:url" content="https://austinhenley.com/blog/cosine.html"> 
     <meta name="twitter:card" content="summary_large_image"> 
-
-    <title>Implementing cosine in C from scratch - Austin Z. Henley</title>
-
-    <link href="../bootstrap.min.css" rel="stylesheet">
-    <link href="../style.css" rel="stylesheet">
-	<style>img {max-width:100%} p {padding-bottom:3px}</style>
-
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
 	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-
-  </head>
-
-  <body>
-
-    <div class="container">
-
-	<div class="jumbotron" style="padding-top:0px;padding-bottom:0px; background-color:transparent;">
-  	<div class="row">
-			<div class="col-md-6 text-right" style="padding-left:0px;margin-left:0px;">
-				<h3 style="margin-bottom:0;padding-bottom:0;">Austin Z. Henley</h3>
-				I work on dev tools.
-			</div>
-			<div class="col-md-6 text-left" style="padding-left:6px;margin-left:0px;margin-top:0px;"><br>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
 				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
 				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
 				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
 			</div>
-	  </div>	
-	</div>
+		  </div>
+		</div>
+	  </div>
 
-	<hr style="margin-top:-10px;margin-bottom:10px"/>
-	<b><ul style="text-align:center;">
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../index.html">Home</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../publications.html">Publications</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../blog.html" style="text-decoration: underline;">Blog</a></li>
-	</ul></b>
-	<hr style="margin-top:1px"/>
-	
-	<div class="row" style="margin-top:-8px">
-		<div class="col-md-12">
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+	  <hr />
 
+	<h1 class="blogtitle">Implementing cosine in C from scratch</h1>
+	<small>7/19/2020</small><br><br>
 
-<br><h3>Implementing cosine in C from scratch</h3><small>7/19/2020</small><br><br>
+    <img src="images/cosine.jpg" class="center" style="max-width:80%; margin-bottom:28px; border:1px solid #000000;">
 
-<img src="images/cosine.jpg" class="center-block" style="max-width:60%;margin-bottom:19px;">
 
 <p><i>Update 7/20: See the discussion of this post on <a href="https://www.reddit.com/r/programming/comments/huc7vm/implementing_cosine_in_c_from_scratch/">Reddit</a>.</i></p>
 
@@ -70,9 +62,9 @@
 <p>You must realize that I am neither a mathematician or a systems programming guru. In fact, out of my 10 years of college studying mathematics and computer science, I somehow never took a trigonometry course. So I'm going to walk you through my hurdles of investigating and implementing cosine in C. The goals are:</p>
 
 <ul>
-	<li>Simple <i>enough</i> that even I can understand the code.</li>
-	<li>Accurate <i>enough</i> that no mortal will notice the error.</li>
-	<li>Fast <i>enough</i> that a video game could use it.</li>
+    <li>Simple <i>enough</i> that even I can understand the code.</li>
+    <li>Accurate <i>enough</i> that no mortal will notice the error.</li>
+    <li>Fast <i>enough</i> that a video game could use it.</li>
 </ul>
 
 <p>We will explore several ways to compute cosine and a few optimizations. Since I'm not a C ninja, I'll be avoiding any elaborate trickery or micro-optimizations (but if you know of some, let me know!). In fact, I often chose more readable code for slightly less performant code. We will benchmark as we go along to understand the implications of our actions. All of the code and benchmarks can be found in the GitHub <a href="https://github.com/AZHenley/cosine">repository</a>.</p>
@@ -80,19 +72,19 @@
 <p>Table of contents:</p>
 
 <ul>
-	<li>Why do I care about cosine?</li>
-	<li>Methods to compute cosine</li>
-	<li>Benchmark setup</li>
-	<li>First attempt: Naive Taylor series with literals</li>
-	<li>Second attempt: Better Taylor series with literals</li>
-	<li>Third attempt: Taylor series with running product</li>
-	<li>Fourth attempt: Lookup table</li>
-	<li>Fifth attempt: Lookup table with LERP</li>
-	<li>Final comparison</li>
-	<li>Conclusion</li>
+    <li>Why do I care about cosine?</li>
+    <li>Methods to compute cosine</li>
+    <li>Benchmark setup</li>
+    <li>First attempt: Naive Taylor series with literals</li>
+    <li>Second attempt: Better Taylor series with literals</li>
+    <li>Third attempt: Taylor series with running product</li>
+    <li>Fourth attempt: Lookup table</li>
+    <li>Fifth attempt: Lookup table with LERP</li>
+    <li>Final comparison</li>
+    <li>Conclusion</li>
 </ul>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Why do I care about cosine?</h4>
+<h3 style="margin-top:22px;margin-bottom:15px;">Why do I care about cosine?</h3>
 
 <p>In all my time of coding, there has only been one situation in which I used cosine: games, games, games.</p>
 
@@ -111,7 +103,7 @@ function move(obj) {
 
 <p>Maybe don't stare at that for too long...</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Methods to calculate cosine</h4>
+<h3 style="margin-top:22px;margin-bottom:15px;">Methods to calculate cosine</h3>
 
 <p>When I initiated this transcendental rabbit hole, I found the <b>Taylor series</b> method of approximating cosine.</p>
 
@@ -128,7 +120,7 @@ function move(obj) {
 <p>Then there is the Intel CPU <b>fcos</b> instruction. The instruction computes cosine given a floating-point value in radians in the range -2^63 to 2^63 stored in a FPU register and replaces it with the result. I'm not sure if modern Intel CPUs still use the CORDIC method, and if so, whether it is implemented in hardware or software. After dissembling a few programs that use cosine, I could not find one that actually used the fcos instruction. Although it is fast, others have <a href="http://notabs.org/fpuaccuracy/">documented</a> the inaccuracy of the instruction, most notably when the argument approaches multiples of pi/2. For more details, see this unofficial <a href="https://mudongliang.github.io/x86/html/file_module_x86_id_89.html">documentation</a> or the official Intel <a href="https://software.intel.com/sites/default/files/managed/39/c5/325462-sdm-vol-1-2abcd-3abcd.pdf">reference</a>.</p>
 
 <p>Now, any sane person will just use C's <b>math.h</b>. And for everyday purposes, you probably should. But remember, we couldn't use anything from the standard library. Also, that wouldn't be any fun. I did compare the accuracy of math.h's cosine function on my computer to Wolfram Alpha. I found that math.h is accurate up to 15 digits of precision, which is way more than I will ever need.
-	
+    
 <p>To see how the standard library computes cosine, I went and looked at the source of several C standard library implementations. Glibc, Newlibc, Musl, etc. Even though they looked like they were using a Taylor series, these were a bit too much for me to get my head around. They were all very different from one another, often relied on several dense functions, were littered with magic numbers, had tables of precomputed values, and were using extensive bit trickery. Someone spent a lot of time on making these fast.</p>
 
 <p>Here is a screenshot of when I was trying to walk through the relevant code in Musl. From <a href="https://github.com/ifduyue/musl/blob/master/src/math/cos.c">cos()</a> to <a href="https://github.com/ifduyue/musl/blob/master/src/math/__cos.c">__cos()</a> to <a href="https://github.com/ifduyue/musl/blob/master/src/math/__rem_pio2.c">__rem_pio2()</a>.</p>
@@ -137,7 +129,7 @@ function move(obj) {
 
 <p>Yikes.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Benchmark setup</h4>
+<h3 style="margin-top:22px;margin-bottom:15px;">Benchmark setup</h3>
 
 <p>As I progress through implementing the different methods of calculating cosine, I will be comparing them from two perspectives: runtime and accuracy. For runtime, each function is executed 100 million times using a range of input values and it is timed using time.h's clock function. For accuracy, it takes the difference of my function's results and math.h's results over a range of inputs, and returns the worst case. For example, an accuracy value of 0.0002 means that in the worst case, my implementation was 0.0002 off from math.h, for one input over a large range of inputs.</p>
 
@@ -179,7 +171,7 @@ double accuracy(double (*func)(double))
 
 <p>You can find all the benchmark code in the GitHub <a href="https://github.com/AZHenley/cosine">repo</a>. Thanks to Dr. Marz for rewriting it to have an easy to use interface.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">First attempt: Naive Taylor series with literals</h4>
+<h3 style="margin-top:22px;margin-bottom:15px;">First attempt: Naive Taylor series with literals</h3>
 
 <p>First, I tried a literal translation of the Taylor series with 4 terms:</p>
 
@@ -209,7 +201,7 @@ double cos_taylor_literal_6terms_naive(double x) {
 
 <p>Much better. But it still explodes as it approaches to 2pi.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Second attempt: Better Taylor series with literals</h4>
+<h3 style="margin-top:22px;margin-bottom:15px;">Second attempt: Better Taylor series with literals</h3>
 
 <p>There were 3 possible improvements that jumped out at me at this point: reduce the range of the input, reduce the number of redundant calculations, and keep adding more terms.</p>
 
@@ -287,7 +279,7 @@ double cos_taylor_literal_10terms(double x)
 
 <p>Adding more terms with this approach looked a bit ridiculous, so I moved on.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Third attempt: Taylor series with running product</h4>
+<h3 style="margin-top:22px;margin-bottom:15px;">Third attempt: Taylor series with running product</h3>
 
 <p>After showing my progress to <a href="http://stephenmarz.com">Dr. Marz</a>, he did some algebra magic and sent me over his modified version. His method removes a lot of redundant calculations by storing them and has the added benefit of allowing you to specify how many terms in you want. For particular applications, this could be handy so that you can have varying degrees of precision/speed as a parameter.</p>
 
@@ -321,7 +313,7 @@ double cos_taylor_running_yterms(double x, int y)
 
 <p>There are definitely diminishing returns with adding more terms. At 16 terms the worst case accuracy is off by 0.0000000000000009 but takes 2.57 seconds for the runtime benchmark. It isn't slow by any means at all, but compared to math.h... it is.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Fourth attempt: Lookup table</h4>
+<h3 style="margin-top:22px;margin-bottom:15px;">Fourth attempt: Lookup table</h3>
 
 <p>The other option I wanted to try is a lookup table. The idea is to precompute a bunch of values and hardcode them in an array. Lookup tables have existed looong before computers, so this isn't a novel technique. In this case, I'm hoping that giving up a bit of memory will provide a huge runtime win while still being accurate enough.</p>
 
@@ -367,7 +359,7 @@ return costable_0_01[(int)(x * 100 + 0.5)];
 
 <p>The tables seem to hit a nice balance of accuracy. The worst case accuracy of the smallest table is 0.49, so not usable. But with each increase in the table size, you get 1 more digit of precision: 0.049, 0.0049, 0.00049, and 0.000049. The runtime test for each table was about 0.38. <b>That is fast!</b> (Actually, we got the runtime down to about 0.33, but the code was ugly.)</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Fifth attempt: Lookup table with LERP</h4>
+<h3 style="margin-top:22px;margin-bottom:15px;">Fifth attempt: Lookup table with LERP</h3>
 
 <p>Sure, a lookup table is great, but we can do better for values that aren't in the table. Introducing, <i>linear interpolation</i>. This is just a cool sounding term for taking the weighted average between two values. Now when the input value isn't in the table, we will compute an approximation based on which table entry is closer. The code:</p>
 
@@ -387,7 +379,7 @@ double cos_table_0_01_LERP(double x)
 }
 </pre>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Final comparison</h4>
+<h3>Final comparison</h3>
 
 <p>Here is a comparison of our functions for worst case accuracy compared to math.h (lower is better!):</p>
 
@@ -397,23 +389,14 @@ double cos_table_0_01_LERP(double x)
 
 <img src="images/cosineruntime.png" class="center-block" style="max-width:80%;margin-bottom:31px;margin-top:12px;border:1px solid black;">
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Conclusion</h4>
+<h3>Conclusion</h3>
 
 <p>So what do I recommend using? Math.h if possible. None of these functions are particularly slow, and most of them are accurate enough. But the next time I make a game that depends heavily on trig functions, I'll be using the 0_001 table.</p>
 
 <p>Until the next rabbit hole.</p>
 
-<br><br>
-<br><br>
-
 
 <br><br><br><br>
-	
 
-		</div>
-	</div><br><br><br>
-			
-	</div>
-  
-
-</body></html>
+</body>
+</html>
