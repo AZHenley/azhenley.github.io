@@ -84,11 +84,11 @@
     <li>Conclusion</li>
 </ul>
 
-<h3 style="margin-top:22px;margin-bottom:15px;">Why do I care about cosine?</h3>
+<h3>Why do I care about cosine?</h3>
 
 <p>In all my time of coding, there has only been one situation in which I used cosine: games, games, games.</p>
 
-<pre class="prettyprint lang-js" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-js">
 function move(obj) {
     obj.x += obj.speed * Math.sin(obj.rotation);
     obj.y += obj.speed * Math.cos(obj.rotation);
@@ -99,15 +99,15 @@ function move(obj) {
 
 <p>It looks like this:</p>
 
-<img src="images/spiral.gif" class="center-block" style="max-width:50%;margin-bottom:19px;">
+<img src="images/spiral.gif" class="center" style="max-width:50%;">
 
 <p>Maybe don't stare at that for too long...</p>
 
-<h3 style="margin-top:22px;margin-bottom:15px;">Methods to calculate cosine</h3>
+<h3>Methods to calculate cosine</h3>
 
 <p>When I initiated this transcendental rabbit hole, I found the <b>Taylor series</b> method of approximating cosine.</p>
 
-<img src="images/taylorseries.png" class="center-block" style="max-width:50%;margin-bottom:19px;">
+<img src="images/taylorseries.png" class="center" style="max-width:50%;">
 
 <p>This seems to be the defacto way of calculating cosine in math libraries, at least at a high level. Given more terms, the approximation will be more accurate.</p>
 
@@ -115,7 +115,7 @@ function move(obj) {
 
 <p><b>CORDIC</b> is another term that kept popping up in my searches. It is an iterative method for computing functions like sine and cosine using only addition, subtraction, bit shifting, and a small lookup table. It was often implemented in hardware, going back to the late 1950s, or in software that often runs on low-end CPUs or microcontrollers, like those found in calculators. This method was quite popular in the past, and was used by the Intel 8087 Math Coprocessor, TI-85 calculator, and HP-48G calculator. However, I can't find any references of whether it is used much today. For more details, see the Wikipedia <a href="https://en.wikipedia.org/wiki/CORDIC">article</a> or the original <a href="https://dl.acm.org/doi/abs/10.1145/1457838.1457886">paper</a> describing the method or check out an <a href="https://people.sc.fsu.edu/~jburkardt/c_src/cordic/cordic.html">implementation</a> written in C. I won't be comparing my methods to it, but I am a little curious how it holds up. Figure from the original <a href="https://dl.acm.org/doi/abs/10.1145/1457838.1457886">paper</a>:</p>
 
-<img src="images/cordic.png" class="center-block" style="max-width:50%;margin-bottom:19px;">
+<img src="images/cordic.png" class="center" style="max-width:50%;">
 
 <p>Then there is the Intel CPU <b>fcos</b> instruction. The instruction computes cosine given a floating-point value in radians in the range -2^63 to 2^63 stored in a FPU register and replaces it with the result. I'm not sure if modern Intel CPUs still use the CORDIC method, and if so, whether it is implemented in hardware or software. After dissembling a few programs that use cosine, I could not find one that actually used the fcos instruction. Although it is fast, others have <a href="http://notabs.org/fpuaccuracy/">documented</a> the inaccuracy of the instruction, most notably when the argument approaches multiples of pi/2. For more details, see this unofficial <a href="https://mudongliang.github.io/x86/html/file_module_x86_id_89.html">documentation</a> or the official Intel <a href="https://software.intel.com/sites/default/files/managed/39/c5/325462-sdm-vol-1-2abcd-3abcd.pdf">reference</a>.</p>
 
@@ -125,17 +125,17 @@ function move(obj) {
 
 <p>Here is a screenshot of when I was trying to walk through the relevant code in Musl. From <a href="https://github.com/ifduyue/musl/blob/master/src/math/cos.c">cos()</a> to <a href="https://github.com/ifduyue/musl/blob/master/src/math/__cos.c">__cos()</a> to <a href="https://github.com/ifduyue/musl/blob/master/src/math/__rem_pio2.c">__rem_pio2()</a>.</p>
 
-<img src="images/muslcode.png" class="center-block" style="max-width:99%;margin-bottom:21px;margin-top:15px;border:1px solid black;">
+<img src="images/muslcode.png" class="center" style="max-width:99%;margin-bottom:21px;margin-top:15px;border:1px solid black;">
 
 <p>Yikes.</p>
 
-<h3 style="margin-top:22px;margin-bottom:15px;">Benchmark setup</h3>
+<h3>Benchmark setup</h3>
 
 <p>As I progress through implementing the different methods of calculating cosine, I will be comparing them from two perspectives: runtime and accuracy. For runtime, each function is executed 100 million times using a range of input values and it is timed using time.h's clock function. For accuracy, it takes the difference of my function's results and math.h's results over a range of inputs, and returns the worst case. For example, an accuracy value of 0.0002 means that in the worst case, my implementation was 0.0002 off from math.h, for one input over a large range of inputs.</p>
 
 <p>Here is the relevant code:</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 // Measures the time of many executions in seconds. Smaller number is better.
 double runtime(double (*func)(double))
 {
@@ -171,11 +171,11 @@ double accuracy(double (*func)(double))
 
 <p>You can find all the benchmark code in the GitHub <a href="https://github.com/AZHenley/cosine">repo</a>. Thanks to Dr. Marz for rewriting it to have an easy to use interface.</p>
 
-<h3 style="margin-top:22px;margin-bottom:15px;">First attempt: Naive Taylor series with literals</h3>
+<h3>First attempt: Naive Taylor series with literals</h3>
 
 <p>First, I tried a literal translation of the Taylor series with 4 terms:</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 double cos_taylor_literal_4terms_naive(double x) {
     return 1 - ((x*x)/(2)) + ((x*x*x*x)/(24)) - ((x*x*x*x*x*x)/(720)) + ((x*x*x*x*x*x*x*x)/(40320));
 }
@@ -183,13 +183,13 @@ double cos_taylor_literal_4terms_naive(double x) {
 
 <p>This seemed surprisingly accurate when I started testing it with input values like <i>0.1</i> and <i>0.235</i>. My enthusiasm faded when I graphed it next to math.h:</p>
 
-<img src="images/cosinegraph1.png" class="center-block" style="max-width:80%;margin-bottom:19px;margin-top:11px;border:1px solid black;">
+<img src="images/cosinegraph1.png" class="center" style="max-width:80%;margin-bottom:19px;margin-top:11px;border:1px solid black;">
 
 <p>The magenta line is math.h while green is my function. It looks fairly accurate between -pi and +pi, but then explodes.</p>
 
 <p>Perhaps more terms will help.</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 double cos_taylor_literal_6terms_naive(double x) {
     return 1 - ((x*x)/(2)) + ((x*x*x*x)/(24)) - ((x*x*x*x*x*x)/(720)) + ((x*x*x*x*x*x*x*x)/(40320)) - ((x*x*x*x*x*x*x*x*x*x)/(3628800)) + ((x*x*x*x*x*x*x*x*x*x*x*x)/(479001600)); 
 }
@@ -197,7 +197,7 @@ double cos_taylor_literal_6terms_naive(double x) {
 
 <p>Now if we graph that...</p>
 
-<img src="images/cosinegraph2.png" class="center-block" style="max-width:80%;margin-bottom:19px;margin-top:11px;border:1px solid black;">
+<img src="images/cosinegraph2.png" class="center" style="max-width:80%;">
 
 <p>Much better. But it still explodes as it approaches to 2pi.</p>
 
@@ -383,11 +383,11 @@ double cos_table_0_01_LERP(double x)
 
 <p>Here is a comparison of our functions for worst case accuracy compared to math.h (lower is better!):</p>
 
-<img src="images/cosineaccuracy.jpg" class="center-block" style="max-width:50%;margin-bottom:22px;margin-top:10px;border:1px solid black;">
+<img src="images/cosineaccuracy.jpg" class="center" style="max-width:50%;margin-bottom:22px;margin-top:10px;border:1px solid black;">
 
 <p>Here is a comparison of our functions for runtime to compute 100,000,000 values (lower is better!):</p>
 
-<img src="images/cosineruntime.png" class="center-block" style="max-width:80%;margin-bottom:31px;margin-top:12px;border:1px solid black;">
+<img src="images/cosineruntime.png" class="center" style="max-width:80%;margin-bottom:31px;margin-top:12px;border:1px solid black;">
 
 <h3>Conclusion</h3>
 
