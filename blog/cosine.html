@@ -125,7 +125,7 @@ function move(obj) {
 
 <p>Here is a screenshot of when I was trying to walk through the relevant code in Musl. From <a href="https://github.com/ifduyue/musl/blob/master/src/math/cos.c">cos()</a> to <a href="https://github.com/ifduyue/musl/blob/master/src/math/__cos.c">__cos()</a> to <a href="https://github.com/ifduyue/musl/blob/master/src/math/__rem_pio2.c">__rem_pio2()</a>.</p>
 
-<img src="images/muslcode.png" class="center" style="max-width:99%;margin-bottom:21px;margin-top:15px;border:1px solid black;">
+<img src="images/muslcode.png" class="center" style="max-width:99%;border:1px solid black;">
 
 <p>Yikes.</p>
 
@@ -140,7 +140,7 @@ function move(obj) {
 double runtime(double (*func)(double))
 {
     clock_t start = clock();
-    for (int i = 0; i < 100000000; i++)
+    for (int i = 0; i &lt; 100000000; i++)
     {
         volatile double c = func(i / 10000.0);
         (void)c;
@@ -155,10 +155,10 @@ double accuracy(double (*func)(double))
     double start = 0;
     double stop = CONST_2PI;
     double step = 0.0000001;
-    for (double i = start; i < stop; i += step)
+    for (double i = start; i &lt; stop; i += step)
     {
         double c = absd(func(i) - cos(i));
-        if (c > w)
+        if (c &gt; w)
         {
             w = c;
         }
@@ -224,7 +224,7 @@ double cos_taylor_literal_6terms_pi(double x)
 {
     x = modd(x, CONST_2PI);
     char sign = 1;
-    if (x > CONST_PI)
+    if (x &gt; CONST_PI)
     {
         x -= CONST_PI;
         sign = -1;
@@ -242,7 +242,7 @@ double cos_taylor_literal_6terms(double x)
 {
     x = modd(x, CONST_2PI);
     char sign = 1;
-    if (x > CONST_PI)
+    if (x &gt; CONST_PI)
     {
         x -= CONST_PI;
         sign = -1;
@@ -262,7 +262,7 @@ double cos_taylor_literal_10terms(double x)
 {
     x = modd(x, CONST_2PI);
     char sign = 1;
-    if (x > CONST_PI)
+    if (x &gt; CONST_PI)
     {
         x -= CONST_PI;
         sign = -1;
@@ -295,7 +295,7 @@ double cos_taylor_running_yterms(double x, int y)
     double result = 1.0;
     double inter = 1.0;
     double num = x * x;
-    for (int i = 1; i <= y; i++)
+    for (int i = 1; i &lt;= y; i++)
     {
         double comp = 2.0 * i;
         double den = comp * (comp - 1.0);
@@ -330,7 +330,7 @@ def main(f, PRECISION, NAME):
         f.write("{:.20f}, ".format(cos(p)))
         j += 1
         p += PRECISION
-        if p > 2*pi:
+        if p &gt; 2*pi:
             break
     f.write("1.0 };\n")
     f.write("const int %s_size = %d;\n" % (NAME, j+1))
@@ -346,24 +346,24 @@ if __name__ == '__main__':
 
 <p>We wanted to test our tables with different precision. We generated tables with 8 values, 64 values, 630 values, 6285 values, and 62833 values. The cost comes in the form of an increased executable. The 1.0 and 0.1 tables aren't noticeable, but the other tables increased the executable size by about 5KB, 50KB, and 500KB, respectively.</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
-double absd(double a) { *((unsigned long *)&a) &= ~(1UL << 63); return a; }
+<pre class="prettyprint lang-c">
+double absd(double a) { *((unsigned long *)&a) &= ~(1UL &lt;&lt; 63); return a; }
 
 double cos_table_0_01(double x)
 {
-x = absd(x);
-x = modd(x, CONST_2PI);
-return costable_0_01[(int)(x * 100 + 0.5)];
+    x = absd(x);
+    x = modd(x, CONST_2PI);
+    return costable_0_01[(int)(x * 100 + 0.5)];
 }
 </pre>
 
 <p>The tables seem to hit a nice balance of accuracy. The worst case accuracy of the smallest table is 0.49, so not usable. But with each increase in the table size, you get 1 more digit of precision: 0.049, 0.0049, 0.00049, and 0.000049. The runtime test for each table was about 0.38. <b>That is fast!</b> (Actually, we got the runtime down to about 0.33, but the code was ugly.)</p>
 
-<h3 style="margin-top:22px;margin-bottom:15px;">Fifth attempt: Lookup table with LERP</h3>
+<h3>Fifth attempt: Lookup table with LERP</h3>
 
 <p>Sure, a lookup table is great, but we can do better for values that aren't in the table. Introducing, <i>linear interpolation</i>. This is just a cool sounding term for taking the weighted average between two values. Now when the input value isn't in the table, we will compute an approximation based on which table entry is closer. The code:</p>
 
-<pre class="prettyprint lang-c" style="margin-top: 16px; margin-bottom: 20px;">
+<pre class="prettyprint lang-c">
 #define lerp(w, v1, v2) ((1.0 - (w)) * (v1) + (w) * (v2))
 
 double cos_table_0_01_LERP(double x)
@@ -383,11 +383,11 @@ double cos_table_0_01_LERP(double x)
 
 <p>Here is a comparison of our functions for worst case accuracy compared to math.h (lower is better!):</p>
 
-<img src="images/cosineaccuracy.jpg" class="center" style="max-width:50%;margin-bottom:22px;margin-top:10px;border:1px solid black;">
+<img src="images/cosineaccuracy.jpg" class="center" style="max-width:50%;">
 
 <p>Here is a comparison of our functions for runtime to compute 100,000,000 values (lower is better!):</p>
 
-<img src="images/cosineruntime.png" class="center" style="max-width:80%;margin-bottom:31px;margin-top:12px;border:1px solid black;">
+<img src="images/cosineruntime.png" class="center" style="max-width:80%;">
 
 <h3>Conclusion</h3>
 
