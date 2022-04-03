@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The project with a single 11,000-line code file - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I was responsible for a critical software project written by non-programmers a decade ago.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="The project with a single 11,000-line code file">
+    <meta property="og:description" content="I was responsible for a critical software project written by non-programmers a decade ago.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/dependency.png">
+    <meta property="og:url" content="https://austinhenley/blog/11000lines.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+	  <hr />
+
+	<h1 class="blogtitle">The project with a single 11,000-line code file</h1>
+	<small>4/3/2022</small><br><br>
+
+    <img src="images/dependency.png" class="center" style="max-width:60%; margin-bottom:28px; border:1px solid #000000;">
+
+
+<p><small>Image based on obligatory <a href="https://xkcd.com/2347">XKCD comic</a>.</small></p>
+
+<p>A long time ago at one of my first software jobs, I received a bug report for a internal product that I didn't even know existed.</p>
+
+<p>It turned out to be an application that serves up basically <b>every</b> form that any employee within the company might need. Essentially a catch-all resource. Do you need to report someone to HR? There is a form for that. Do you need a contract for a new client? There is a form for that.</p> 
+
+<p>The responsibility of maintaining the project had been bounced from team to team over the years. Apparently it belonged to my team. And by my team, I mean me.</p>
+
+<p>Oh, the horror.</p>
+
+<p>It was a single code file with over 11,000 lines of VBScript.</p>
+
+<p>Countless people had made changes to this file over the years. But they did not appear to be software developers. Their roles ranged from IT support to business analyst. I'm shocked at how little value the project was given considering how many employees used these forms each day.</p>
+
+<p>It looked like the entire file would execute through from top to bottom, although I never actually confirmed it. The code followed a rough pattern of <i>fetch some data about the user, check if some conditions are met, then do some action</i> which repeated a thousand or so times.  The conditions were often as simple as:</p>
+
+<code>If (usrrps = 5) And (wauth &lt;&gt; "") Then</code>
+
+<p>What came next was usually a combination of displaying a form, accessing a file on a shared drive, running a SQL query on who know whose database, and sending an email to a hardcoded address.</p>
+
+<p>Now, I had never used VBScript before (and haven't since then), but many variables appeared to be unused. The names were indecipherable. Synonyms were littered throughout.</p>
+
+<p>Something I found hilarious is that a variable might be used on lines 200-210 and then again on line 8544. No where else.</p>
+
+<p>Much of the logic appeared redundant. Probably copy and pasted at some point then later diverged. Like, how many times does the user need to be authenticated in one code file? Once I dared to clean this up and reuse the authentication response, but it broke everything. I never figured out why. To this day I sometimes lie in bed wondering what could have caused this.</p>
+
+<p>There was no version control. The only context about code changes was in the bug tracker and in the code comments, though I learned the hard way to not trust those.</p>
+
+<p>There was no test environment. If I made a change, I had to test it in "production". All of the program's state was based on the user's privileges so we would impersonate whoever reported the bug such that we could see what they saw.</p>
+
+<p>There were no unit tests. If I made a change that caused some other "feature" to break, there was essentially a 0% chance I would know about it until a week later when Jeff in marketing would report a bug.</p>
+
+<hr>
+
+<p>What is the moral of the story?</p>
+
+<ul style="text-decoration: line-through;">
+<li>Users don't care about the technologies or code.</li>
+<li>Developers do care.</li>
+<li>Technical debt is <i>real</i>. And it can be costly.</li>
+<li>The ingenuity of people is astounding.</li>
+</ul>
+
+<p>I have no idea.</p>
+
+<br><br><br><br>
+
+</body>
+</html>
