@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Computational notebooks research at CHI 2022 - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Interesting HCI research on computational notebooks that was presented at CHI 2022.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Computational notebooks research at CHI 2022">
+    <meta property="og:description" content="Interesting HCI research on computational notebooks that was presented at CHI 2022.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/chi2022.jpg">
+    <meta property="og:url" content="https://austinhenley.com/blog/notebooksatchi2022.html"> 
+    <meta name="twitter:card" content="summary_large_image"> 
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 7px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Computational notebooks research at CHI 2022</h1>
+	<small>5/13/2021</small><br><br>
+
+    <img src="images/chi2022.jpg" class="center" style="max-width:75%; margin-bottom:28px; border:1px solid #000000;">
+
+
+<p>Last week I attended the ACM CHI 2022 conference in New Orleans, the premier research conference in human-computer interaction. My goal was to attend as many presentations about data science and human-AI collaboration as possible.</p>
+
+<p>Below are my notes about a handful of the presentations on computational notebooks, including my summary and links to the presentation video, short preview video, and paper for each.</p>
+	
+<hr><br>
+
+<div>
+<b>Diff in the Loop: Supporting Data Comparison in Exploratory Data Analysis</b><br>
+<small>April Yi Wang, Will Epperson, Robert A. DeLine, Steven M. Drucker</small><br>
+<small><a href="https://www.youtube.com/watch?v=F4CJRsowktg">preview video</a>, 
+<a href="https://www.youtube.com/watch?v=4sz9fO4eXes">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3491102.3502123">paper</a></small><br> 
+My summary: <i>This paper contributes a tool for comparing versions of *data* throughout the data analysis process, called Diff in the Loop. The tool automatically saves snapshots of the code and provides visualizations of how the data changed. For example, if you filter automobiles that have fewer than 4 cylinders, how does that change the distribution of MPG and horsepower? Without this tool, you'd have to setup these plots after each step manually. A preliminary user study found that the tool does aid a common pain point, though the utility of each visualization is highly dependent on the task.</i>
+</div>
+<img src="images/diffintheloop.png" class="center" style="max-width:70%; margin-top:7px; margin-bottom: 7px; border:1px solid #000000;"><br><br>
+
+
+<div>
+<b>Documentation Matters: Human-Centered AI System to Assist Data Science Code Documentation in Computational Notebooks</b><br>
+<small>April Yi Wang, Dakuo Wang, Jaimie Drozdal, Michael Muller, Soya Park, Justin D. Weisz, Xuye Liu, Lingfei Wu, Casey Dugan</small><br>
+<small><a href="https://www.youtube.com/watch?v=nnSfsePFSuM">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3489465">paper</a></small><br>
+My summary: <i>Notebooks aim to tell a story, but it may not be effective. This paper has two major contributions, (1) an investigation into what makes good notebook documentation and (2) a tool for automatically generating documentation. First, they analyzed 80 highly-rated Kaggle notebooks and found 9 types of information in the markdown cells (e.g., describing what the code is doing, explaining the result, or an external reference). Second, they designed Themisto for automatically generating documentation that uses a deep learning model and API documentation. Their within-subjects user study found that using Themisto reduced task time and resulted in better documentation.</i>
+</div>
+<img src="images/themisto.png" class="center" style="max-width:70%; margin-top:7px; margin-bottom: 7px; border:1px solid #000000;"><br><br>
+
+
+<div>
+<b>StickyLand: Breaking the Linear Presentation of Computational Notebooks</b><br>
+<small>Zijie J. Wang, Katie Dai, W. Keith Edwards</small><br>
+<small><a href="https://www.youtube.com/watch?v=nnSfsePFSuM">talk video</a>,
+<a href="https://dl.acm.org/doi/pdf/10.1145/3491101.3519653">paper</a></small><br>
+My summary: <i>This early work contributes StickyLand, a notebook extension for making non-linear notebooks. It enables users to make "sticky cells" that stay at the same position onscreen even when scrolling. These features make it possible to build dashboards from code and output cells.</i>  
+</div>
+<img src="images/stickyland.png" class="center" style="max-width:70%; margin-top:7px; margin-bottom: 7px; border:1px solid #000000;"><br><br>
+
+
+<div>
+<b>Symphony: Composing Interactive Interfaces for Machine Learning</b><br>
+<small>Alex Bäuerle, Ángel Alexander Cabrera, Fred Hohman, Megan Maher, David Koski, Xavier Suau, Titus Barik, Dominik Moritz</small><br>
+<small><a href="https://www.youtube.com/watch?v=Wf-YRBsI-wA">preview video</a>, 
+<a href="https://www.youtube.com/watch?v=0Q3wIh3AiPs">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3491102.3502102">paper</a></small><br>
+My summary: <i>Symphony is a framework for creating interactive machine learning visualizations, either in notebooks or in webpages. These dashboards are intended to enhance collaboration between teams since prior interfaces are not designed to be reused or shared. Through a user-centric design process and field study, teams using Symphony found insights such as labeling errors and model blind spots.</i>
+</div>
+<img src="images/symphony.png" class="center" style="max-width:70%; margin-top:7px; margin-bottom: 7px; border:1px solid #000000;"><br><br>
+
+
+<div>
+<b>Telling Stories from Computational Notebooks: AI-Assisted Presentation Slides Creation for Presenting Data Science Work</b>
+<small>Chengbo Zheng, Dakuo Wang, April Yi Wang, Xiaojuan Ma</small><br>
+<small><a href="https://www.youtube.com/watch?v=lWQZCMZEQ20">preview video</a>, 
+<a href="https://www.youtube.com/watch?v=qdvOmxoLdvc">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3491102.3517615">paper</a></small><br>
+My summary: <i>This paper introduces NB2Slides, an AI-based tool for creating slide presentations based on notebooks. The tool assists the user in locating relevant information, organizing the story, and customizing it. There is interesting discussion on the collaboration between humans and AI in a domain that involves mundane tasks (e.g., fetch information from a notebook) and creative tasks (e.g., craft a compelling story).</i>
+</div>
+<img src="images/nb2slides.png" class="center" style="max-width:70%; margin-top:7px; margin-bottom: 7px; border:1px solid #000000;"><br><br>
+
+
+<div>
+<b>TunePad Playbooks: Designing Computational Notebooks for Creative Music Coding</b>
+<small>Mike Horn, Amartya Banerjee, Matthew Brucker</small>
+<small><a href="https://www.youtube.com/watch?v=JfGtUJWEdq8">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3491102.3502021">paper</a></small><br>
+My summary: <i>TunePad is a notebook platform for live coding music to teach students how to program. The systems alters the typical notebook paradigm to better suit the domain of creative work and to cater to students. For example, cells do not share state and do not have dependencies unless explicitly specified. This paper is a prime example of how notebooks can still evolve and be customized for specific domains.</i>
+</div>
+<img src="images/tunepad.png" class="center" style="max-width:70%; margin-top:7px; margin-bottom: 7px; border:1px solid #000000;"><br><br>
+
+
+
+
+
+
+<br><br><br><br>
+
+</body>
+</html>
+
+
+
+
+
