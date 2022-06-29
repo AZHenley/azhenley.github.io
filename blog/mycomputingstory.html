@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Learning HTML was too hard so I made a compiler instead - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="This is the 10-year story of how I struggled to learn how to code.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Learning HTML was too hard so I made a compiler instead">
+    <meta property="og:description" content="This is the 10-year story of how I struggled to learn how to code.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/compilerbooks.jpg">
+    <meta property="og:url" content="https://austinhenley.com/blog/mycomputingstory.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Learning HTML was too hard so I made a compiler instead</h1>
+	<small>6/29/2021</small><br><br>
+
+
+<p>Recently, I was on John Lam's podcast, <a href="https://john-lam-podcast.simplecast.com/">Pivotal Moments</a>. He interviews folks about the big changes in their careers, and I happened to be his first guest. We discussed my transition from <a href="leavingacademia.html">academia to industry</a> and the "prestigious" grant I <a href="500kgrant.html">turned down</a>. He already has 12 episodes out so definitely give it a listen!</p>
+
+<p style="text-align:center"><iframe height="140px" width="70%" frameborder="no" scrolling="no" seamless src="https://player.simplecast.com/fc78863b-0236-47cf-8d6e-4e3841ad0e4b?dark=false"></iframe></p>
+
+<p>It got me thinking about the other pivotal points in my career. Especially the first one. I started writing it down as an exercise for myself. These are the type of stories I seek out in blogs in podcasts (such as John Lam's!), so I hope you'll enjoy it too.</p> 
+
+<p>Here we go, this is <b>the story of how I got into computing</b>.</p>
+
+<hr>
+
+<p><b>TL;DR:</b> <i>I was struggling to learn how to design web pages with HTML in 5th grade so I set off to make my own language. Yep. But that meant I first had to learn how to code and then learn how to make a compiler. It took about 10 years! Fun ensues.</i></p>
+
+<p>Around the year 2000 I got sucked into the internet when I discovered online communities about video games and anime. Naturally, I wanted to make my own website for my favorite show at the time (Dragon Ball Z, ha!).</p>
+
+<p>However, I struggled with learning HTML. I found it tedious that my website layout would shift around in seemingly unpredictable ways when I added more content. The tags were cryptic. I relied on copy pasting snippets from other websites without understanding them. Etc.</p>
+
+<p>In a glorious bout of naïveté, I decided that I will make my own language to use instead of HTML. Yeah...</p>
+
+<p>Thus started my many year foray into computing, which is still ongoing!</p>
+
+<p>Some strangers in a random chatroom told me I needed to download and learn "Microsoft Visual Basic 6.0" in order to make my own compiler. Unfortunately, it was fairly expensive. So instead I found a old BASIC textbook at the library and started typing in the example programs. It didn't come naturally, but before long I was able to make simple text games and graphical animations.</p> 
+
+<p>Eventually I figured out how to download a copy of Visual Studio and began learning VB6. It was a lot of fun! Being able to drag and drop the GUI was a <b>game changer</b>. One of my first programs was a Tamagotchi-like game. I went down the rabbit hole of programming communities and found people were sharing their code on websites like Planet Source Code! This accelerated my learning a lot.</p>
+
+<p>I didn't feel closer to making a compiler though.</p>
+
+<p>A year or two later a different stranger on the internet tells me that to make a compiler I have to use a <i>real</i> programming language like C++. Ok, I will learn that!</p>
+
+<p>It was <b>hard</b>. All the online resources were too advanced for an 11 year old. Many were lecture notes from universities. I didn't know Unix. I felt like I spent more time setting up my dev environment than I did coding (hmmm maybe that part hasn't changed).</p> 
+
+<p>I convinced my mother to buy me "C++ for Dummies" from Books-A-Million. Each time I typed in the examples, I got compiler errors. But it looked identical! I remember being baffled by curly braces. No one puts them in the same spot! What are they even for? Why doesn't <i>if(x == 0 || 1)</i> mean <i>"if x is 0 or 1"</i>? Why is text <b>SO HARD</b> to work with? I don't want an array or a pointer, I want text! Why does every example of <i>printf()</i> look like someone smashed the keyboard? Why are there so many operators and keywords? Objects, inheritance, polymorphism? None of it made sense.</p>
+
+<img src="images/cppbook.jpg" class="center" style="max-width:40%;">
+
+<p>Years went by.</p>
+
+<p>Somewhere along the way I found a small forum with teenagers all interested in making their own programming language. It was another pivotal moment. They introduced me to the <i>The Dragon Book</i> (<a href="https://amzn.to/3zVkaDX">Amazon</a>) and Jack Crenshaw's tutorial (<a href="https://compilers.iecc.com/crenshaw/">Let's Build a Compiler</a>). Both were still out of my reach to comprehend. I tried anyway. I even spent a weekend typing in every code example from The Dragon Book.</p>
+
+<img src="images/compilerbooks.jpg" class="center" style="max-width:70%;">
+
+<p>Oddly enough, some of those people from that forum are still in my life nearly 20 years later! One I talk to on a daily basis. Another I ran into on my first day as an intern having not spoken to him in a decade nor knowing he worked there.</p>
+
+<p>I had such ambitions to make my own language that I called the <i>Azh programming language</i>. I made tons of "design documents" on paper that I wish I still had. I even envisioned a Visual Studio competitor with a drag-and-drop form editor.</p> 
+
+<p>The only artifact I have is a screenshot of my website where I first announced the language in 2003 that you can see below. Please don't make fun of me too much.</p>
+
+<img src="images/firsthomepage.png" class="center" style="max-width:90%;border:1px solid #000000;">
+
+<p>I started making progress towards making a compiler when I discovered <a href="https://en.wikipedia.org/wiki/Esoteric_programming_language"><i>esoteric</i> programming languages</a>. I was able to quickly make my own Brainf*ck interpreter since it only has 8 instructions. Then I started spending the weekends making my own esoteric languages. I added additional commands to other languages. I made a reverse-polish notation calculator. I learned the basics of assembly. Then I posted the languages I made online and participated in "weekend coding jams". Nothing I made ever got popular, but I was learning.</p>
+
+<p><b>Progress!</b></p>
+
+<p>I finally felt like I was getting closer to my goal. The momentum didn't continue though, despite my sporadic attempts over the next several years. Going beyond parsing single-character commands was a barrier. I didn't understand grammars.</p>
+
+<p>As the years went on, I dabbled in many other programming topics. I started making websites for local businesses to make money. I learned OpenGL and tried to make a game engine. I tinkered with assembly languages because yet another stranger on the internet said <i>real</i> compilers must emit assembly. I got in trouble for doing SQL injections and sending "viruses" I made in VB6. Then in high school, I joined the business club which had competitive C++ events. I placed at the state event and won a trip to New York to compete at nationals 🏆! Funny enough, I had to make an interpreter for a simple markup language!</p>
+
+<p>I went to college nearby for computer science and met someone who made Flash games. He was obsessed with it actually. His games had advertisements in them so he'd refresh the dashboard <b>constantly</b> to see how much money he was making. One day he hit $1! It was at the point that I decided to learn Flash and release some games.</p>
+
+<p>We both skipped our classes regularly to sit in his dorm making games. Over the next 2 years I released 8 games that were played over <a href="8lessons8games.html">25 million times</a>. They weren't even good! It was a great feeling seeing people using software that I made though.</p>
+
+<img src="images/flashgames.png" class="center" style="max-width:70%;border:1px solid #000000;">
+
+<p>To graduate college I had to do a senior project. We could pick any topic to research and present to the entire computer science department.</p>
+
+<p>This was it. I was finally going to make a compiler. I hadn't tried in probably two years. The arrogance of being a soon to be CS degree holder set in. I can do computer science! I should be able to make a compiler!</p>
+
+<p><b>It clicked.</b> Grammars suddenly made sense. I read them easily. Recursive descent parsing made sense. In fact, it was trivial! I stayed up all night and made an interpreter for a dialect of BASIC that I called <a href="https://github.com/AZHenley/PeayBASIC">PeayBASIC</a>. Then another for PL/0. Then I tried out a variety of parsing techniques. It felt like a new ability had been unlocked in my head.</p>
+
+<img src="images/peaybasic.png" class="center" style="max-width:60%;border:1px solid #000000;">
+
+<p>I never did make my own replacement for HTML. I realized that the syntax wasn't the problem, it is the semantics, which is a much, much harder problem. I suppose you can say that I've come to terms with HTML 🏳️.</p>
+
+<hr>
+
+<p>There you have it. The 10-year story of me getting into computers to make my own compiler just so that I could make a website.</p>
+
+<p>Since making my first compiler, I have stayed the course of working on compilers in many ways:</p>
+
+<ul>
+    <li>Built numerous tools on top of compilers (e.g., <a href="yestercode.html">Yestercode</a> for visualizing recent edits).</li>
+    <li>Wrote my own compiler tutorial series (<a href="teenytinycompiler1.html">Let's make a Teeny Tiny Compiler</a>) that's been viewed over 100,000 times.</li>
+    <li>Made countless esoteric languages (e.g., <a href="https://github.com/AZHenley/hofstadter">Hofstadter</a>, which supports concurrency, regex, and HTTP requests!)</li>
+    <li>Made countless Lisp and Forth toy implementations (e.g., <a href="https://github.com/AZHenley/goforth">goforth</a>).</li>
+    <li>Started making a general purpose language (<a href="https://github.com/AZHenley/knox">Knox</a>) and realized the amount of work involved.</li>
+    <li>Taught a university course where we hacked on CPython for a semester.</li>
+</ul>
+
+<p>The challenge now is making a programming language that is <i>useful</i>. New goal? We will see. 🙃</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
+
