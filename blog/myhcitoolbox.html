@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My HCI toolbox: Methods for designing and evaluating UIs - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Anyone on a software team can run user studies! This is my toolbox for understanding user pain points then designing and evaluating solutions.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="My HCI toolbox: Methods for designing and evaluating UIs">
+    <meta property="og:description" content="Anyone on a software team can run user studies! This is my toolbox for understanding user pain points then designing and evaluating solutions.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/myhcitoolbox.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/myhcitoolbox.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">My HCI toolbox: Methods for designing and evaluating UIs</h1>
+	<small>7/31/2022</small><br><br>
+
+<img src="images/myhcitoolbox.png" class="center" style="max-width:90%; margin-bottom:28px;border:1px solid #000000;">
+
+<p>I'm a big advocate for HCI being integrated into all disciplines, no matter your job title. Anyone on a software team could run a user study&mdash;an engineer, PM, designer, researcher, manager, etc.</p>
+
+<p>Showing up to a meeting with actual evidence to support you is <b>very powerful</b>. It can often be done without <i>too</i> much effort. And even if you aren't the one interacting with users directly, there is a lot of value in empathizing with users.</p>
+
+<p>I recently gave a presentation about conducting user studies that went over the methods I tend to use and my experiences with them. My goal was to give a taste of conducting user studies even to someone that may not have a background in user research or HCI.</p>
+
+<p>This is the same content as that presentation but in an elaborated text form. I hope you find it helpful!</p>
+
+<hr>
+
+<h3>What to study?</h3>
+
+<p>First, what are you trying to learn? This can be surprisingly hard to answer, and sometimes we work on a project for quite a long time before we know the answer.</p>
+
+<p>You will likely find yourself at one of these stages at some point:</p>
+
+<ul>
+    <li>Are you trying to identify/understand a problem that users face? </li>
+    <li>Are you trying to come up with a potential solution?</li>
+    <li>Are you trying to validate a potential solution?</li>
+    <li>Are you trying to show that one solution is better than another solution?</li>
+</ul>
+
+<p>Towards addressing each of these, there are a zillion methods, including:</p>
+
+<ul>
+    <li>Lab study</li>
+    <li>A/B test</li>
+    <li>Contextual inquiry</li>
+    <li>Cognitive walkthrough</li>
+    <li>Retrospective study</li>
+    <li>Wizard of Oz study</li>
+    <li>Semi-structured interview</li>
+    <li>Focus group</li>
+    <li>Card sorting</li>
+    <li>Participatory design</li>
+    <li>Diary study</li>
+</ul>
+
+<p>And so on.</p>
+
+<p>Let's look at a handful of methods that I have found particularly useful in both industry and academic settings.</p>
+
+
+<h3>We have a prototype... how do we evaluate it?</h3>
+
+<p>Imagine we have already built a prototype of a feature/product. How do we evaluate it? How do we know that it is better than the competition? Maybe we built the wrong thing or got some details wrong or misinterpreted our users.</p>
+
+<p>What does your intuition say to do?</p>
+
+<p>My initial reaction is to run a <b>comparative lab study</b>. This is a controlled head-to-head comparison between 2 or more UIs for similar tasks with actual participants. It enables us to answer, <i>"do users perform better with X than with Y?"</i> given a specific environment.</p>
+
+<p>A typical session lasts 45-90 minutes per participant and follows a procedure like:</p>
+
+<ol>
+    <li>Intro.</li>
+    <li>Train and warmup with treatment #1.</li>
+    <li>Task(s) with treatment #1.</li>
+    <li>Train and warmup with treatment #2.</li>
+    <li>Task(s) with treatment #2.</li>
+    <li>...</li>
+    <li>Questionnaires, semi-structured interview, and closing.</li>
+</ol>
+
+<p>There are many design choices for a lab study that you must address, such as:</p>
+
+<ul>
+    <li>How many treatments?</li>
+    <li>Within or between subjects? (Does each participant use one or more treatments?)</li>
+    <li>What are the tasks?</li>
+    <li>What will you measure?
+    <ul style="margin-bottom:0px;">
+        <li>Typical: task time, task correctness, mistakes</li>
+        <li>Easy addons: NASA TLX, SUS, preference of treatments, opinions</li>
+    </ul></li>
+    <li>Will you ask them to think aloud?</li>
+</ul>
+
+<p>When deciding what to compare your feature/product to, you can either go with the state of the practice (i.e., the most popular competitor) or to the most reasonable baseline (e.g., if you are evaluating a VS Code plugin, then compare to vanilla VS Code). You could even compare multiple of your own designs.</p>
+
+<p>It is good to collect a mix of quantitative and qualitative data. The standard performance measures are task time and task correctness. I like to also count how many mistake or backtracking actions were performed. Additionally, there are numerous questionnaires that have been well studied (e.g., NASA TLX or SUS). Then at the end of the study it is common to ask participants to compare the treatments and ask open-ended questions about their opinions or to rank the treatments by preference.</p>
+
+<p>All of this data helps you build an understanding of the pros and cons of each design.</p>
+
+<p>I'll also throw out there that you should try to be unbiased as possible. Don't interrupt participants during the tasks and don't push them towards doing what you want. Other important questions to consider include: Which order will you give the treatments and the tasks? Is the task fair for all the treatments? Are these participants like the users we are targeting? More on these questions later.</p>
+
+<img src="images/hcitoolboxexamplecfar.png" class="center" style="max-width:80%;border:1px solid #000000;">
+
+<p><b>Example #1:</b> To understand the effect of an automated code reviewing bot, we asked participants to conduct two code reviews: one with and one without our automated reviewer. We tracked the time taken to conduct the review (the participant decided when they were done), comments left, regions of code viewed, and interactions with the bot's comments. We also asked open-ended questions at the end about their review strategy and their opinions on the automated reviewer.</p>
+
+<p><small>You can read more about this project in our <a href="../pubs/Henley2018CHI_CFar.pdf">CHI'18 paper</a>. It also includes a field deployment and survey.</small></p>
+
+<img src="images/hcitoolboxpatchworks.png" class="center" style="max-width:80%;border:1px solid #000000;">
+
+<p><b>Example #2:</b> I wanted to understand the effect of the code editor on code navigation time. To do so, I asked developers to perform a sequence of navigations from a specific method X to a specific method Y. I timed each of these navigations and they did so using different code editors. The task is purposely artificial since I wanted isolate just the mechanical time taken to navigate code. There were 3 treatments but each participant only received 2.</p>
+
+<p><small>You can read more about this study in our <a href="../pubs/Henley2014CHI_Patchworks.pdf">CHI'14 paper</a>. We followed it up with a more realistic study of developers debugging code in our <a href="../pubs/Henley2017CHI_CodeEditors.pdf">CHI'17 paper</a>.</small></p>
+
+
+<h3>What if we can't get participants?</h3>
+
+<p>It can be a big investment to get participants. Luckily, there are some lighter weight methods we can use to evaluate a UI without users!</p>
+
+<p>The most straight forward approach is to <b>count the GUI actions</b> required to perform some task with your feature/product. That likely means keystrokes, mouse movements, and clicks.</p>
+
+<p>Do this for a several common tasks. You can even assume you are a perfect user that makes no mistakes and knows the shortest path to completing the tasks.</p>
+
+<p>Now go do these same tasks using your competition and count the GUI actions. How does your UI compare?</p>
+
+<p>For an example, see our <a href="../pubs/Henley2014VLHCC_Patchworks.pdf">publication</a> comparing the GUI actions needed to navigate code in different code editors. I even coded up a simulator to automate the process of counting GUI actions for different UI designs.</p>
+
+<p>More formally, you can do a <b>cognitive walkthrough</b>. It is an analytical method where you go through each step of the task and ask yourself a series of questions to understand the decisions that a user must make along the way. This is useful for uncovering assumptions we made about the design without realizing it. Traditionally, you ask a few people to do the same cognitive walkthrough and then you discuss the findings together. You can even adopt a persona, such as a new user, a user from a different domain, or a user transitioning from a specific competing software (e.g., walkthrough Microsoft Excel as a user that has only ever Google Sheets).</i></p>
+
+
+<h3>What if we don't have a solution yet?</h3>
+
+<p>Let's take a step back and look at methods that we can use to understand what problems our users are facing and then how to design a potential solution.</p>
+
+<img src="images/hcitoolboxstarting.png" class="center" style="max-width:80%;border:1px solid #000000;">
+
+<p>There is a rather inexpensive sequence of methods I like to use: <b>forum mining, interviews, and surveys</b>. Repeat.</p>
+
+<p>We gather data from forums/social media to get initial data on pain points. Then we conduct interviews with a small set of users to drill into these pain points. Then we use surveys to validate our findings with a large set of users.</p>
+
+<p>To gather rich qualitative data, we can use my favorite method: <b>fly on the wall</b>. Also known as contextual inquiry or shadowing. This method involves observing users in their normal work environment as they do their own tasks with limited or no interruptions from you.</p>
+
+<p>I <i>always</i> learn so much from watching users. Things that I never thought to ask or that they never thought to mention in an interview come up every time.</p>
+
+<p>The problem is that it can be expensive getting to your users and it can be pretty invasive. At big companies you can likely find users internally. In my experience, people are pretty open to letting you observe them over their shoulder. They're often just happy that someone is trying to fix their problems!</p>
+
+
+<h3>Let's tie these together</h3>
+
+<p>Here is a long example of how I tied together several different methodologies. Note that I did not originally plan this, but rather I reacted to the results after each step. I actually underestimated the project and fell victim to some false assumptions!</p>
+
+<img src="images/hcitoolboxexamplelong.png" class="center" style="max-width:80%;border:1px solid #000000;">
+
+<ol>
+  <li>Asked to investigate automated refactoring tools for a visual programming language. These are common in traditional languages.</li>
+  <li>Interviewed 54 developers to better understand what refactorings should be supported and how they would work. Most devs said modifying existing code is hard and would rather "start from scratch" but I could not get an answer as to <i>why</i> it is hard.</li>
+  <li>Telemetry and a small exploratory lab study showed that undo/redo actions were common during refactoring.</li>
+  <li>Fly on the wall study found that everyone introduced bugs, even devs with 15+ years of experience made subtle bugs. Observed the devs using creative workarounds.</li>
+  <li>Held a focus group with prior participants to present them my findings, get feedback, and brainstorm potential solutions. Collectively came up with a dozen features to help.</li>
+  <li>Feasibility study using existing dataset that tested whether a feature could have helped the user.</li>
+  <li>Lab study to evaluate final solution comparing to baseline.</li>
+</ol>
+
+<p>You can read more details about this project: <a href="solvingunknownproblems.html">Building solutions to problems that no one knows exist yet</a> or more formally in our publications, <a href="../pubs/Henley2016VLHCC_Yestercode.pdf">VL/HCC'16</a> and <a href="../pubs/Henley2018VLHCC_CodeDeviant.pdf">VL/HCC'18</a>.</p>
+
+<h3>Things to be mindful of...</h3>
+
+<p>You do have to be considerate of how you design the study and how you interpret the data. There are many <i>threats to validity</i> and biases that come up. Every study and analysis has weaknesses, just be mindful of them and triangulate if possible.</p>
+
+<img src="images/hcitoolboxthreats.png" class="center" style="max-width:80%;border:1px solid #000000;">
+
+<p>Are you measuring what you think you are measuring? My classic example of this is grades is school. Do grades measure learning or intelligence or effort or the teacher or something else?</p>
+
+<p>Is your study <i>realistic</i>? Are the tasks and participants representative of what you're targeting?</p>
+
+<p>Don't forget that by observing something that you will influence the outcome. People behave very differently when they're being observed. Ever do a coding interview where someone blankly stares at you? It adds a lot of stress. Ever take an important test? You know your performance on it matters. Now consider the situation where we want feedback from someone on our new UI design. Participants might think we put a lot of effort into it and will want to only tell us nice things!</p>
+
+<p>The order in which treatments and tasks are given will also have an impact. Users generally perform better on the later tasks since they know what is expected and warm up. If you have a lot of tasks though then they might get tired and start putting in minimal effort (I know I have done this with surveys...). You do things like counterbalance treatments so that some participants will get Treatment Foo then Treatment Bar but others will get Treatment Bar then Treatment Foo. I also like to give warmup tasks for each treatment.</p>
+
+<p>A collaborator of mine passed on some great advice: <i>"have you done everything you can to disprove your hypothesis?"</i></p>
+
+<h3>There's a lot more out there</h3>
+
+<p>There are <i>many</i> more methodologies out there. These are just my preferred methods in my domain. You can get quite creative with user studies though!</p>
+
+<p>For example, <a href="https://en.wikipedia.org/wiki/Wizard_of_Oz_experiment">Wizard of Oz</a> studies allow you to emulate a complex system that you haven't yet built. I once participated in such a study where I interacted with a voice assistant (think Alexa or Siri) but actually there was a person in another room typing the responses into a computer. It fooled me!</p>
+  
+<p>My favorite example of a creative user study involved measuring the engagement of middle school girls using Alice, a educational programming tool. The researchers operationalized engagement by looking at how often students "snuck" extra time with Alice when they were supposed to be taking a break (<a href="https://dl.acm.org/doi/abs/10.1145/1240624.1240844">paper</a>). I would have never thought of that!
+  
+<p>An area that I am interested to run more studies on is the <i>learnability</i> of tools. Some tools are great for experts but difficult to learn. Some tools are easy to learn but don't allow experts to be performant. Understanding that dichotomy and the transition between seems to be understudied in most software. Just tacking on shortcuts for the experts and a tutorial video for the novices is not sufficient!</p>
+
+<p>Anyway, I hope you find this of value. I really enjoy running user studies and learning new methods, so look out for follow ups to this post.</p>
+
+<p>Here are some resources that have helped me if you want to read more:</p>
+
+<ul>
+  <li>To put yourself in the mindset of understanding people: <i>The Design of Everyday Things</i> (<a href="https://amzn.to/3OJf55n">Amazon</a>)</li>
+  <li>For a pragmatic and short read (buy used!): Nielsen's <i>Usability Engineering</i> (<a href="https://amzn.to/3PRGi7w">Amazon</a>)</li>
+  <li><i>The</i> reference for academic research design: Creswell's <i>Research Design: Qualitative, Quantitative, and Mixed Methods Approaches</i> (<a href="https://amzn.to/3Sc43Zn">Amazon</a>)</li>
+  <li>A story about my project: <i>When users never use the features they asked for</i> (<a href="featurestheywanted.html">my blog</a>)</li>
+  <li>A story about my project: <i>Building solutions to problems that no one knows exist yet</i> (<a href="solvingunknownproblems.html">my blog</a>)</li>
+  <li>If you care about HCI applied to dev tools: <i>Quick start guide to research on human factors of software engineering</i> (<a href="guidehciresearch.html">my blog</a>)</li>
+  <li>A survey of HCI methods applied to dev tools: <i>Programmers Are Users Too: Human-Centered Methods for Improving Programming Tools</i> (<a href="https://ieeexplore.ieee.org/abstract/document/7503516">paper</a>)</li>
+</ul>
+
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+<br><br><br><br>
+
+</body>
+</html>
+
+
+
+
