@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Measuring demand for a feature: An economics approach - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="If we attach a cost to every software feature, could we use the usage as a proxy for demand?">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Measuring demand for a feature: An economics approach">
+    <meta property="og:description" content="If we attach a cost to every software feature, could we use the usage as a proxy for demand?">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/econguibaby.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/measuringdemand.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Measuring demand for a feature: An economics approach</h1>
+	<small>8/29/2022</small><br><br>
+
+<img src="images/econguibaby.png" class="center" style="max-width:50%; margin-bottom:28px;border:1px solid #000000;">
+
+
+<p>How bad do users want a feature in your software?</p>
+
+<p>What if we could use good ole economics to answer the question? The <i>supply</i> of new features you can provide in your software is limited, so measuring the <i>demand</i> accurately is vital.</p>
+
+<p>Let's think about how we could measure the demand for a feature...</p>
+
+<p>We could ask users what they want. Interview or survey them. Take a poll and give them a few options. Or scrape forums and social media to see what they're already asking for. Maybe even show them a mockup and get their feedback. Do they say they can't live without it? These are all standard methods in a user researcher's <a href="myhcitoolbox.html">toolbox</a>.</p>
+
+<p>The economics term for this is <i>stated preference</i>, what someone says they want. The problem is that stated preference often does not align with <i>revealed preference</i>, that is, what someone's actions reveal to be their preference. To put simply, just because a user says they want a feature doesn't mean they will actually use it. I've even written about my own experience where these did not align: <a href="featurestheywanted.html">When users never use the features they asked for</a>.</p>
+
+<p>If we had unlimited resources, we could release every feature imaginable then keep the ones that get sufficient usage and drop the others. But we don't.</p>
+
+<hr>
+
+<p>A few years ago a paper was published, <i><a href="https://dl.acm.org/doi/abs/10.1145/3173574.3173879">"Eliciting users' demand for interface features"</a></i>, that provides an economics perspective on measuring the demand for features. It describes a study where participants used a software system to make investments amongst many choices. If the participant performed well, they received a cash bonus.</p>
+
+<p>The catch? Features of the software had a cost associated with them. Each feature was labeled with a cost of 0-9% that came out of the participant's bonus, which were randomly assigned for each participant. There were 5 different features they could use.</p>
+
+<p>The results showed that the cost of the feature did impact the usage, but the feature usage also correlated with the participant's performance (and bonus). Most of the participants used the feature that had a 0% cost.</p>
+
+<p>What does that mean? Participants were cautious about giving up their bonus to use the features, but there was value in using them. In other words, there was some cost-value analysis going on in the participants' mind to maximize performance while minimizing feature usage.</p>
+
+<hr> 
+
+<p>The interesting part of this paper is not the results <small>(the task and software system are fairly artificial)</small>, rather it is the <i>methodology</i> to measure feature demand by applying an upfront cost to individual features in a user interface while participants are attempting to maximize performance on a task.</p>
+
+<img src="images/econgui.png" class="center" style="max-width:50%;border:1px solid #000000;">
+
+<p>Imagine applying this method to a more complex system with a more realistic task. Want to Google something? $1. Want to use copy-paste? $0.25. Each time you save your file, it costs you a nickel. Bug a coworker on Slack? $50. It would give new insights into what users value!</p>
+
+<p>Let's not stop there though.</p>
+
+<p>What if we apply <i>surge pricing</i>? As you repeatedly use a feature in a short period of time, the price ramps up. At some point we will find out how much you <i>actually</i> cherish Stack Overflow when you can no longer afford it and have to go read documentation instead!</p>
+
+<p>We can put a textbox on the participant's screen that displays how much money they have remaining to complete the task. Start them off at some reasonable amount, say $25, and tell them they get to keep whatever is leftover after they successfully complete the task. Participants would certainly behave differently! It reminds me of that competitive cooking show, Cutthroat Kitchen, from a few years ago where participants could spend their potential prize money on sabotaging the other contestants.</p>
+
+<hr>
+
+<p>I'll add this demand-eliciting study method to my <a href="myhcitoolbox.html">user research toolbox</a>. We can adapt the method in other ways too, like it doesn't have to be a $$$ cost. It could be time. How long will users wait to use that feature? Since computers were much slower not that long ago, it doesn't sound that farfetched of a study anymore when you think of feature usage in relative cost of time!</p>
+
+<p>What other concepts from economics could we apply to the design and evaluation of user interfaces? Why do users often choose to stick with what they know instead of investing in learning how to use a new feature? Why do they keep retrying an action while expecting a different outcome? How could they be nudged to take the optimal path through your UI? Maybe we could investigate how availability bias, remembered utility, opportunity cost, sunk cost, illusion of validity, etc. could be understood in this context.</p>
+
+<img src="images/econbooks.jpg" class="center" style="max-width:60%;border:1px solid #000000;">
+
+<p>In grad school I got really into reading about behavioral economics. Here are some of the notable books:</p>
+
+<ul>
+    <li>Thinking, Fast and Slow (<a href="https://amzn.to/3ATR9bL">Amazon</a>)</li>
+    <li>Predictably Irrational (<a href="https://amzn.to/3wBL1Cz">Amazon</a>)</li>
+    <li>The Paradox of Choice (<a href="https://amzn.to/3CE2UUX">Amazon</a>)</li>
+    <li>Nudge (<a href="https://amzn.to/3Tlpg3D">Amazon</a>)</li>
+    <li>Fooled by Randomness (<a href="https://amzn.to/3Tlpg3D">Amazon</a>)</li>
+</ul>
+
+<p>I hope to try running a study like this soon. I'll let you know how it goes!</p>
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+<br><br><br><br>
+
+</body>
+</html>
