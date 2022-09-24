@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>An AI assistant for command line errors - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Why is it so tedious to fix command line errors? Surely this can be automated.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="An AI assistant for command line errors">
+    <meta property="og:description" content="Why is it so tedious to fix command line errors? Surely this can be automated.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/terminalclippy.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/aiterminal.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">An AI assistant for command line errors</h1>
+	<small>9/24/2022</small><br><br>
+
+<img src="images/terminalclippy.png" class="center" style="max-width:65%; margin-bottom:12px;">
+
+<p>How many times have you ran a command in your terminal, got an error message, Googled the error message, clicked on a Stack Overflow result, and then copy pasted the solution back into your terminal?</p>
+
+<p>I do this <b>a lot</b>.</p>
+
+<p>It is as if I am traversing a knowledge tree on Google or Stack Overflow, but in a manual and very tedious way. I'm often solving one symptom at a time and not seeing the underlying problem.</p>
+
+<p>In fact, I wrote about this before, <a href="stackoverflow.html">Stack Overflow knows your future problem</a>.</p>
+
+<hr>
+
+<p>There is hope! <i>A virtual assistant in your terminal powered by the crowd</i>.</p>
+
+<p>At a high level, this system sees a command line error, automatically pulls the most relevant solution from Stack Overflow, presents it in the terminal, then runs it.</p>
+
+<img src="images/aiterminal.png" class="center" style="max-width:80%;margin-bottom:-8px;">
+
+<p>Let me break down the v1 approach in more details:</p>
+
+<ol>
+    <li>Monitor stdout/stderr for errors.</li>
+    <li>If an error is detected, automatically and asynchronously look it up on Stack Overflow or other documentation pages.</li>
+    <li>Filter potential solutions using contextual info (e.g., recent commands, OS, and preferred package manager).</li>
+    <li>Extract the candidate solution.</li>
+    <li>Sanitize and validate the solution (e.g., check for malicious scripts and prefer solutions that use already installed programs).</li>
+    <li>Customize the solution for the user (e.g., replace paths and identifiers).</li>
+    <li>Suggest to the user the potential fix and provide an explanation.</li>
+</ol>
+
+<p><i>But wait, there is more!</i></p>
+
+<p>Although Stack Overflow is a good starting point, the system can build its own <b>crowd-sourced decision tree</b>. As more users use the system and face similar errors, the system will be able to build a confidence level for each solution and identify the important variables (e.g., the version of a particular package). Large language models, such as Codex, can be used for refinement.</p>
+
+<p>For example, the system can learn that to solve <i>Error #123</i> when running React for the first time, then you should <b>run</b> <i>Foobar -a -b</i> <b>IF</b> you are on <i>macOS &gt;10.14</i> <b>AND</b> have <i>NPM 8.19.2</i> installed, <b>ELSE</b> you should <b>run</b>...</p>
+
+<p>The system can preemptively know what errors you will have and can put together sequences of commands that will get you to the goal state.</p>
+
+<p>Additionally, it could help you rollback, generate documentation, export the suggestions to a script, or create a container so that these problems aren't an issue for you or your team in the future.</p> 
+
+<hr>
+
+<p>What's next? The basic concept works. There are problems to overcome: generalize the approach to more complex scenarios, fix corner cases, scale such that there is a crowd-sourced decision tree, and do so while enforcing security and privacy.</p>
+
+<p>Don't worry, Clippy will be back!</p>
+
+<p><small>Thanks to Alex Williams and Gregory Croisdale for the early discussions about this project.</small></p><br><br>
+
+<br><br><br><br>
+
+</body>
+</html>

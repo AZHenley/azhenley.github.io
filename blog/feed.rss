@@ -7,7 +7,14 @@
     <description />
     <language>en-us</language>
     <copyright>Austin Z. Henley (2022)</copyright>
-      <item>
+    <item>
+      <title>An AI assistant for command line errors</title>
+      <pubDate>Sat, 24 Sep 2022 16:00:01 -0400</pubDate>
+      <link>https://austinhenley.com/blog/aiterminal.html</link>
+      <author>azh321@gmail.com (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://austinhenley.com/blog/aiterminal.html">https://austinhenley.com/blog/aiterminal.html</a>]]></description>
+    </item>
+    <item>
       <title>Measuring demand for a feature: An economics approach</title>
       <pubDate>Mon, 29 Aug 2022 16:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/measuringdemand.html</link>
