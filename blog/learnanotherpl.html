@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Why is it hard to learn another programming language? - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Even the most experienced programmers face difficulties learning a new language. A recent study looked into the reasons why!">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Why is it hard to learn another programming language?">
+    <meta property="og:description" content="Even the most experienced programmers face difficulties learning a new language. A recent study looked into the reasons why!">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/pythonlearning.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/learnanotherpl.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Why is it hard to learn another programming language?</h1>
+	<small>10/8/2022</small><br><br>
+
+<img src="images/pythonlearning.png" class="center" style="max-width:50%; margin-bottom:12px;">
+
+
+<p>Learning my first programming language was really hard for me. Learning the second was also hard but probably easier. What about the third or fourth? The Nth? Does each one get easier? Does knowing other languages create new difficulties?</p>
+
+<p>I just read a paper, <i><a href="https://ieeexplore.ieee.org/abstract/document/9284077">Here We Go Again: Why Is It Difficult for Developers to Learn Another Programming Language?</a></i>, that tries to understand the barriers that developers face when picking up another language.</p>
+
+<p>The researchers started by interviewing the famed <a href="https://en.wikipedia.org/wiki/Peter_Norvig">Peter Norvig</a> who told them: <i>"Most research is on beginners learning language. For experts, it's quite different and we don't know that process. We just sort of assume if you're an expert, you don't need any help."</i></p>
+
+<p>My intuition is that switching languages is fairly straightforward if the languages follow the same <i>paradigms</i>. You just learn how to map each feature, one to one, while watching out for a small set of corner cases. For instance, moving from Java to C#. They're both statically-typed, interpreted, imperative languages that come with massive standard libraries. What about moving from very different languages, like C# to Haskell? That is when things break down since now you have to learn new concepts and there may not be an obvious mapping of concepts and features between the languages.</p>
+
+<p>But let's see what the research says!</p>
+
+<p>In the <a href="https://ieeexplore.ieee.org/abstract/document/9284077">paper</a>, they looked at (1) "cross-language interference", which is when prior knowledge of a language disrupts learning new knowledge (2) how programmers learn another language, and (3) what is confusing when learning a new language.</p>
+
+<p>First, they sampled questions from Stack Overflow where users were asking how to do <i>something</i> in language <i>Y</i> given how it is done in language <i>X</i>. For example, a user had misconceptions about assigning a value in a Pandas data frame because of their experience with R:</p>
+
+<img src="images/pandasquestion.png" class="center" style="max-width:90%; border:1px solid #000000;">
+
+<p>In fact, the researchers found that 61% of the 450 sampled questions made incorrect assumptions.</p>
+
+<p>The language pairs with the highest rates of incorrect assumptions were Java/Kotlin, Java/Scala, and C#/Visual Basic.</p>
+
+<p>The lowest rates were Java/C#, Java/PHP, and Python/C++. This one really surprised me: <b>going between Python and C++ doesn't cause much confusion?!</b></p>
+
+<p>To investigate <i>how</i> experienced programmers learn a new language and what they find <i>confusing</i>, they interviewed 16 programmers who recently learned a new language.</p>
+
+<p>The programmers often (1) had to teach themselves without any formal training, (2) picked up new concepts only when they needed it, and (3) would relate the new language to other languages that they already know.</p>
+
+<p>The researchers found 5 themes for what programmers found confusing when learning a new language.</p>
+
+<img src="images/languageinterference.png" class="center" style="max-width:95%;">
+
+<p>Programmers struggled with old habits, such as arrays being 0-indexed versus 1-indexed.</p>
+
+<p>Switching paradigms forced programmers to rethink their problem. For example, everything is an object in Python yet Julia follows a more functional programming style. On the other hand, the borrow checker in Rust will make just about anyone pull their hair out!</p>
+
+<p>Different terminology and naming conventions make it difficult to even search for help.</p>
+
+<p>Moreover, when learning a new language you often also have to learn all the surrounding tooling. Now you have to learn a new build system, package manager, and maybe even IDE.</p>
+
+<p>Talk about frustrating.</p>
+
+<img src="images/pythonprinterror.png" class="center" style="max-width:70%;">
+
+<p>So the next time you design a programming language (or tool), make it easy for users to transition!</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
