@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Coding with Copilot for acceleration and exploration - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="A recent study found that programmers use Copilot either for accelerating what they are already doing or for exploring what to do next.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Coding with Copilot for acceleration and exploration">
+    <meta property="og:description" content="A recent study found that programmers use Copilot either for accelerating what they are already doing or for exploring what to do next.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/rocketmaze.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/copilotmodes.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Coding with Copilot for acceleration and exploration</h1>
+	<small>10/10/2022</small><br><br>
+
+<img src="images/rocketmaze.png" class="center" style="max-width:50%; margin-bottom:12px;">
+
+
+<p>This morning I read a paper,<a href="https://arxiv.org/abs/2206.15000">Grounded Copilot: How Programmers Interact with Code-Generating Models</a>, that reports a qualitative study on <i>how</i> programmers interact with Copilot.</p>
+
+<p>The main takeaway is that programmers use Copilot in two modes: either for accelerating what they are already doing or for exploring what to do next.</p>
+
+<p><i>Acceleration</i> is when they already know what they want to do and Copilot just gets them there faster. Much like an intelligent autocomplete.</p>
+
+<p><i>Exploration</i> is when they do not know how to proceed with their task and Copilot provides them a starting point. Similar to a context-aware assistant that presents various options.</p>
+
+<img src="images/copilotsuggestion.png" class="center" style="max-width:85%;">
+
+<p>I've noticed examples of both from my own experience tinkering with Copilot. In one case, I started writing a function to parse <i>s-expressions</i> when Copilot presented a suggestion that looked close enough to what I was going to do anyway. In another case, I wasn't sure how to do something in React but Copilot gave me suggestions demonstrating library calls that I didn't know about.</p>
+
+<p><b>Lab study.</b> They recruited 20 programmers (16 from academia) to take part in an 60-minute lab study involving a warmup task followed by a core programming task and then an interview. Participants received one of four different programming tasks, such as working on an existing chat client or solving puzzles from Advent of Code.</p>
+
+<p><b>Analysis.</b> To make sense of the data, the researchers used <a href="">grounded theory</a>, an iterative process that involves labeling the raw data, refining the labels as you go, and grouping the labels to form concepts. The end result is an inductively built hierarchy of labels that applies to the entire dataset.</p>
+
+<p>The paper then goes on to describe a variety of behaviors of each mode.</p>
+
+<h3>Behaviors while accelerating</h3>
+
+<p>The main scenario they found for accelerating is when the programmer is able to decompose the problem into <i>microtasks</i>. Copilot seems to do a good job of suggesting code for these small, well-defined scenarios.</p>
+
+<blockquote>"I think of Copilot as an intelligent autocomplete... I already have the line of code in mind and I just want to see if it can do it, type it out faster than I can."</blockquote>
+
+<p>Similarly, participants are often happy with Copilot's ability to complete single lines of code, much like traditional autocomplete features.</p>
+
+<p>However, <b>long suggestions can be problematic</b>. Participants felt compelled to read the suggestions even though it broke their flow.</p>
+
+<blockquote>"So instead of writing the full line, I have to stop, look at the code, think whether I want this or not."</blockquote>
+
+<p>Several participants remarked about Copilot's long suggestions being a distraction and taking considerable time to understand.</p>
+
+<p>To validate suggestions, the participants scan the suggestions for a specific pattern or shape, made up primarily of control flow structures.</p>
+
+<h3>Behaviors while exploring</h3>
+
+<p>When the programmer is not able to decompose the problem, they turn to Copilot to explore.</p>
+
+<blockquote>"Copilot feels useful for doing novel tasks that I don't necessarily know how to do. It is easier to jump in and get started with the task."</blockquote>
+
+<p>To explore, participants would explicitly prompt Copilot with comments. 15 of the 16 participants did this.</p>
+
+<p>They used natural language comments to have greater control over the suggestions in less time. The alternative would be writing a sufficient amount of code for Copilot to have enough context to produce relevant suggestions.</p>
+
+<blockquote>"The kind of comments I would write to Copilot are not the kind of comments I would use to document my code."</blockquote>
+
+<p>A noteworthy finding is that the participants write comments differently depending on if it is for Copilot. They will then go clean up or delete the comments!</p>
+
+<p>There is value in having multiple suggestions. In fact, 14/16 of the participants used the side pane to see multiple.</p>
+
+<img src="images/copilotpane.png" class="center" style="max-width:95%;">
+
+
+<p>Although there was a tendency to use the first suggestion in the list, sometimes they would cherry pick pieces from different suggestions.</p>
+
+<p>However, 5 of the participants indicated that the side pane adds additional cognitive load.</p>
+
+<p>The programmers spent considerable time reading the suggestions, much like a code review, but only a few participants executed the code to validate the behavior.</p>
+
+<p>In the event that the suggestions did not do exactly what the programmer wanted, many times they would still accept one then edit it, thus providing a template with the desired control flow.</p>
+
+<img src="images/copilotmodestime.png" class="center" style="max-width:95%;">
+
+<p>For three out of four of the tasks, participants were in exploration mode far more often than acceleration mode. During the other task, participants spent a bit more than half their time in acceleration mode, likely because it involved "simple business logic".</p>
+
+<p>It is still an open question as to how the results will generalize to other tasks, to codebases that are large or that programmers are already familiar with, or to those with more industry experience.</p>
+
+<hr>
+
+<p>Research like this is just the starting point to a better understanding of how programmers interact with large language model-based programming assistants.</p> 
+
+<p>In fact, my team has been working on improving the interaction design of such tools. I'll share more soon.</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
