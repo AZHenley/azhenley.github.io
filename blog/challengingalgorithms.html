@@ -64,12 +64,12 @@
 <li>Splay tree</li>
 </ul>
 
-<p><b>Note:</b> If you need a general introduction to algorithms, I recommend Jeff Erickson's <i>Algorithms</i> (<a href="https://amzn.to/3G0v65I">Amazon</a>, <a href="http://jeffe.cs.illinois.edu/teaching/algorithms/?">web</a>) or Daniel Zingaro's <i>Algorithmic Thinking</i> (<a href="https://amzn.to/3HQYpJk">Amazon</a>). If you want a giant reference, then the classic is <i>Introduction to Algorithms</i> by CLRS (<a href="https://amzn.to/3hthlDv">Amazon</a>). Not enough? Watch MIT's Advanced Data Structures (<a href="https://www.youtube.com/playlist?list=PLUl4u3cNGP61hsJNdULdudlRL493b-XZf">YouTube</a>) to blow your mind.</p>
+<p><b>Note:</b> If you need an introduction to algorithms, I recommend Jeff Erickson's <i>Algorithms</i> (<a href="https://amzn.to/3G0v65I">Amazon</a>, <a href="http://jeffe.cs.illinois.edu/teaching/algorithms/?">web</a>) or Daniel Zingaro's <i>Algorithmic Thinking</i> (<a href="https://amzn.to/3HQYpJk">Amazon</a>). If you want a giant reference, then the classic is <i>Introduction to Algorithms</i> by CLRS (<a href="https://amzn.to/3hthlDv">Amazon</a>). Not enough? Watch MIT's Advanced Data Structures (<a href="https://www.youtube.com/playlist?list=PLUl4u3cNGP61hsJNdULdudlRL493b-XZf">YouTube</a>) to blow your mind.</p>
 
 
 <h2>Topological sort</h2>
 
-<p>Anytime you need to sort items that are dependent on other items, you use topological sort. Common scenarios include determining the order of tasks for build systems, the evaluation order of cells in a spreadsheet, which classes a student should take each semester to graduate the fastest, and a variety of scheduling problems.</p>
+<p>Anytime you need to sort items that are dependent on other items, you use topological sort. Common scenarios include determining the order of tasks for build systems, the evaluation order of cells in a spreadsheet, which classes a student should take each semester to graduate, and a variety of scheduling problems.</p>
 
 <img src="images/toposort.png" class="center" style="max-width:60%;">
 
@@ -83,7 +83,7 @@
 
 <h2>Recursive descent parsing</h2>
 
-<p>This one felt like unlocking a super power when it clicked for me. If you ever need to ingest a recursive data format or make a programming language, this is the tool for you. Sketch out a grammar then map each grammar rule to a code function. Bam!</p>
+<p>This one felt like unlocking a super power when it clicked for me. If you ever need to ingest a recursive data format or make a programming language, this is the tool for you. Sketch out a grammar then map each grammar rule to a code function. Bam! It feels like it codes itself.</p>
 
 <img src="images/teenyparser.png" class="center" style="max-width:80%;">
 
@@ -129,7 +129,7 @@
 
 <p>When I first tried making my own text editor, I stored all of the text in an array. But that hits performance problems right away (e.g., when the user inserts text anywhere but the end). Years later I even got asked how to implement a performant text buffer at an internship interview.</p>
 
-<p>What should I have used? Well, there are a few options with different tradeoffs: rope, gap buffer, or piece table. With a piece table, you track the edits performed on text rather than only keeping the resulting text. It also makes a lot of other features trivial to add (e.g., undo support and incremental saving).</p>
+<p>What should I have used? Well, there are a few options with different tradeoffs: rope, gap buffer, or piece table. With a piece table, you track the edits performed on text rather than only keeping the resulting text. It makes a lot of other features trivial to add (e.g., undo support and incremental saving).</p>
 
 <p>Piece tables aren't only useful for text editors though. You can use it whenever you have a large buffer of data that can be arbitrarily modified.</p>
 
