@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Challenging algorithms and data structures every programmer should try - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Bored of algorithms? Here are my recommendations that are exciting, understandable, and sometimes even useful!">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Challenging algorithms and data structures every programmer should try">
+    <meta property="og:description" content="Bored of algorithms? Here are my recommendations that are exciting, understandable, and sometimes even useful!">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/algorithmsbook.jpg">
+    <meta property="og:url" content="https://austinhenley.com/blog/challengingalgorithms.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Challenging algorithms and data structures every programmer should try</h1>
+	<small>12/21/2022</small><br><br>
+
+<p>Alright, so we are all spending our leisure time reading about algorithms, right?</p>
+
+<p>Well, back when I was a student, my algorithms courses regularly put me to sleep. This is unfortunate because there are some <i>really</i> interesting algorithms and data structures out there. Not only have they come up during job interviews, but learning them changed how I think about problems. Plus they're useful even if you don't work on Google-scale problems.</p>
+
+<p>Following my other popular posts, <a href="challengingprojects.html">challenging projects every programmer should try</a> and <a href="morechallengingprojects.html">more challenging projects every programmer should try</a>, I made a list of interesting algorithms and data structures you should try:</p>
+
+<ul>
+<li>Topological sort</li>
+<li>Recursive descent parsing</li>
+<li>Myers string difference</li>
+<li>Bloom filter</li>
+<li>Piece table</li>
+<li>Splay tree</li>
+</ul>
+
+<p><b>Note:</b> If you need a general introduction to algorithms, I recommend Jeff Erickson's <i>Algorithms</i> (<a href="https://amzn.to/3G0v65I">Amazon</a>, <a href="http://jeffe.cs.illinois.edu/teaching/algorithms/?">web</a>) or Daniel Zingaro's <i>Algorithmic Thinking</i> (<a href="https://amzn.to/3HQYpJk">Amazon</a>). If you want a giant reference, then the classic is <i>Introduction to Algorithms</i> by CLRS (<a href="https://amzn.to/3hthlDv">Amazon</a>). Not enough? Watch MIT's Advanced Data Structures (<a href="https://www.youtube.com/playlist?list=PLUl4u3cNGP61hsJNdULdudlRL493b-XZf">YouTube</a>) to blow your mind.</p>
+
+
+<h2>Topological sort</h2>
+
+<p>Anytime you need to sort items that are dependent on other items, you use topological sort. Common scenarios include determining the order of tasks for build systems, the evaluation order of cells in a spreadsheet, which classes a student should take each semester to graduate the fastest, and a variety of scheduling problems.</p>
+
+<img src="images/toposort.png" class="center" style="max-width:60%;">
+
+<p>I even used it in graduate school to rearrange graphs to be easier to read.</p>
+
+<ul>
+<li>Topological sorting (<a href="https://en.wikipedia.org/wiki/Topological_sorting">Wikipedia</a>)</li>
+<li>Topological sort interactive visualization (<a href="https://www.cs.usfca.edu/~galles/visualization/TopoSortDFS.html">web</a>)</li>
+</ul>
+
+
+<h2>Recursive descent parsing</h2>
+
+<p>This one felt like unlocking a super power when it clicked for me. If you ever need to ingest a recursive data format or make a programming language, this is the tool for you. Sketch out a grammar then map each grammar rule to a code function. Bam!</p>
+
+<img src="images/teenyparser.png" class="center" style="max-width:80%;">
+
+<p>You could have a simple compiler whipped up in a few hours with it.</p>
+
+<ul>
+<li>Let's make a Teeny Tiny compiler (<a href="teenytinycompiler2.html">my tutorial series</a>)</li>
+<li>Crafting Interpreters (<a href="https://craftinginterpreters.com/contents.html">web</a>, <a href="https://amzn.to/3HT015y">Amazon</a>)</li>
+<li>Recursive descent parser (<a href="https://en.wikipedia.org/wiki/Recursive_descent_parser">Wikipedia</a>)</li>
+</ul>
+
+
+<h2>Myers string diff</h2>
+
+<p>Processing strings is such a common programming task, but I can usually get away with brute forcing whatever it is I need to calculate. We've all learned about Levenshtein distance, but what if you need to show the differences between two strings in a sensible way?</p>
+
+<img src="images/codediff.png" class="center" style="max-width:60%; border:1px solid #000000;">
+
+<p>The default algorithm used by git for showing diffs is the Myers diff algorithm.</p>
+
+<ul>
+<li><a href="https://blog.jcoglan.com/2017/02/12/the-myers-diff-algorithm-part-1/">The Myers diff algorithm</a></li>
+<li><a href="https://blog.robertelder.org/diff-algorithm/">Myers diff algorithm - Code and interactive visualization</a></li>
+</ul>
+
+
+<h2>Bloom filter</h2>
+
+<p>The most known unknown data structure. In fact, I polled some friends at Big Tech about what data structure they'd suggest I add to this list and <i>all of them</i> said bloom filter!</p>
+
+<p>It really only helps with large-scale problem, such as when you need a really big hash table, but it is a great introduction to <i>probabilistic data structures</i>. With very little memory, it can tell you if an item is <i>not</i> present in the table, otherwise it can only tell you <i>maybe</i> the item is present.</p>
+
+<p>Google asked me two interview problems involving these back when I was in college. Have I ever needed this in practice? Nope!</p>
+
+<ul>
+<li>Bloom filter (<a href="https://en.wikipedia.org/wiki/Bloom_filter">Wikipedia</a>)</li>
+<li>Let's implement a bloom filter (<a href="https://onatm.dev/2020/08/10/let-s-implement-a-bloom-filter/">web</a>)</li>
+<li>Bloom filters by example (<a href="https://llimllib.github.io/bloomfilter-tutorial/">web</a>)</li>
+</ul>
+
+
+<h2>Piece table</h2>
+
+<p>When I first tried making my own text editor, I stored all of the text in an array. But that hits performance problems right away (e.g., when the user inserts text anywhere but the end). Years later I even got asked how to implement a performant text buffer at an internship interview.</p>
+
+<p>What should I have used? Well, there are a few options with different tradeoffs: rope, gap buffer, or piece table. With a piece table, you track the edits performed on text rather than only keeping the resulting text. It also makes a lot of other features trivial to add (e.g., undo support and incremental saving).</p>
+
+<p>Piece tables aren't only useful for text editors though. You can use it whenever you have a large buffer of data that can be arbitrarily modified.</p>
+
+<ul>
+<li>Piece table (<a href="https://en.wikipedia.org/wiki/Piece_table">Wikipedia</a>)</li>
+<li>VS Code's text buffer story (<a href="https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation">web</a>)</li>
+<li>The piece table (<a href="https://darrenburns.net/posts/piece-table/">web</a>)</li>
+</ul>
+
+
+<h2>Splay tree</h2>
+
+<p>How about a self-optimizing data structure? Splay trees are binary trees that will tend to have the more recently accessed elements closer to the root, and it does so without maintaining any additional metadata. Each time an element is accessed, it gets moved to the root.</p>
+
+<img src="images/algorithmsbook.jpg" class="center" style="max-width:70%; border:1px solid #000000;">
+
+<p>It's a tree with a builtin cache and it is beautifully simple to implement! As a student, I had a really hard time implementing red-black trees (we wrote the code on paper, ugh) so I was pleasantly surprised when splay trees just clicked for me.</p>
+
+<ul>
+<li>Splay tree interactive visualization (<a href="https://www.cs.usfca.edu/~galles/visualization/SplayTree.html">web</a>)</li>
+<li>Splay tree (<a href="https://en.wikipedia.org/wiki/Splay_tree">Wikipedia</a>)</li>
+<li>Implementation in TypeScript (<a href="https://github.com/w8r/splay-tree">GitHub</a>)</li>
+</ul>
+
+
+<hr>
+
+<p>If you are still craving more, here are the honorable mentions that I cut from the list:</p>
+
+<ul>
+<li>Trie</li>
+<li>Segment tree</li>
+<li>Operational transformation</li>
+<li>Fibonacci heap</li>
+<li>Skip list</li>
+<li>Union find</li>
+</ul>
+
+<p>Try these out, and let me know if I missed any!</p>
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small><br><br>
+
+<br><br><br><br>
+
+</body>
+</html>
