@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My first experience using Swift, SwiftUI, and XCode - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I documented my experience trying to make an iOS app, including everything I struggled with.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="My first experience using Swift, SwiftUI, and XCode">
+    <meta property="og:description" content="I documented my experience trying to make an iOS app, including everything I struggled with.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/swifthelloworld.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/firstswiftproject.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">My first experience using Swift, SwiftUI, and XCode</h1>
+	<small>1/2/2023</small><br><br>
+
+
+<p>I'm documenting my progress and experience using Swift, SwiftUI, and XCode for the first time to make an iOS app.</p>
+
+<p>Over the last few years I have failed miserably to learn React Native on a few different occasions. I spent too many hours just trying to get it installed, running Hello World, and dealing with errors after updating a package.</p>
+
+<p>It really makes me miss the days of VB6. Open Visual Studio and <i>It Just Works<sup>&trade;</sup></i>.</p>
+
+<p>This time, I'll skip the middle layer and go straight for native development. Maybe I will have better success?</p>
+
+<p><b>Let's go!</b></p>
+
+<p>Time to download XCode from the app store.</p>
+
+<img src="images/brickwall.jpg" class="center" style="max-width:50%;">
+
+<p>First problem: The app store asks if I want to download an old XCode but with no option to download the latest?</p>
+
+<p>The message isn't clear but it mentions a version number so maybe I need to update my macOS.</p>
+
+<p>Indeed, looks like macOS Ventura is available. Update!</p>
+
+<p>...</p>
+
+<p>(Roughly an hour later)</p>
+
+<img src="images/macosdesktop.png" class="center" style="max-width:60%;">
+
+<p>A new red desktop image. I do miss the mountain ones from several years ago.</p>
+
+<p>Ok, now install XCode.</p>
+
+<p>Second problem: After the download, the App Store is showing a spinning circle instead of the "Open" button beside XCode.</p>
+
+<p>I've already waited several minutes. It doesn't give any status of what is going on.</p>
+
+<p>I'll take my dog for a walk then restart my computer if it isn't fixed.</p>
+
+<p>...</p>
+
+<p>(Roughly 20 minutes later)</p>
+
+<p>Ok, XCode is installed and opened.</p>
+
+<img src="images/xcodenewproject.png" class="center" style="max-width:100%;">
+
+<p>Hmmm. Which app do I want? "App" and "Document App" are not very informative names.</p>
+
+<p>Is the "App" under "Multiplatform" the same as the "App" under "iOS"?</p>
+
+<p>Should I just use "Blank" under "Other"?</p>
+
+<p>Guess I'll just pick one and delete it later if it doesn't work.</p>
+
+<img src="images/swifthelloworld.png" class="center" style="max-width:100%;">
+
+<p>Nice! This looks fairly understandable.</p>
+
+<p>Only two code files. Not much boilerplate at all.</p>
+
+<p>The first file seems to be the program's entry point which creates a view. The second file defines that view.</p>
+
+<p>Off the bat, a few syntax peculiarities stand out:</p>
+
+<ul>
+<li>Chaining of methods (<i>.imageScale()</i> and <i>.foregroundColor()</i>). Reminds me of LINQ. Does each one return a reference to the target object so you can conveniently do this?</li> 
+<li>Dot operator without something on the left (<i>.large</i>). Are periods allowed in names or is there an implicit <i>this</i>?</li>
+<li>Blocks after a type (<i>VStack { ... }</i>). Is this some sort of shorthand for object initialization? But the object isn't stored anywhere. I don't even know what to google for this... "curly brace after function call"?  A result mentions it could be a "computed property".</li>
+<li>The <i>some</i> keyword (<i>var body: some View</i>). Sounds like it has something to do with polymorphism.</li>
+</ul>
+
+<p>Anyway, what am I trying to build here?</p>
+
+<p>I'll go for a <b>todo list</b> app. Along the way, there are a handful of concepts I'll need to figure out with SwiftUI, like creating controls, handling events, and managing state.
+
+<p>My first goal will be simple: add a button that takes the user to another screen.</p>
+
+<pre class="prettyprint lang-swift">
+Button(action: {
+  print("Clicked!")
+}) {
+  Text("Hello, world!")
+    .font(.title)
+    .foregroundColor(.white)
+    .background(Color.blue)
+}
+</pre>
+
+<p>So far this seems easy enough. Basic layout stuff is working. The button is printing to the console when clicked. (I still don't understand why a block can come after a function call like this.)</p>
+
+<p>Now to change the view when the button is clicked. I'll set a variable from the button's event and in the ContentView I'll render a Button when that variable is true.</p>
+
+<pre class="prettyprint lang-swift">
+struct ContentView: View {
+  var body: some View {
+    var clicked = false
+    VStack {
+      Button("Add", action: {
+        clicked = true
+      })
+      if(clicked) {
+        Text("CLICKED")
+      }
+    }
+  .padding()
+  }
+}
+</pre>
+
+<p>Nope, not working. The console message is being printed but the text control is not appearing.</p>
+
+<p>...</p>
+
+<p>(30 minutes of reading and tinkering)</p>
+
+<p>...</p>
+
+<p>YAY! Button works :)</p>
+
+<img src="images/iosbutton.gif" class="center" style="max-width:35%;">
+
+<p>To get it working I had to add the <i>@State</i> annotation to the clicked variable or else SwiftUI won't recalculate the view. That was not obvious at all.</p>
+
+<p>That will take some more time for me to understand, but now I am able to modify views at runtime.</p>
+
+<p>Also, I think I am misunderstanding "views". I thought a view is like a page or screen of the app. Based on some event, you render a different view. That would make sense because the new project created a ContentView.swift file for me.</p>
+
+<p>However, this appears to be wrong, at least partially. Views can be made up of multiple views?</p>
+
+<p>And I don't know how to change which global view is displayed at any time. Maybe I need to change BadTodoApp.swift to be like a controller that manages the global views. Or I could treat the default ContentView like the manager of global views.</p>
+
+<p>I'm not sure which is more idiomatic, but both seem doable.</p>
+
+<p>I really just want to know the best way to define a few screens and how the user moves between them.</p>
+
+<p>I saw mentions of navigation in the document so I'll go do some digging to get an idea of how people do this.</p>
+
+<p>...</p>
+
+<p>After reading quite a few tutorials and official docs, I am more confused.</p>
+
+<p>SwiftUI seems to treat low-level UI elements (like a button) the same as their opinionated, high-level paradigms (like the NavigationStack) which are just predefined sets of low-level UI elements, I think.</p>
+
+<p>But it looks like I can just ignore the navigation types by modifying the view myself with barely any additional effort. I probably don't get the free transition animations though.</p>
+
+<p>I tried reading about Scenes but I don't see the difference from a View.</p>
+
+<p>Why am I not able to find a straightforward example of <b>Go from SCREEN A to SCREEN B</b>?</p>
+
+<p>WinForms made this easy. You define forms (same as views?) and control which is visible, like so:</p>
+
+<pre class="prettyprint lang-cs">
+private void button1_Click(object sender, EventArgs e) {
+  SecondForm myNewForm = new SecondForm();
+  myNewForm.Show();
+  this.Close();
+}
+</pre>
+
+<p>SwiftUI feels less like declarative programming and more like an opaque system that dictates when my control flow executes.</p>
+
+<p>Anyway, time to try out these ideas to manage which page is visible.</p>
+
+<p>I'm going to attempt a switch statement in my ContentView struct representing which page the user is currently on using an enum.</p>
+
+<pre class="prettyprint lang-swift">
+struct ContentView: View {
+    @State var currentPage = Pages.First
+    switch currentPage {
+    case .First:
+        Text("First Page")
+    case .Second:
+        Text("Second Page")
+    default:
+        break
+    }
+}
+</pre>
+
+<p>This gives me an error, <i>"Expected declaration"</i>. Not particularly helpful.</p>
+
+<p>Apparently I need to move the switch to inside <i>some View</i>. This resurges my confusion: what is this mysterious { } block?</p>
+
+<p>Oh well, I will just pretend it is a function. Let me try again and add a button to test.</p>
+
+<pre class="prettyprint lang-swift">
+struct ContentView: View {
+    @State var currentPage = Pages.First
+    var body: some View {
+        switch currentPage {
+        case .First:
+            VStack {
+                Button("Go to Second page", action: {
+                    currentPage = .Second
+                })
+            }.padding()
+        case .Second:
+            VStack {
+                Button("Go to First page", action: {
+                    currentPage = .First
+                })
+            }.padding()
+        }
+    }
+}
+</pre>
+
+<p>There we have it! I can move from one page to another, <b>FINALLY</b>.</p>
+
+<p>I went ahead and added some layout stuff and additional controls without any problems. I created a struct to represent a todo item along with some basic metadata and created an array to track a dynamic number of todo items.</p>
+
+<p>It isn't a todo list app <i>yet</i>, but it is in sight! The remaining concepts I need to look into are:</p>
+
+<ul>
+<li>Add a floating control on top of the screen to edit a todo item.</li>
+<li>Refactor each page into a different view object.</li>
+<li>Pass data between views.</li>
+<li>Animate going from one screen to another.</li>
+<li>Persist data across app runs.</li>
+</ul>
+
+<hr>
+
+<p>So, what do I think about Swift, SwiftUI, and XCode?</p>
+
+<p>Swift has some interesting language features that I think I would really appreciate. My impression is that it is a big language and that the syntax deviates away from languages I'm used to. I want to keep trying it out.</p>
+
+<p>SwiftUI has been the hard part, but it is probably because I don't have much experience with declarative frameworks which have been popular lately (e.g., React).</p>
+
+<p>XCode seems fairly minimalist, which I like. I find the autocompletion to often be more distracting than useful though.</p>
+
+<p>But... the <b>error messages are abysmal</b>.</p>
+
+<ul>
+<li>Cannot infer contextual base in reference to member 'padding'</li>
+<li>Function declares an opaque return type, but has no return statements in its body from which to infer an underlying type</li>
+<li>Type annotation missing in pattern</li>
+<li>Expected declaration</li>
+</ul>
+
+<p>These look like error messages from a 2003 C++ compiler. Terse, vague, and full of jargon. In stark contrast to modern compilers, these give little to no context other than the line number and no suggested fix.</p>
+
+<p>For example, I forgot just the "case" keyword inside an Enum declaration and got this:</p>
+
+<img src="images/swifterrors.png" class="center" style="max-width:50%;">
+
+
+<p>Not exactly helpful!</p>
+
+<hr>
+
+<p><b>I did have fun though.</b></p>
+
+<p>This was a more pleasant experience than when I tried to learn React Native. I knew I'd hit some snags, especially since I jumped in without reading much documentation, so I'm happy with my progress. There's definitely some low hanging fruit for Apple to address in terms of usability.</p>
+
+<p>Ultimately, I had my first iOS app working in a handful of hours!</p>
+
+<p>My next goal is to launch something to the app store within a few months. I'll write about that experience too.</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>

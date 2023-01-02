@@ -6,7 +6,14 @@
     <link>https://austinhenley.com/blog.html</link>
     <description />
     <language>en-us</language>
-    <copyright>Austin Z. Henley (2022)</copyright>
+    <copyright>Austin Z. Henley (2023)</copyright>
+    <item>
+      <title>My first experience using Swift, SwiftUI, and XCode</title>
+      <pubDate>Mon, 2 Jan 2023 16:00:01 -0400</pubDate>
+      <link>https://austinhenley.com/blog/firstswiftproject.html</link>
+      <author>azh321@gmail.com (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://austinhenley.com/blog/firstswiftproject.html">https://austinhenley.com/blog/firstswiftproject.html</a>]]></description>
+    </item>
     <item>
       <title>Challenging algorithms and data structures every programmer should try</title>
       <pubDate>Wed, 21 Dec 2022 17:00:01 -0400</pubDate>
