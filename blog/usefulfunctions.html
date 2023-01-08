@@ -131,9 +131,9 @@ function distance(objA, objB) {
 // NOTE: Assumes shapes are rectangular and not rotated.
 function overlapping(objA, objB) {
   // Check x axis.
-  if(objA.x &lt; (objB.x + objB.w) && (objA.x + objA.w) > objB.x) {
+  if(objA.x &lt; (objB.x + objB.w) && (objA.x + objA.w) &gt; objB.x) {
     // Check y axis.
-    if((objA.y + objA.h) > objB.y && objA.y &lt; (objB.y + objB.h)) {
+    if((objA.y + objA.h) &gt; objB.y && objA.y &lt; (objB.y + objB.h)) {
       return true;
     }
   }
@@ -146,8 +146,8 @@ function overlapping(objA, objB) {
 <pre class="prettyprint lang-js">
 // Check if point overlaps with rectangle.
 function intersectPointRectangle(px, py, rect) {
-  if(px >= rect.x && px &lt;= rect.x + rect.w) {
-    if(py >= rect.y && py &lt;= rect.y + rect.h) {
+  if(px &gt;= rect.x && px &lt;= rect.x + rect.w) {
+    if(py &gt;= rect.y && py &lt;= rect.y + rect.h) {
       return true;
     }
   }
