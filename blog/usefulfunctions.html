@@ -146,8 +146,8 @@ function overlapping(objA, objB) {
 <pre class="prettyprint lang-js">
 // Check if point overlaps with rectangle.
 function intersectPointRectangle(px, py, rect) {
-  if(px >= rect.x && px <= rect.x + rect.w) {
-    if(py >= rect.y && py <= rect.y + rect.h) {
+  if(px >= rect.x && px &lt;= rect.x + rect.w) {
+    if(py >= rect.y && py &lt;= rect.y + rect.h) {
       return true;
     }
   }
