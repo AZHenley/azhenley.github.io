@@ -28,6 +28,7 @@
 			<div class="dense">
 				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
 				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://hci.social/@azhenley">@azhenley@hci.social</a><br>
 				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
 
 			</div>
@@ -201,9 +202,9 @@ struct ContentView: View {
 
 <pre class="prettyprint lang-cs">
 private void button1_Click(object sender, EventArgs e) {
-    SecondForm myNewForm = new SecondForm();
-    myNewForm.Show();
-    this.Close();
+  SecondForm myNewForm = new SecondForm();
+  myNewForm.Show();
+  this.Close();
 }
 </pre>
 
@@ -215,15 +216,15 @@ private void button1_Click(object sender, EventArgs e) {
 
 <pre class="prettyprint lang-swift">
 struct ContentView: View {
-    @State var currentPage = Pages.First
-    switch currentPage {
-    case .First:
-        Text("First Page")
-    case .Second:
-        Text("Second Page")
-    default:
-        break
-    }
+  @State var currentPage = Pages.First
+  switch currentPage {
+  case .First:
+    Text("First Page")
+  case .Second:
+    Text("Second Page")
+  default:
+    break
+  }
 }
 </pre>
 
@@ -235,23 +236,23 @@ struct ContentView: View {
 
 <pre class="prettyprint lang-swift">
 struct ContentView: View {
-    @State var currentPage = Pages.First
-    var body: some View {
-        switch currentPage {
-        case .First:
-            VStack {
-                Button("Go to Second page", action: {
-                    currentPage = .Second
-                })
-            }.padding()
-        case .Second:
-            VStack {
-                Button("Go to First page", action: {
-                    currentPage = .First
-                })
-            }.padding()
-        }
+  @State var currentPage = Pages.First
+  var body: some View {
+    switch currentPage {
+    case .First:
+      VStack {
+        Button("Go to Second page", action: {
+          currentPage = .Second
+        })
+      }.padding()
+    case .Second:
+      VStack {
+        Button("Go to First page", action: {
+          currentPage = .First
+        })
+      }.padding()
     }
+  }
 }
 </pre>
 
