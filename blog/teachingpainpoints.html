@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The pain points of teaching computer science - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="We interviewed computer science instructors to understand their pain points and workarounds.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="The pain points of teaching computer science">
+    <meta property="og:description" content="We interviewed computer science instructors to understand their pain points and workarounds.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/professorpainting.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/teachingpainpoints.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://hci.social/@azhenley">@azhenley@hci.social</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">The pain points of teaching computer science</h1>
+	<small>1/16/2023</small><br><br>
+
+
+<img src="images/professorpainting.png" class="center" style="max-width:50%;border:1px solid #000000;">
+
+<p><i>This post is an informal summary of our recent SIGCSE'23 paper, "What Is Your Biggest Pain Point? An Investigation of CS Instructor Obstacles, Workarounds, and Desires". Check out the <a href="../pubs/Mirhosseini2023SIGCSE_TeacherPainPoints.pdf">preprint</a> for more details.</i></p>
+
+<hr>
+
+<p>Teaching is hard.</p>
+
+<p>But exactly what about it is hard? How could technology help?</p>
+
+<p>To investigate the pain points that CS instructors face and their workarounds, we conducted semi-structured interviews with 32 computer science instructors. Their institutions range from large research universities to small liberal arts colleges and community colleges across 7 different countries.</p>
+
+<p>We asked open-ended questions about lecture structure, availability of resources such as TAs and software, time spent on various activities, techniques used to improve learning experiences, the most painful aspects of running courses, and potential solutions to their pain points.</p>
+
+<h3>Pain points</h3>
+
+<p>We identified 6 categories of pain points:</p>
+
+<ul>
+<li><b>Where are students struggling?</b> It is a huge challenge for instructors to know when students are struggling. There is often not an effective feedback loop since instructors often rely on students to ask questions. However, two instructors expressed why this doesn't work: <i>"I can't see where they get stuck and many don't ask questions"</i> and <i>"students are doing lots and lots of things but I can't process all they are doing".</i></li>
+<li><b>Answering student questions.</b> In contrast, instructors and TAs are overwhelmed with responding to questions and problems. These questions are often last minute, repetitive in nature, and require technical troubleshooting. For example, <i>"Why does Python no longer exist?"</i>.</li>
+<li><b>Limited TA support.</b> You might be thinking that teaching assistants will just solve all these challenges! Sadly, most departments are understaffed with TAs, if they have any at all, despite growing enrollments. Instructors said that even when they have TAs, they sometimes require considerable time to manage and may not be reliable.</li>
+<li><b>Grading and feedback.</b> Nearly every instructor brought up the time and tedium of grading. In fact, one instructor told us <i>"grading is probably the biggest burden of the courses"</i>. Instructors also described how critical it is to design a rubric and feedback mechanism that is transparent and minimizes lawyering.</li>
+<li><b>Course material preparation.</b> Instructors lamented about the high cost of creating and maintain course materials, such as lectures, assignments, and quizzes. They often don't update them over the years because they <i>"just don't have the resources"</i>. The shift to online courses because of COVID-19 required significant upfront investment, though instructors complained they saw little engagement from students.</li>
+<li><b>Administrative tasks.</b> The <i>grunt work</i> of running a course includes managing social dynamics, accreditation tasks, enforcing academic honest policies, dealing with LMS issues, etc. Several instructors said they wished they could spend this time improving the course instead. Dealing with cheating was probably the least favorite task of all!</li>
+</ul>
+
+<h3>Workarounds</h3>
+
+<p>We also identified 5 categories of how instructors attempt to overcome these pain points:</p>
+
+<ul>
+    <li><b>Interactive textbooks and exercises.</b> To minimize developing their own course materials and the grading of assignments, a few instructors rely on paid interactive textbook services that are regularly updated. This also encouraged a more active learning experience, since the alternative for many instructors involves static notes or a physical textbook.</li>
+    <li><b>Online IDEs and visualizers.</b> To eliminate environment issues, increase engagement, and provide faster feedback, instructors leveraged online coding tools. Supporting students' technical issues with their local development environments could be a full-time job in itself, so online IDEs completely eliminate this pain point. Instructors were particularly impressed by educational tools that show visualizations of the students' code.</li>
+    <li><b>Automated grading.</b> A long time dream of CS instructors has been to completely automate grading. Many mentioned the use of test cases and naive grading scripts, and some instructors mentioned that AI graders may soon be viable. However, there seems to be a tension here: instructors also pointed out the need for the <i>"human touch"</i>.</li>
+    <li><b>Flipped classroom.</b> To better understand where students are struggling, instructors have switched to in-class activities while having recorded lectures for homework. This has the added benefit that students can rewatch or rewind the lecture. Several instructors switched to this model because of COVID-19 but stuck with it after seeing the benefits.</li>
+    <li><b>Peer instruction.</b> To provide better feedback and overcome the lack of TAs, instructors have experimented with peer instruction. For example, one instructor has multiple office hour sessions with small groups. Others require student-led study groups. They've also found undergraduate TAs to be effective and cheap to scale core courses.</li>
+</ul>
+
+<hr>
+
+<p>There are many opportunities to improve the lives of instructors and students in computer science courses. As class sizes increase, how is an instructor to know when a student struggles with the same concept across multiple assignments? How can they provide fair mechanisms for students of various backgrounds to seek help? How do instructors keep their courses modern while sufficiently attending to all the administrivia? What is the right balance of automation and human touch?</p> 
+
+<p>What role does AI play, especially those powered by large language models like ChatGPT and Copilot?</p>
+
+<p>Read more in our SIGCSE'23 paper: <a href="../pubs/Mirhosseini2023SIGCSE_TeacherPainPoints.pdf">What Is Your Biggest Pain Point? An Investigation of CS Instructor Obstacles, Workarounds, and Desires</a>.</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
