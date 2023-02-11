@@ -419,7 +419,7 @@ return 0;
 <p>We will first take care of <b>comparison</b>, which will only emit the specific operator.</p>
 
 <pre class="prettyprint lang-python" >
-    # comparison ::= expression (("==" | "!=" | ">" | ">=" | "<" | "<=") expression)+
+    # comparison ::= expression (("==" | "!=" | "&gt;" | "&gt;=" | "&lt;" | "&lt;=") expression)+
     def comparison(self):
         self.expression()
         # Must be at least one comparison operator and another expression.
@@ -568,7 +568,7 @@ CC="gcc"
 
 function comp {
     BN=$(basename -s .teeny $1)
-    TTOUTPUT=$(${PYTHON} ${COMPILER} $1 2>&1)
+    TTOUTPUT=$(${PYTHON} ${COMPILER} $1 2&gt;&1)
     if [ $? -ne 0 ]; then
         echo "${TTOUTPUT}"
     else
