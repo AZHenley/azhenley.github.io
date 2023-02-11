@@ -217,7 +217,7 @@ r
 <p>But we don't just want characters, we want tokens! We need to plan how combining individual characters together makes a token, which works much like a state machine. Here are the main lexer rules for the Teeny Tiny language:</p>
 
 <ul>
-	<li>Operator. One or two consecutive characters that matches: + - * / = == != > &lt; >= &lt;=</li>
+	<li>Operator. One or two consecutive characters that matches: + - * / = == != &gt; &lt; &gt;= &lt;=</li>
 	<li>String. Double quotation followed by zero or more characters and a double quotation. Such as: "hello, world!" and ""</li>
 	<li>Number. One or more numeric characters followed by an optional decimal point and one or more numeric characters. Such as: 15 and 3.14</li>
 	<li>Identifier. An alphabetical character followed by zero or more alphanumeric characters.</li>
@@ -398,7 +398,7 @@ TokenType.NEWLINE
 
 <p>Progress!</p>
 
-<p>At this point, we can move on to lexing the operators that are made up of two characters, such as <i>==</i> and <i>>=</i>. All of these operators will be lexed in the same fashion: check the first character, then peek at the second character to see what it is before deciding what to do. Add this after the <i>elif</i> for the <i>SLASH</i> token in <b>getToken</b>:</p>
+<p>At this point, we can move on to lexing the operators that are made up of two characters, such as <i>==</i> and <i>&gt;=</i>. All of these operators will be lexed in the same fashion: check the first character, then peek at the second character to see what it is before deciding what to do. Add this after the <i>elif</i> for the <i>SLASH</i> token in <b>getToken</b>:</p>
 
 <pre class="prettyprint lang-python">
         elif self.curChar == '=':
@@ -414,16 +414,16 @@ TokenType.NEWLINE
 <p>Using the <b>peek</b> function allows us to look at what the next character will be without discarding the <i>curChar</i>. Here is the code for the remaining operators which work the same way:</p>
 
 <pre class="prettyprint lang-python">
-        elif self.curChar == '>':
-            # Check whether this is token is > or >=
+        elif self.curChar == '&gt;':
+            # Check whether this is token is &gt; or &gt;=
             if self.peek() == '=':
                 lastChar = self.curChar
                 self.nextChar()
                 token = Token(lastChar + self.curChar, TokenType.GTEQ)
             else:
                 token = Token(self.curChar, TokenType.GT)
-        elif self.curChar == '<':
-                # Check whether this is token is < or <=
+        elif self.curChar == '&lt;':
+                # Check whether this is token is &lt; or &lt;=
                 if self.peek() == '=':
                     lastChar = self.curChar
                     self.nextChar()
@@ -441,7 +441,7 @@ TokenType.NEWLINE
 
 <p>The only operator that is a bit different is <i>!=</i>. That is because the <i>!</i> character is not valid on its own, so it must be followed by <i>=</i>. The other characters are valid on their own, but the lexer is greedy and will accept it as one of the multi-character operators if possible.</p>
 
-<p>We can test these operators by updating the input to <i>"+- */ >>= = !="</i> which should give you the following output when you run the program:</p>
+<p>We can test these operators by updating the input to <i>"+- */ &gt;&gt;= = !="</i> which should give you the following output when you run the program:</p>
 
 <pre class="prettyprint">
 TokenType.PLUS
