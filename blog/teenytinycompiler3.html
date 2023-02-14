@@ -69,7 +69,7 @@ PRINT ""
 
 LET a = 0
 LET b = 1
-WHILE nums > 0 REPEAT
+WHILE nums &gt; 0 REPEAT
     PRINT a
     LET c = a + b
     LET a = b
@@ -80,7 +80,7 @@ ENDWHILE
     </div>
     <div style="flex:1;">
 <pre class="prettyprint lang-c" >
-#include &lt;stdio.h>
+#include &lt;stdio.h&gt;
 
 int main(void){
     float nums, a, b, c;
@@ -91,7 +91,7 @@ int main(void){
 
     a = 0;
     b = 1;
-    while(nums>0){
+    while(nums&gt;0){
         printf("%.2f\n", (float)(a));
         c = a+b;
         a = b;
@@ -202,7 +202,7 @@ class Emitter:
 <pre class="prettyprint lang-python" >
     # program ::= {statement}
     def program(self):
-        self.emitter.headerLine("#include &lt;stdio.h>")
+        self.emitter.headerLine("#include &lt;stdio.h&gt;")
         self.emitter.headerLine("int main(void){")
         
         # Since some newlines are required in our grammar, need to skip the excess.
@@ -230,7 +230,7 @@ class Emitter:
 <p>Let's test our emitter thus far. Assuming your <b>hello.teeny</b> with the Fibonacci code example still exists from last time, run <i>python3 teenytiny.py hello.teeny</i>. If things go as planned, the last line in the terminal should be "Compiling completed." and <b>out.c</b> should have been created. Check the contents of the emitted code and you should see:</p>
 
 <pre class="prettyprint lang-c" >
-#include &lt;stdio.h>
+#include &lt;stdio.h&gt;
 int main(void){
 return 0;
 }
@@ -264,7 +264,7 @@ return 0;
 <p>Run your compiler with <b>hello.teeny</b> again and check <b>out.c</b>:</p>
 
 <pre class="prettyprint lang-c" >
-#include &lt;stdio.h>
+#include &lt;stdio.h&gt;
 int main(void){
 printf("How many fibonacci numbers do you want?\n");
 printf("\n");
