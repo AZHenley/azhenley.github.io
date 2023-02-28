@@ -250,7 +250,7 @@ r
         self.nextChar()
 </pre>
 
-<p>This will detect a few possible tokens, but doesn't do anything useful yet. What we need next is a <b>Token</b> class to keep track of what type of token it is and the exact text from the code. Place this in <b>Lex.py</b> for now:</p>
+<p>This will detect a few possible tokens, but doesn't do anything useful yet. What we need next is a <b>Token</b> class to keep track of what type of token it is and the exact text from the code. Place this in <b>lex.py</b> for now:</p>
 
 <pre class="prettyprint lang-python">
 # Token contains the original text and the type of token.
@@ -260,7 +260,7 @@ class Token:
         self.kind = tokenKind   # The TokenType that this token is classified as.
 </pre>
 
-<p>To specify what type a token is, we will create the <b>TokenType</b> class as an enum. It looks long, but it just specifies every possible token our language allows. Add <i>import enum</i> to the top of <b>Lex.py</b> and add this class:</p>
+<p>To specify what type a token is, we will create the <b>TokenType</b> class as an enum. It looks long, but it just specifies every possible token our language allows. Add <i>import enum</i> to the top of <b>lex.py</b> and add this class:</p>
 
 <pre class="prettyprint lang-python">
 # TokenType is our enum for all the types of tokens.

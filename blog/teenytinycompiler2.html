@@ -316,7 +316,7 @@ statement ::= "PRINT" (expression | string) nl
             self.nextToken()
 </pre>
 
-<p>Time to test! Create a file, <b>hello.tiny</b>, to use as input to the compiler with <i>PRINT "hello, world!"</i> as the contents. Run <b>teenytiny.py</b> with the input file as an argument and you should get:</p>
+<p>Time to test! Create a file, <b>hello.teeny</b>, to use as input to the compiler with <i>PRINT "hello, world!"</i> as the contents. Run <b>teenytiny.py</b> with the input file as an argument and you should get:</p>
 
 <img src="images/teenytinyoutput2.png" class="center" style="max-width:75%;">
 
@@ -658,7 +658,7 @@ Parsing completed.
 LET foo = bar * 3 + 2
 IF foo &gt; 0 THEN
     IF 10 * 10 &lt; 100 THEN
-    PRINT bar
+        PRINT bar
     ENDIF
 ENDIF
 </pre>
@@ -715,7 +715,7 @@ GOTO main
             self.match(TokenType.IDENT)
 </pre>
 
-<p>The way this works is that if a label has already exists in <i>labelsDeclared</i>, then it means the code is attempting to declare it twice. That is not allowed, so the compiler aborts with an error message. If it doesn't already exist, then add it to the set. Whenever GOTO is parsed, insert the label into <i>labelsGotoed</i>. This can occur multiple times.</p>
+<p>The way this works is that if a label already exists in <i>labelsDeclared</i>, then it means the code is attempting to declare it twice. That is not allowed, so the compiler aborts with an error message. If it doesn't already exist, then add it to the set. Whenever GOTO is parsed, insert the label into <i>labelsGotoed</i>. This can occur multiple times.</p>
 
 <p>To verify that there is not a GOTO to an undeclared label, we need to update <b>program</b>. Once the parsing is complete, the compiler just needs to ensure that all of the labels in <i>labelsGotoed</i> are also in <i>labelsDeclared</i>.</p>
 
@@ -738,7 +738,7 @@ GOTO main
                 self.abort("Attempting to GOTO to undeclared label: " + label)
 </pre>
 
-<p>That takes care of labels. The last thing the parser needs to do is check that variables are declared. In a LET or INPUT statement, we will add it to set of declared variables if it doesn't already exist. If a variable is referenced in an expression, the parser will check that it has been declared first.</p>
+<p>That takes care of labels. The last thing the parser needs to do is check that variables are declared. In a LET or INPUT statement, we will add it to a set of declared variables if it doesn't already exist. If a variable is referenced in an expression, the parser will check that it has been declared first.</p>
 
 <p>Update LET in <b>statement</b>:</p>
 

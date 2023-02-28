@@ -225,7 +225,7 @@ class Emitter:
 
 <p>The additions here are starting out with the include statement and the main function. Then we loop through all of the <i>self.statement()</i>. At the end, we have to close up the main function with <i>return 0;</i> and a closing curly bracket.</p>
 
-<p>We will continue to use the emitter just like so. Emit some initial code, call other parser functions based on the grammer, and emit more code before returning up the call stack.</p>
+<p>We will continue to use the emitter just like so. Emit some initial code, call other parser functions based on the grammar, and emit more code before returning up the call stack.</p>
 
 <p>Let's test our emitter thus far. Assuming your <b>hello.teeny</b> with the Fibonacci code example still exists from last time, run <i>python3 teenytiny.py hello.teeny</i>. If things go as planned, the last line in the terminal should be "Compiling completed." and <b>out.c</b> should have been created. Check the contents of the emitted code and you should see:</p>
 
@@ -383,9 +383,9 @@ return 0;
 }
 </pre>
 
-<p>The code definitely isn't error free, plus things are bit hard to read without formatting. You'll see that the variable declarations are all at the top though! That is exciting. So what isn't working? Well <i>a = ;</i> certainly isn't valid C code. Looks like all the variable assignments are broken. In fact, anything that calls <b>expression</b> is emitting invalid code (still). We are making significant progress though!</p>
+<p>The code definitely isn't error free, plus things are a bit hard to read without formatting. You'll see that the variable declarations are all at the top though! That is exciting. So what isn't working? Well <i>a = ;</i> certainly isn't valid C code. Looks like all the variable assignments are broken. In fact, anything that calls <b>expression</b> is emitting invalid code (still). We are making significant progress though!</p>
 
-<p>Alright, we have one more type of statement to support: <i>INPUT</i>. There a few things to note about this. First, if the variable being referenced doesn't already exist, then we should declare it by using <b>emitter.headerLine</b>. Second, we have to include some C specific code because of how <i>scanf</i> works. We could just emit <i>scanf("%f", &foo);</i>, but that won't handle invalid input, such as when a user enters a letter. So we must also check if scanf returns 0. If it does, we clear the input buffer and we set the input variable to 0.</p> 
+<p>Alright, we have one more type of statement to support: <i>INPUT</i>. There are a few things to note about this. First, if the variable being referenced doesn't already exist, then we should declare it by using <b>emitter.headerLine</b>. Second, we have to include some C specific code because of how <i>scanf</i> works. We could just emit <i>scanf("%f", &foo);</i>, but that won't handle invalid input, such as when a user enters a letter. So we must also check if scanf returns 0. If it does, we clear the input buffer and we set the input variable to 0.</p> 
 
 <p>Note: This will be a limitation of Teeny Tiny. You can't tell if the user input was the value 0 or an invalid input. They are treated the same. There are ways to fix this though. You could modify it such that an invalid input results in an obscure value, like -999, or prints an error message and asks for a valid input in a loop, or sets an error code in a flag. Every programming language handles these types of scenarios differently. The value of 0 will work for now though.</p>
 
@@ -488,7 +488,7 @@ return 0;
 
 <p>While we are here, go ahead and remove the <i>print</i> from <b>nl</b>.</p>
 
-<p>That is it! Teeny Tiny compiles to C code now! Let's test it with a new example, <b>average.tiny</b>:</p>
+<p>That is it! Teeny Tiny compiles to C code now! Let's test it with a new example, <b>average.teeny</b>:</p>
 
 <pre class="prettyprint" >
 # Compute average of given values.
