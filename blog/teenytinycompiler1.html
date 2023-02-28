@@ -112,7 +112,7 @@ ENDWHILE
 
 <pre class="prettyprint lang-python">
 class Lexer:
-    def __init__(self, input):
+    def __init__(self, source):
         pass
 
     # Process the next character.
@@ -145,8 +145,8 @@ class Lexer:
 <p>The lexer needs to keep track of the current position in the input string and the character at that position. We will initialize these in the constructor:</p>
 
 <pre class="prettyprint lang-python">
-    def __init__(self, input):
-        self.source = input + '\n' # Source code to lex as a string. Append a newline to simplify lexing/parsing the last token/statement.
+    def __init__(self, source):
+        self.source = source + '\n' # Source code to lex as a string. Append a newline to simplify lexing/parsing the last token/statement.
         self.curChar = ''   # Current character in the string.
         self.curPos = -1    # Current position in the string.
         self.nextChar()
@@ -180,8 +180,8 @@ class Lexer:
 from lex import *
 
 def main():
-	input = "LET foobar = 123"
-	lexer = Lexer(input)
+	source = "LET foobar = 123"
+	lexer = Lexer(source)
 
 	while lexer.peek() != '\0':
 		print(lexer.curChar)
@@ -331,8 +331,8 @@ class TokenType(enum.Enum):
 
 <pre class="prettyprint lang-python">
 def main():
-    input = "+- */"
-    lexer = Lexer(input)
+    source = "+- */"
+    lexer = Lexer(source)
 
     token = lexer.getToken()
     while token.kind != TokenType.EOF:
