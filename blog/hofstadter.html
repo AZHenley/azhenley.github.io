@@ -144,9 +144,9 @@
 
 <p>Commands must be space separated. Lines are 1-indexed. If you need more than one value per line, you can swap with nonexistent lines as long as it is a positive number. If you need to clear a line's value, you can swap with line 0 which will always be the empty string. If you need a no-op, you can swap with the current line. If you need literal values, you'll need to load them from a file or a website.</p>
 
-<p>The source code can be found on the GitHub <a href="https://github.com/AZHenley/hofstadter">repo</a>. There are only a few examples in the repo so please submit a PR if you come up with one!</p>
-
 <hr>
+
+<p>The source code can be found on the GitHub <a href="https://github.com/AZHenley/hofstadter">repo</a>. There are only a few examples in the repo so please submit a PR if you come up with one!</p>
 
 <p>How did I come up with the language? I tried to deliberately come up with features I had not seen in other esoteric languages: web requests and string processing. Those would make it appear useful. I then tried to figure out how to apply some sort of forced concurrency and messaging passing to make it tricky. I vaguely recall a language that used a metaphor of numbered mailboxes to pass values around, so I twisted that to be implicit, where each line has a mailbox. Then I added a standard conditional. How to do a loop? Make each line loop automatically! I conveniently forgot support for literal values, and I quite like it that way.</p>
 
