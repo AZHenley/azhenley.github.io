@@ -86,9 +86,11 @@
 
 <p>Above is a slightly verbose Hello World program written in Hofstadter. You can't set values using literals, so it does an HTTP GET on a website, uses a regex to extract the first instance of "Hello world", and then prints it.</p>
 
+<p>The <i>lines</i> of code are important. Each line is executed concurrently in round-robin style (one command per line starting with the first line) and can store one value at a time (a string). The stored value can be referenced from other lines using the line number. Lines will loop, forever.</p>
+
 <blockquote>Hofstadter's Law: It always takes longer than you expect, even when you take into account Hofstadter's Law.</blockquote>
 
-<p>The <i>lines</i> of code are important. Each line is executed concurrently in round-robin style (one command per line starting with the first line) and can store one value at a time (a string). The stored value can be referenced from other lines using the line number. Lines will loop, forever.</p>
+<p>I named it after <a href="https://en.wikipedia.org/wiki/Hofstadter%27s_law">Hofstadter's Law</a> because if you add another command to a line or add an entirely new line, it will often have consequences for all the other lines. Each line must account for the other lines.</p>
 
 <p>There are only 8 commands, though some of their meanings change based on whether the line's current value is empty. They are:</p>
 
@@ -141,8 +143,6 @@
 </table>
 
 <p>Commands must be space separated. Lines are 1-indexed. If you need more than one value per line, you can swap with nonexistent lines as long as it is a positive number. If you need to clear a line's value, you can swap with line 0 which will always be the empty string. If you need a no-op, you can swap with the current line. If you need literal values, you'll need to load them from a file or a website.</p>
-
-<p>I named it after <a href="https://en.wikipedia.org/wiki/Hofstadter%27s_law">Hofstadter's Law</a> because if you add another command to a line or add an entirely new line, it will often have consequences for all the other lines. Each line must account for the other lines.</p>
 
 <p>The source code can be found on the GitHub <a href="https://github.com/AZHenley/hofstadter">repo</a>. There are only a few examples in the repo so please submit a PR if you come up with one!</p>
 
