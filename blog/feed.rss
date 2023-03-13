@@ -8,6 +8,13 @@
     <language>en-us</language>
     <copyright>Austin Z. Henley (2023)</copyright>
     <item>
+      <title>Hofstadter: An esoteric programming language with concurrency, regex, and web requests</title>
+      <pubDate>Mon, 13 Mar 2023 16:00:01 -0400</pubDate>
+      <link>https://austinhenley.com/blog/hofstadter.html</link>
+      <author>azh321@gmail.com (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://austinhenley.com/blog/hofstadter.html">https://austinhenley.com/blog/hofstadter.html</a>]]></description>
+    </item>
+    <item>
       <title>AI-generated code needs permission labels</title>
       <pubDate>Tue, 28 Feb 2023 14:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/aicodepermissions.html</link>
