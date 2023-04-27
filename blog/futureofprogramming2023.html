@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The future of programming: Research at CHI 2023 - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Research on programming tools published at CHI 2023.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="The future of programming: Research at CHI 2023">
+    <meta property="og:description" content="Research on programming tools published at CHI 2023.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/academicconference.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/futureofprogramming2023.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://hci.social/@azhenley">@azhenley@hci.social</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">The future of programming: Research at CHI 2023</h1>
+	<small>4/27/2023</small><br><br>
+
+    <img src="images/academicconference.png" class="center" style="max-width:60%; margin-bottom:28px;">
+
+
+<p>The esteemed CHI conference is happening this week, and I'm jealous that I can't be there.</p>
+
+<p>Instead, I'm going through the proceedings and reading all of the papers related to <b>programming</b>, of which many involve <b>AI</b>.</p>
+
+<p>Here are some papers that stood out to me:</p>
+	
+<hr><br>
+
+<h3>"What It Wants Me To Say": Bridging the Abstraction Gap Between End-User Programmers and Code-Generating Large Language Models</h3>
+<p><small><a href="https://youtu.be/B8gu2GSW_BI">preview video</a>, 
+<a href="https://youtu.be/kNSjscPFpRk">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3544548.3580817">paper</a></small></p>
+<p>My summary: <i>To help end users write LLM prompts, the researchers designed a system that maps a user's natural language input to a series of system actions. This communicates to the user precisely how the system is interpreting their prompt and gives a list of fine-grained actions that can be edited.</i></p>
+<img src="images/groundedabstraction.png" class="center" style="max-width:80%;"><br>
+
+
+<h3>Why Johnny Can't Prompt: How Non-AI Experts Try (and Fail) to Design LLM Prompts</h3>
+<p><small><a href="https://youtu.be/ix8lIwHmopM">preview video</a>, 
+<a href="https://youtu.be/_LYk05LbQcQ">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3544548.3581388">paper</a></small></p>
+<p>My summary: <i>Prompt engineering is quite the craze right now, but can non-AI-experts write effective prompts? The researchers investigated the challenges that people face while writing prompts and designed a tool to help these non-experts do so.</i></p>
+<img src="images/botdesigner.png" class="center" style="max-width:80%;"><br>
+
+
+<h3>VizProg: Identifying Misunderstandings by Visualizing Students' Coding Progress</h3>
+<p><small><a href="https://youtu.be/nc6njbX0lVY">talk video</a>,
+<a href="https://dl.acm.org/doi/pdf/10.1145/3544548.3581516">paper</a></small></p>
+<p>My summary: <i>It is challenging for instructors to understand how students are doing during in-class activities. The researchers designed a tool that visualizes the students' different approaches in real time. It shows an edit-distance view of the entire class while also allowing an instructor to check specific submissions.</i></p>  
+<img src="images/vizprog.png" class="center" style="max-width:80%;"><br>
+
+
+<h3>On the Design of AI-powered Code Assistants for Notebooks</h3>
+<p><small><a href="https://youtu.be/FIVTdLBV6EM">preview video</a>, 
+<a href="https://youtu.be/g0prh8mE3bI">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3544548.3580940">paper</a></small></p>
+<p>My summary: <i>This is an exploration of the design space for AI code assistants in computational notebooks. They provide a useful framework for the UX of AI, that includes how users iterate on their input, how they refine the output, and much more.</i></p>
+<img src="images/ainotebookdesign.png" class="center" style="max-width:50%;border:1px solid #000000;"><br>
+
+
+
+<h3>Colaroid: A Literate Programming Approach for Authoring Explorable Multi-Stage Tutorials</h3>
+<p><small> 
+<a href="https://youtu.be/ZglbpRuqh1k">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3544548.3581525">paper</a></small></p>
+<p>My summary: <i>Even a short programming tutorial can take many hours to do well. The researchers designed a tool for creating interactive notebooks-based tutorials. It allows the author to grab code chunks from their codebase's history, then remix them for better explanation.</i></p>
+<img src="images/colaroid.png" class="center" style="max-width:80%; border:1px solid #000000;"><br>
+
+
+<h3>Studying the Effect of AI Code Generators on Supporting Learners in Introductory Programming</h3>
+<p><small><a href="https://youtu.be/-jdu16rumDY">preview video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3544548.3580919">paper</a></small></p>
+<p>My summary: <i>The world wants to know how AI is going to change education. Will over-reliance get in the way of learning? The researchers conducted a 3-week study and found that students using an AI tool for their tasks did not perform worse on manual coding tasks or on tests. Perhaps AI is the new calculator after all.</i></p>
+<img src="images/codexeffectstudents.png" class="center" style="max-width:70%; border:1px solid #000000;"><br>
+
+
+<h3>Log-it: Supporting Programming with Interactive, Contextual, Structured, and Visual Logs</h3>
+<p><small><a href="https://youtu.be/bmMvMwbx7KQ">preview video</a>, 
+<a href="https://youtu.be/3hTFHDjhLYE">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3544548.3581403">paper</a></small></p>
+<p>My summary: <i>Print statements are still a popular means of debugging, but it isn't always the most effective technique. The researchers designed a snazzy tool to structure and visualize output on the fly.</i></p>
+<img src="images/logit.png" class="center" style="max-width:90%; border:1px solid #000000;"><br>
+
+
+<h3>Structured Editing for All: Deriving Usable Structured Editors From Grammar</h3>
+<p><small><a href="https://youtu.be/fXfWGagGBhg">preview video</a>, 
+<a href="https://youtu.be/FKNjGOv1HxU">talk video</a>, 
+<a href="https://dl.acm.org/doi/pdf/10.1145/3544548.3580785">paper</a></small></p>
+<p>My summary: <i>Structured editors is one of those ideas that everyone seems to love and yet they haven't taken off. The researchers focused on making a structured editor that is available to all programming languages while still being highly usable. It provides a consistent UI that can work on virtually any language given the formal grammar.</i></p>
+<img src="images/sandblocks.png" class="center" style="max-width:70%; border:1px solid #000000;"><br>
+
+
+<hr>
+
+<p>I'll <i>definitely</i> be at CHI next year in Hawaii...</p>
+
+
+
+<br><br><br><br>
+
+</body>
+</html>
+
+
+
+
+
