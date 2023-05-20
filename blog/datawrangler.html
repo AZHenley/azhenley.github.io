@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Data wrangling with Data Wrangler - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Data Wrangler is a new tool for data cleaning and preparation.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Data wrangling with Data Wrangler">
+    <meta property="og:description" content="Data Wrangler is a new tool for data cleaning and preparation.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/datawrangler.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/datawrangler.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://hci.social/@azhenley">@azhenley@hci.social</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Data wrangling with Data Wrangler</h1>
+	<small>5/20/2023</small><br><br>
+
+<img src="images/datawrangler.png" class="center" style="max-width:100%; margin-bottom:12px;" alt="Screenshot of the Data Wrangler extension in VS Code. It shows a preview of the data in a grid, descriptive stats with a visualization above each column, a Python code editor at the bottom, and a list of operations on the left.">
+
+<p>Microsoft recently released a new product, <b>Data Wrangler</b>, that I worked on with a fantastic team of developers, PMs, designers, and researchers. You can download it as a VS Code <a href="https://marketplace.visualstudio.com/items?itemName=ms-toolsai.datawrangler">extension</a> that works well with Jupyter Notebooks.</p>
+
+<p>Studies show that data scientists spend <i>a lot</i> of time cleaning and preparing data (<a href="https://dl.acm.org/doi/10.1145/3290605.3300356">Muller et al. CHI'19</a>, <a href="../pubs/Chattopadhyay2020CHI_NotebookPainpoints.pdf">Chattopadhyay et al. CHI'20</a>). They report that it is tedious, repetitive, and error-prone.</p>
+
+<p>Towards improving this experience, Data Wrangler provides a rich GUI that generates Pandas code for common operations and enables you to visually preview the effect on your data. When you're done, you can export the code to a notebook.</p>
+
+<hr>
+
+<p>Let's try one of the built-in operations, <b>New Column by Example</b>. It lets you give examples of how you want your data to ultimately look, then it uses AI to figure out the pattern and apply it to the remaining rows.</p>
+	 
+<p>To demonstrate, I'll open a <a href="https://www.kaggle.com/datasets/gregorut/videogamesales">dataset</a> of video game sales.  Next, I select the columns that I want to derive from: <i>Name</i>, <i>Platform</i>, and <i>Year</i>. Then I go to a row and provide an example of what I want the result to be: <i>Tetris (GB, 1989)</i>. Lastly, I press enter and the AI extrapolates the other rows based on my example.</p>
+
+<p>I effectively concatenated the three columns with additional formatting. <i>But without writing any code!</i> See this in action:</p>
+
+<img src="images/datawranglerbyexample.gif" alt="A gif of me performing the New Column by Example operation." class="center" style="max-width:100%;">
+
+<p>In this scenario, providing one example was enough. In other cases, you might need to provide two or three examples if there is ambiguity. You can verify the generated Python code or even modify it based on your needs.</p>
+
+<hr>
+
+<p>Data Wrangler has many more operations too: one-hot encoding, multi-label binarizer, drop missing values, group by column, split text, DateTime formatting by example, etc.</p>
+
+<img src="images/datawranglerextension.png" alt="A screenshot of the entry for Data Wrangler in the VS Code Extension Marketplace." class="center" style="max-width:90%;">
+
+<p>Want to give it a try? Download it from the VS Code <a href="https://marketplace.visualstudio.com/items?itemName=ms-toolsai.datawrangler">marketplace</a> or explore the GitHub <a href="https://github.com/microsoft/vscode-data-wrangler">repo</a>.</p>
+
+<p>Please leave us <a href="https://aka.ms/datawranglerfeedback">feedback</a> with any feature requests or questions you have. More soon!</p>
+
+
+
+<br><br><br><br>
+
+</body>
+</html>
+
