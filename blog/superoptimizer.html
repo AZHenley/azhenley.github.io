@@ -52,11 +52,13 @@
 
 <img src="images/superoptimizer.png" class="center" style="max-width:90%; margin-bottom:12px;" alt="A screenshot of the code that generates all possible programs for the language.">
 
+<p><small><i>See the discussion of this post on <a href="https://news.ycombinator.com/item?id=36117950">Hacker News</a>.</i></small></p>
+
 <p>It's time for another <a href="makinguselessstuff.html">useless</a> project.</p>
 
 <p>For any given code snippet, is it possible to find the absolute <b>optimal</b> code that has the same output? Years ago I stumbled on this concept, known as <a href="https://en.wikipedia.org/wiki/Superoptimization">superoptimization</a>. It isn't practical but the idea has been stuck in my head.</p>
 
-<p>The way it works: generate every possible permutation of code instructions and test each generated program for equivalence to the original program. That's basically it. As you can imagine, the space of possible programs quickly <b>explodes</b>, and testing two programs for equivalence also isn't easy. If it was possible on computers back in <a href="https://dl.acm.org/doi/abs/10.1145/36177.36194">1987</a> then surely my computer can handle it.</i></p>
+<p>The way it works: generate every possible permutation of code instructions and test each generated program for equivalence to the original program. That's basically it. As you can imagine, the space of possible programs quickly <b>explodes</b>, and testing two programs for equivalence also isn't easy. But if it was possible on computers back in <a href="https://dl.acm.org/doi/abs/10.1145/36177.36194">1987</a> then surely my computer can handle it.</i></p>
 
 <p>I'm going to try building a toy superoptimizer.</p>
 
@@ -130,7 +132,7 @@ class CPU:
         return state
     
     def inc(self, state, mem):
-        state[mem] += state[mem] + 1
+        state[mem] += 1
         return state
 </pre>
 
