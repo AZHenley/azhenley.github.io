@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My first superoptimizer - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I heard about these mythical programs that find optimal code through a brute-force search, but I didn't know how they worked. So I made one.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="My first superoptimizer">
+    <meta property="og:description" content="I heard about these mythical programs that find optimal code through a brute-force search, but I didn't know how they worked. So I made one.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/superoptimizer.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/superoptimizer.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + dev tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austinhenley@microsoft.com">austinhenley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://hci.social/@azhenley">@azhenley@hci.social</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">My first superoptimizer</h1>
+	<small>5/29/2023</small><br><br>
+
+<img src="images/superoptimizer.png" class="center" style="max-width:90%; margin-bottom:12px;">
+
+<p>It's time for another <a href="makinguselessstuff.html">useless</a> project.</p>
+
+<p>For any given code snippet, is it possible to find the absolute <b>optimal</b> code that has the same output? Years ago I stumbled on this concept, known as <a href="https://en.wikipedia.org/wiki/Superoptimization">superoptimization</a>. It isn't practical but the idea has been stuck in my head.</p>
+
+<p>The way it works: generate every possible permutation of code instructions and test each generated program for equivalence to the original program. That's basically it. As you can imagine, the space of possible programs quickly <b>explodes</b>, and testing two programs for equivalence also isn't easy. If it was possible on computers back in <a href="https://dl.acm.org/doi/abs/10.1145/36177.36194">1987</a> then surely my computer can handle it.</i></p>
+
+<p>I'm going to try building a toy superoptimizer.</p>
+
+<hr>
+
+<p>To make this feasible, I'm going to make up a fictional assembly language with only a few instructions. I'll need to write an emulator that executes programs in order to show whether two programs are equivalent. The optimizer will then generate every possible program in this language given some set of constraints and return the shortest one.</p>
+
+<p>I broke the project up into chunks:</p>
+
+<ul>
+    <li>Design a simple assembly language.</li>
+    <li>Write an emulator that executes an assembly program and returns the final state.</li>
+    <li>Write a function that tests the equivalence of two programs based on their before/after state.</li>
+    <li>Write an assembler that can translate to and from human-readable assembly and the internal assembly representation.</li>
+    <li>Write an optimizer that generates every program of length 1 to <i>n</i> instructions with every possible operand from 0 to <i>k</i> with <i>x</i> memory cells.</li>
+</ul>
+
+<p>The source code can be found on <a href="https://github.com/AZHenley/superoptimizer">GitHub</a>.</p>
+
+<h3>Assembly language</h3>
+
+<p>I want to limit this to only a few instructions, but make sure they are interesting enough that the superoptimizer can find optimizations that aren't obvious to me.</p>
+
+<p>Remember, the goal is not to come up with a comprehensive, real-world assembly language, but rather to learn about superoptimizers.</p>
+
+<p>To start, I somewhat arbitrarily chose:</p>
+
+<ul>
+    <li><b>LOAD <i>val</i></b> which loads the immediate value into memory location 0.</li>
+    <li><b>SWAP <i>mem</i>, <i>mem</i></b> which swaps the values of the two memory locations.</li>
+    <li><b>XOR <i>mem</i>, <i>mem</i></b> which performs a bitwise XOR operation on the values of the memory locations and stores the result in the first's location. </li>
+    <li><b>INC <i>mem</i></b> which increments the value at the memory location.</li>
+</ul>
+
+<p>You'll see that these are quite boring. There isn't even a control flow instruction! It will be trivial to add more later though.</p>
+
+<h3>Emulator</h3>
+
+<p>Writing the emulator is surprisingly easy. The memory state is a list of numbers and a program is a list of instructions with operands. Execute all the instructions and return the final state of the memory as the result.</p>
+
+<pre class="prettyprint lang-python">
+class CPU:
+    def __init__(self, max_mem_cells):
+        self.max_mem_cells = max_mem_cells
+        self.state = [0] * max_mem_cells
+        self.ops = {'LOAD': self.load, 'SWAP': self.swap, 'XOR': self.xor, 'INC': self.inc}
+
+    def execute(self, program):
+        state = self.state.copy()
+        for instruction in program:
+            op = instruction[0]
+            args = list(instruction[1:])
+            args.insert(0, state)
+            state = op(*args)
+        return state
+</pre>
+
+<p>An instruction is a reference to the function that performs the operation:</p>
+
+<pre class="prettyprint lang-python">
+    def load(self, state, val):
+        state[0] = val
+        return state
+    
+    def swap(self, state, mem1, mem2):
+        state[mem1], state[mem2] = state[mem2], state[mem1]
+        return state
+    
+    def xor(self, state, mem1, mem2):
+        state[mem1] = state[mem1] ^ state[mem2]
+        return state
+    
+    def inc(self, state, mem):
+        state[mem] += state[mem] + 1
+        return state
+</pre>
+
+<p>That is it for the emulator.</p>
+
+<p>To make it easier to use, I also implemented a function that takes human-readable assembly and converts it to a program as well as a function that takes a program and converts it to human-readable assembly. They aren't particularly interesting, but you can see them here: <a href="https://github.com/AZHenley/superoptimizer/blob/main/assembler.py">assembler.py</a>.</p>
+
+
+<h3>Optimizer</h3>
+
+<p>Now for the fun part. Generate every possible program.</p>
+
+<pre class="prettyprint lang-python">
+class Superoptimizer:
+    def generate_programs(self, cpu, max_length, max_mem, max_val):
+        for length in range(1, max_length + 1):
+            for prog in product(cpu.ops.values(), repeat=length):
+                arg_sets = []
+                for op in prog:
+                    if op == cpu.load:
+                        arg_sets.append([tuple([val]) for val in range(max_val + 1)])
+                    elif op == cpu.swap or op == cpu.xor: 
+                        arg_sets.append(product(range(max_mem), repeat=2))
+                    elif op == cpu.inc:
+                        arg_sets.append([tuple([val]) for val in range(max_mem)])
+                for arg_set in product(*arg_sets):
+                    program = [(op, *args) for op, args in zip(prog, arg_set)] 
+                    yield program
+</pre>
+
+<p>Don't let this function overwhelm you. It is generating every possible program based on several variables: program length, number of instructions, and number of possible operands (size of memory or the maximum value). I turned it into a generator because the first version was causing my laptop to run out of memory.</p>
+
+<p>What is the computational complexity of this? Terrible.</p>
+
+<p>We will use this to test <i>every</i> program:</p>
+
+<pre class="prettyprint lang-python">
+    def search(self, max_length, max_mem, max_val, target_state):
+        cpu = CPU(max_mem)
+        for program in self.generate_programs(cpu, max_length, max_mem, max_val):
+            state = cpu.execute(program)
+            if state == target_state:
+                state = tuple(state) 
+                if state not in self.program_cache or len(program) &lt; len(self.program_cache[state]):
+                    self.program_cache[state] = program
+        return self.program_cache.get(tuple(target_state), None)
+</pre>
+
+<p>The <b>search</b> function takes the constraints and the target state as parameters. It considers two programs as equivalent if both of their final memory states are identical. We can loosen this restriction later. It saves the shortest program with the correct state and eventually returns it when the search is complete.</p>
+
+<h3>Giving it a go</h3>
+
+<p>It is time to put the superoptimizer to the test. Given a program, can it find the shortest program with the same end result?</p>
+
+<p>My first program in the made-up assembly language:</p>
+
+<pre class="prettyprint">
+LOAD 3
+SWAP 0, 1
+LOAD 3
+SWAP 0, 2
+LOAD 3
+SWAP 0, 3
+LOAD 3
+</pre>
+
+<p>The state of the finished program is <i>[3, 3, 3, 3]</i>. It is filling the finite memory with 3s.</p>
+
+<p>What is the optimal code according to the superoptimizer? </p>
+
+<img src="images/superoptimizeroutput.png" class="center" style="max-width:90%;">
+
+<pre class="prettyprint">
+LOAD 3
+XOR 1, 0
+XOR 2, 0
+XOR 3, 0
+</pre>
+
+<p><b>It works!</b></p>
+
+<p>The superoptimizer is using the <i>XOR</i> instruction to duplicate values and storing them in the appropriate location instead of <i>LOAD</i> and <i>SWAP</i>. Very cool, I didn't think of that.</p>
+
+<p>Now for another test.</p>
+
+<p>It is also possible to give the superoptimizer just the desired final state without first writing a program that produces it. So I can tell it to find the shortest program that results in state <i>[0, 2, 1]</i>. The optimal program:</p>
+
+<pre class="prettyprint">
+LOAD 2
+SWAP 0, 1
+INC 2
+</pre>
+
+<p>It used the <i>LOAD</i> and <i>SWAP</i> pattern for the <i>2</i>, but it used <i>INC</i> for the <i>1</i> since it takes one less instruction. Victory, again!</p>
+
+<h3>Performance</h3>
+
+<p>The performance is not good by any means. Searching for the final state <i>[1, 0, 1, 0, 1, 0]</i> with no more than 6 instructions and values only up to 2 caused the superoptimizer to generate 1,580,000,000 programs for 30+ minutes on my laptop before I killed it.</p>
+
+<img src="images/superoptimizerperformance.png" class="center" style="max-width:90%;">
+
+
+<h3>Future work</h3>
+
+<p>There are many improvements to be made:</p>
+
+<p><b>Start state.</b> The emulator assumes the start state is always the same: 0 for all memory locations. But really we want to allow different start states so that the program can take inputs, like <i>fib(n)</i>, which would compute the n'th fibonacci number. We can do this by allowing the emulator to take a start state parameter that sets the first subset of memory values.</p>
+
+<p><b>Program equivalence.</b> To better support program equivalence, including inputs and outputs, like showing <i>fib(n)</i> is equivalent to <i>opt_fib(n)</i>, then we also need a notion of output. This can be another parameter that defines the output as the first <i>x</i> memory cells when the program finishes. Additionally, we need a function to show that the equivalence stands for multiple inputs. It is probably good enough to test a predefined set of integers for every input rather than testing them all exhaustively.</p>
+
+<p><b>Pruning.</b> The superoptimizer is searching through a ridiculous number of programs, many of which are nonsensical. For example, I peaked at thousands of generated programs and they were <i>XOR</i>ing zeros together repeatedly and overwriting unused values. It'll complicate the generation function, but it will reduce the search space dramatically.</p>
+
+<p><b>More instructions.</b> Given the limited instruction set, the superoptimizer won't be able to discover more interesting patterns. The first thing I would add is some sort of conditional instruction so it can act on inputs. Like <i>CMP mem, mem</i> which sets memory location 0 to a specific value depending on if the first operand's value is greater than, less than, or equal to the second. Then I'd add whatever else is needed to implement classic functions like <i>fib(n)</i> and <i>max(a, b)</i>, probably <i>ADD</i> and <i>SUB</i>. Classic compilers are great about replacing conditionals with arithmetic so it would be a good test for a superoptimizer. Be careful with emulating jumps though since you won't know if the program ever terminates!</p>
+
+<hr>
+
+<p>Please let me know if you manage to make any improvements to the superoptimizer. It would be fun to continue working on it. You can find all of the source on <a href="https://github.com/AZHenley/superoptimizer">GitHub</a>.</p>
+
+<p>If you're interested in learning more about compilers, see my tutorial series: <a href="teenytinycompiler1.html">Let's make a Teeny Tiny compiler</a>.</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
