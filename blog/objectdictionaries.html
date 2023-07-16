@@ -46,6 +46,9 @@
 	<h1 class="blogtitle">Design patterns for hacking together prototypes: Object Dictionaries</h1>
 	<small>9/30/2019</small><br><br>
 
+<p><small><i>See the discussion of this post on <a href="https://news.ycombinator.com/item?id=21119170">Hacker News</a>.</i></small></p>
+
+
 	<p>I've been in several situations where I needed to implement experimental features in software projects with millions of lines of code given very little time and no familiarity with the code. On reflection, I noticed that I was applying the same patterns to the projects which might be useful for others. This is the first post in a series about my design patterns for hacking together prototypes.</p>
 
 	<p>The projects included extending Microsoft's internal code reviewing tool and build system (see <a href="https://austinhenley.com/pubs/Henley2018CHI_CFar.pdf">CFar</a>) and National Instrument's LabVIEW development environment (see <a href="https://austinhenley.com/pubs/Henley2017CHI_CodeEditors.pdf">Patchworks LV</a>, <a href="https://austinhenley.com/pubs/Henley2016VLHCC_Yestercode.pdf">Yestercode</a>, and <a href="https://austinhenley.com/pubs/Henley2018VLHCC_CodeDeviant.pdf">CodeDeviant</a>). The goal of these projects was to quickly demonstrate and evaluate a proof of concept, not produce software for customers. My code was essentially "throw away."  These are not design patterns for production use!</p>
