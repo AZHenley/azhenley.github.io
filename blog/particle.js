@@ -1,7 +1,8 @@
 var time = 0;
-var burst = 3;
-var rate = 30;
+var burstsize = 3;
+var burstdelay = 30;
 var count = 0;
+var alive = 0;
 let app = new PIXI.Application({
     width: 600,
     height: 400,
@@ -19,14 +20,14 @@ let output1 = document.getElementById("st1");
 output1.innerHTML = slider1.value; 
 slider1.oninput = function() {
     output1.innerHTML = this.value;
-    burst = this.value;
+    burstsize = this.value;
 }
 let slider2 = document.getElementById("s2");
 let output2 = document.getElementById("st2");
 output2.innerHTML = slider2.value; 
 slider2.oninput = function() {
     output2.innerHTML = this.value;
-    rate = this.value;
+    burstdelay = this.value;
 }
 
 ////
@@ -91,6 +92,7 @@ class Particle {
         if (this.life <= 0) {
             app.stage.removeChild(this.shape);
         }
+        alive = app.stage.children.length;
         run(this);
         this._r = this.r;
         this._g = this.g;
@@ -107,9 +109,9 @@ class Emitter {
 
     update() {
         this.timer++;
-        if (this.timer >= rate) {
+        if (this.timer >= burstdelay) {
             this.timer = 0;
-            for (let i = 0; i < burst; i++) {
+            for (let i = 0; i < burstsize; i++) {
                 count += 1;
                 let newParticle = this.create();
                 app.stage.addChild(newParticle.shape);
