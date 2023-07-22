@@ -1,4 +1,5 @@
 var time = 0;
+var frames = 0; 
 var burstsize = 3;
 var burstdelay = 30;
 var count = 0;
@@ -110,6 +111,7 @@ class Emitter {
     update() {
         this.timer++;
         if (this.timer >= burstdelay) {
+            time++;
             this.timer = 0;
             for (let i = 0; i < burstsize; i++) {
                 count += 1;
@@ -141,7 +143,7 @@ emitters.push(emitter);
 function update() {
     emitters.forEach(emitter => emitter.update());
     requestAnimationFrame(update);
-    time++;
+    frames++; // TODO: Check bug. Doesn't always start at 0.
 }
 update();
 
@@ -150,6 +152,7 @@ function restart() {
     code1 = document.getElementById('tb1').value;
     code2 = document.getElementById('tb2').value;
     time = 0;
+    frames = 0; // TODO: Check bug. Doesn't always start at 0.
     count = 0;
 }
 
