@@ -16,14 +16,14 @@ var code1 = "";
 var code2 = "";
 let slider1 = document.getElementById("s1");
 let output1 = document.getElementById("st1");
-output1.innerHTML = slider1.value; // Display the default value
+output1.innerHTML = slider1.value; 
 slider1.oninput = function() {
     output1.innerHTML = this.value;
     burst = this.value;
 }
 let slider2 = document.getElementById("s2");
 let output2 = document.getElementById("st2");
-output2.innerHTML = slider2.value; // Display the default value
+output2.innerHTML = slider2.value; 
 slider2.oninput = function() {
     output2.innerHTML = this.value;
     rate = this.value;

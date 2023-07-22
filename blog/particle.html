@@ -27,14 +27,14 @@
 	<p>Burst delay: <span id="st2"></span></p>
 	<input type="range" min="1" max="60" value="30" class="slider" id="s2" step="1">
 
-	<p>Update event:</p> <textarea id="tb1" rows="6" cols="60" style="resize: both;">
+	<p>Update event:</p> <textarea id="tb1" rows="6" cols="60" spellcheck="false" style="resize: both;">
 p.rotation += 0.02;
 if(p.life % 20 == 0) { p.r += 5; p.g -= 1; }
   </textarea>
 
 	<br>
 
-	<p>Init event:</p> <textarea id="tb2" rows="6" cols="60" style="resize: both;">
+	<p>Init event:</p> <textarea id="tb2" rows="6" cols="60" spellcheck="false" style="resize: both;">
 p.life = 900;
 p.x = 300; p.y = 140 + p.i%3 * 10;
 p.g = 200;
@@ -52,16 +52,17 @@ p.speed = 1.25;
 
 	<ul>
 		<li><b>x,y</b> -- position</li>
+		<li><b>xscale,yscale</b> -- multiplies the particle's size</li>
 		<li><b>r,g,b</b> -- color values from 0 to 255</li>
 		<li><b>a</b> -- alpha from 0 to 1</li>
-		<li><b>life</b> -- how many frames until it is deleted</li>
+		<li><b>life</b> -- how many frames until the particle is deleted</li>
 		<li><b>speed</b> -- how far to be moved at the end of the frame</li>
 		<li><b>rotation</b> -- the angle to be moved at the end of the frame, in radians</li>
 		<li><b>i</b> -- the unique id of the particle, starting at 0 and counting up</li>
 		<li><b>z</b> -- the depth to draw the object, smaller numbers get drawn first</li>
 	</ul>
 
-	<p>There is also a global <i>time</i> variable that increments each frame.</p>
+	<p>Press Start to restart with the current code. You can modify Burst Size and Burst Delay anytime. There is also a global <i>time</i> variable that increments each frame.</p>
 
 	<br><br><br>
 	<script src="particle.js"></script>
