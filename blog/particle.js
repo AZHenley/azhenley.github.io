@@ -154,9 +154,11 @@ function restart() {
 }
 
 function copyToClipboard() {
+    var burstSize = document.getElementById('st1').innerHTML;
+    var burstDelay = document.getElementById('st2').innerHTML;
     var updateEvent = document.getElementById('tb1').value;
     var initEvent = document.getElementById('tb2').value;
-    var str = "Update event:\n" + updateEvent + "\n\nInit event:\n" + initEvent;
+    var str = "Burst size: " + burstSize + "\nBurst delay: " + burstDelay + "\n\nUpdate event:\n" + updateEvent + "\n\nInit event:\n" + initEvent;
     
     navigator.clipboard.writeText(str).then(function() {
         console.log('Copying to clipboard was successful!');
