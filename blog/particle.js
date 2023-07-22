@@ -4,6 +4,9 @@ var burstsize = 3;
 var burstdelay = 30;
 var count = 0;
 var alive = 0;
+let lastTime = Date.now();
+let frameCount = 0;
+let frameRate = 0;
 let app = new PIXI.Application({
     width: 600,
     height: 400,
@@ -18,6 +21,8 @@ var code1 = "";
 var code2 = "";
 let slider1 = document.getElementById("s1");
 let output1 = document.getElementById("st1");
+let fpsText = document.getElementById("fps");
+let particlesText = document.getElementById("particles");
 output1.innerHTML = slider1.value; 
 slider1.oninput = function() {
     output1.innerHTML = this.value;
@@ -144,6 +149,17 @@ function update() {
     emitters.forEach(emitter => emitter.update());
     requestAnimationFrame(update);
     time++; 
+
+    let currentTime = Date.now();
+    let deltaTime = currentTime - lastTime;
+    frameCount++;
+    if (deltaTime >= 1000) {
+        frameRate = frameCount;
+        frameCount = 0;
+        lastTime = currentTime;
+        fpsText.innerText = frameRate;
+    }
+    particlesText.innerText = alive;
 }
 update();
 
