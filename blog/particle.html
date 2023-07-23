@@ -37,7 +37,7 @@ if(p.life % 20 == 0) { p.r += 5; p.g -= 1; }
 
 	<p>Init event:</p> <textarea id="tb2" rows="6" cols="60" spellcheck="false" style="resize: both;">
 p.life = 900;
-p.x = 300; p.y = 140 + p.i%3 * 10;
+p.x = 300; p.y = 140 + p.i%burstsize * 10;
 p.g = 200;
 p.speed = 1.25;
     </textarea>
@@ -63,16 +63,17 @@ p.speed = 1.25;
 		<li><b>z</b> -- the depth to draw the object, smaller numbers get drawn first</li>
 	</ul>
 
-	<p>Press Start to restart with the current code. You can modify Burst Size and Burst Delay anytime with the sliders. There are these global variables (I recommend using them as read-only):</p> 
+	<p>Press Start to restart with the current code. You can modify Burst Size and Burst Delay anytime with the sliders. There are also globals (I recommend using them as read-only):</p> 
 	
 	<ul>
+		<li><b>height,width</b> -- size of the drawing area</li>
 		<li><b>time</b> -- number of frames that have occured</li>
 		<li><b>bursts</b> -- number of bursts that have occured</li>
 		<li><b>alive</b> -- number of particles currently alive</li>
 		<li><b>burstsize</b> -- number of particles to create at a time</li>
 		<li><b>burstdelay</b> -- delay between bursts</li>
+		<li><b>move(obj,distance,direction)</b> -- helper function to move a particle</li>
 	</ul>
-	There is also a global <i>time</i> variable that increments each frame.</p>
 
 	<br><br><br>
 	<script src="particle.js"></script>

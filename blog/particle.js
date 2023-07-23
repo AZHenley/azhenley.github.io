@@ -7,9 +7,11 @@ var alive = 0;
 let lastTime = Date.now();
 let frameCount = 0;
 let frameRate = 0;
+let width = 600;
+let height = 400;
 let app = new PIXI.Application({
-    width: 600,
-    height: 400,
+    width: width,
+    height: height,
     backgroundColor: 0xf0f0f0
 });
 app.stage.sortableChildren = true;
@@ -39,8 +41,13 @@ slider2.oninput = function() {
 ////
 
 function run(obj) {
-    obj.x += Math.cos(obj.rotation)*obj.speed;
-    obj.y += Math.sin(obj.rotation)*obj.speed;
+    obj.x += Math.cos(obj.rotation + Math.PI / 2) * obj.speed;
+    obj.y += Math.sin(obj.rotation + Math.PI / 2) * obj.speed;
+}
+
+function move(obj, distance, direction) {
+    obj.x += Math.cos(direction + Math.PI / 2) * speed;
+    obj.y += Math.sin(direction + Math.PI / 2) * speed;
 }
 
 function rgbToHex(r, g, b) {
@@ -92,13 +99,13 @@ class Particle {
         this.shape.y = this.y;
         this.shape.scale.x = this.xscale;
         this.shape.scale.y = this.yscale;
+        this.shape.rotation = this.rotation;
         this.shape.alpha = this.alpha;
         this.zIndex = this.z;
         this.life--;
         if (this.life <= 0) {
             app.stage.removeChild(this.shape);
         }
-        alive = app.stage.children.length;
         run(this);
         this._r = this.r;
         this._g = this.g;
@@ -125,6 +132,7 @@ class Emitter {
                 this.particles.push(newParticle);
             }
         }
+        alive = app.stage.children.length;
         this.particles.forEach(particle => particle.update());
     }
 }
@@ -141,9 +149,6 @@ function init() {
     eval(code2);
     return p;
 }
-
-let emitter = new Emitter(init);
-emitters.push(emitter);
 
 function update() {
     emitters.forEach(emitter => emitter.update());
@@ -170,6 +175,9 @@ function restart() {
     time = 0; // TODO: Check bug. Doesn't always start at 0.
     bursts = 0; 
     count = 0;
+
+    let emitter = new Emitter(init);
+    emitters.push(emitter);
 }
 
 function copyToClipboard() {
