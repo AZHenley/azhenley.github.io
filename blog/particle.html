@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Creative coding with particle emitters - Austin Z. Henley</title>
+	<title>Particle playground - Austin Z. Henley</title>
 	<meta charset="UTF-8">
 	<meta name="description" content="A creative playground for making particle emitters.">
 	<meta name="author" content="Austin Z. Henley">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Creative coding with particle emitters">
+    <meta property="og:title" content="Particle playground">
     <meta property="og:description" content="A creative playground for making particle emitters.">
     <meta property="og:image" content="https://austinhenley.com/blog/images/particle.png">
     <meta property="og:url" content="https://austinhenley.com/blog/particle.html">
@@ -14,6 +14,13 @@
 	<link rel="stylesheet" type="text/css" href="../modesty.css">
     <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
 	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <style>
+        .editor {
+            width: 500px;
+            height: 160px;
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
     <div class="card">
@@ -47,19 +54,17 @@
     </div>
 	  <hr />
 
-	<h1 class="blogtitle">Creative coding with particle emitters</h1>
+	<h1 class="blogtitle">Particle playground</h1>
 	<small>8/6/2023</small><br><br>
 
 
-<p>For a recent <a>useless</a> programming project, I made a particle emitter engine along with a playground for making new designs. It is a nice combination of mathematics and creativity that comes with a visual reward. I've lost quite a bit of time by unintentionally getting sucked into tinkering with this!</p>
+<p>My most recent <a href="">useless</a> programing project is a particle emitter engine with an interactive playground for making new designs. It involves a nice combination of mathematics and creativity that results in a visual reward. I've lost quite a bit of time by unintentionally getting sucked into tinkering with this!</p>
 
-<p>The way it works is that new particles are created every few frames, and you specify the initial properties and the update behavior in JavaScript. The particles are automatically moved each frame. That is it!</p>
+<p>It enables you to create animated patterns from thousands of particles using a few lines of code. It works by automatically producing new particles every few frames, and you just specify the initial properties and the update behavior in JavaScript. The engine does the rest! </p>
 
-<p>Try it for yourself below. You can see the canvas, parameters, code snippets, and documentation. If you come up with any cool designs, click the <i>Share Code</i> button and <a>email</a> it to me so I can add it as a preset. You can also look at the source on <a>GitHub</a>.</p>
+<p>Try it for yourself below. You can see the canvas, parameters, code snippets, and documentation. If you come up with any cool designs, click the <i>Share Code</i> button and <a href="mailto:austinhenley@microsoft.com">email</a> it to me so I can add it as a preset. You can also look at the source on <a href="https://github.com/AZHenley/particle">GitHub</a>.</p>
 
 <hr>
-
-<h3>Particle Playground</h3>
 
 <div id="display" style="display:inline-block;border:1px solid black;"></div>
 
@@ -87,15 +92,14 @@
 
 <div>
     <label for="tb1">Update event:</label><br>
-    <textarea id="tb1" rows="6" cols="60" spellcheck="false" style="resize: both;"></textarea>
+    <div id="tb1" class="editor"></div>
 </div>
-
 
 <br>
 
 <div>
     <label for="tb2">Init event:</label><br>
-    <textarea id="tb2" rows="6" cols="60" spellcheck="false" style="resize: both;"></textarea>
+    <div id="tb2" class="editor"></div>
 </div>
 
 
@@ -108,7 +112,7 @@
 
 <h3>Documentation</h3>
 
-<p>The Init event runs once for each particle when it is created. The Update event runs for each particle once per frame. Each particle will be moved by its <i>speed</i> in the direction of its <i>rotation</i>. You can modify all individual particle's properties through the <i>p</i> object, like <i>p.speed</i>. You can even store your own variables, like <i>p.foobar</i>. The other properties of particles include:</p>
+<p>The <i>Init</i> event runs once for each particle when it is created. The <i>Update</i> event runs for each particle once per frame. Each particle will be moved by its <i>speed</i> in the direction of its <i>rotation</i>. You can modify all individual particle's properties through the <i>p</i> object, like <i>p.speed</i>. You can even store your own variables, like <i>p.foobar</i>. The other properties of particles include:</p>
 
 <ul>
     <li><b>x,y</b> -- position</li>
@@ -134,7 +138,13 @@
     <li><b>move(obj,distance,direction)</b> -- helper function to move a particle</li>
 </ul>
 
-<p>You can find the source on <a>GitHub</a>. Special thanks to Joseph Lormand for presets.</p>
+<hr> 
+
+<p>You can find the source on <a href="https://github.com/AZHenley/particle">GitHub</a>. Special thanks to Joseph Lormand for presets.</p>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.23.4/src-min-noconflict/ace.min.js"></script>
 
 <script src="particle.js"></script>
 <script src="playground.js"></script>
