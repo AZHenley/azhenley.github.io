@@ -66,7 +66,7 @@
 
 <hr>
 
-<div id="display" style="display:inline-block;border:1px solid black;"></div>
+<div id="display" style="display:table; margin-left: auto; margin-right: auto; border:1px solid black;"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/pixi.js@5.3.10/dist/pixi.min.js"></script>
 <p><small>FPS: <span id="fps"></span>, Particles: <span id="particles"></span></small></p>
@@ -78,14 +78,14 @@
 <div>
     <label for="s1">Burst size: </label>
     <span id="st1"></span>
-    <input type="range" min="1" max="16" value="3" class="slider" id="s1" step="1">
+    <input type="range" min="1" max="16" value="3" class="slider" id="s1" step="1" style="width: 180px;">
 </div>
 
 
 <div>
     <label for="s2">Burst delay: </label>
     <span id="st2"></span>
-    <input type="range" min="2" max="60" value="30" class="slider" id="s2" step="1">
+    <input type="range" min="2" max="60" value="30" class="slider" id="s2" step="1" style="width: 180px;">
 </div>
 
 <br>
