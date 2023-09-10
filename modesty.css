@@ -146,21 +146,13 @@ blockquote p {
 }
 
 .links {
-    margin-bottom: 1.2em;
+    margin-bottom: 1em;
 }
 
 /* For mobile */
 @media only screen and (max-width: 540px) {
     .photo-container {
         margin-left: 0px;
-    }
-
-    .headshot {
-        margin-bottom: -5px; 
-    }
-
-    .name-header {
-        margin-top: 5px;  
     }
 
     .links {
