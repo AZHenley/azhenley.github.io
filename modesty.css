@@ -119,10 +119,10 @@ blockquote p {
 
 .headshot {
     width: 172px;
-    height: 200px; /* Making the height and width the same */
-    margin: 46px 34px 0 0;
+    height: 200px; 
+    margin: 0px 0px 0 0;
     border-radius: 10%;
-    object-fit: cover; /* This will make sure your image covers the whole circle */
+    object-fit: cover; 
     object-position: 0% 8%;
 }
 
@@ -142,7 +142,7 @@ blockquote p {
 
 .photo-container {
     flex-basis: 100px;
-    padding: 10px 0 10px 25px;
+    margin: 20px 20px 10px 35px;
 }
 
 .links {
@@ -150,9 +150,9 @@ blockquote p {
 }
 
 /* For mobile */
-@media only screen and (max-width: 550px) {
-    .content {
-        margin-bottom: 0;
+@media only screen and (max-width: 540px) {
+    .photo-container {
+        margin-left: 0px;
     }
 
     .headshot {
