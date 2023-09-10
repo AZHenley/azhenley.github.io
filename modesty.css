@@ -119,7 +119,7 @@ blockquote p {
 
 .headshot {
     width: 172px;
-    height: 172px; /* Making the height and width the same */
+    height: 200px; /* Making the height and width the same */
     margin: 46px 34px 0 0;
     border-radius: 10%;
     object-fit: cover; /* This will make sure your image covers the whole circle */
