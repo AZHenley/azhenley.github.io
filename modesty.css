@@ -114,29 +114,43 @@ blockquote p {
   }
 
 .card {
-    padding:12px;
+    padding: 12px;
 }
-  
+
 .headshot {
-    max-width:172px;
+    max-width: 172px;
     margin: 46px 34px 0 0;
 }
 
-.projimg {
-    max-width:172px;
+.row {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.row {
-    display:flex;
-    flex-wrap:wrap;
-}
-  
 .text-container {
-    flex:2;
+    flex: 2;
     min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
-  
+
 .photo-container {
     flex-basis: 172px;
     padding: 10px 0 10px 25px;
+}
+
+/* For mobile */
+@media only screen and (max-width: 600px) {
+    .content {
+        margin-bottom: 0;
+    }
+
+    .headshot {
+        margin-bottom: -5px;  /* Reduces space below image */
+    }
+
+    .name-header {
+        margin-top: 5px;  /* Fine-tunes space above name */
+    }
 }
