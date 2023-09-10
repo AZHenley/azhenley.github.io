@@ -140,8 +140,12 @@ blockquote p {
     padding: 10px 0 10px 25px;
 }
 
+.links {
+    margin-bottom: 1.2em;
+}
+
 /* For mobile */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 550px) {
     .content {
         margin-bottom: 0;
     }
@@ -153,4 +157,12 @@ blockquote p {
     .name-header {
         margin-top: 5px;  /* Fine-tunes space above name */
     }
+
+    .links {
+        margin-bottom: 0; /* Resetting to zero for mobile */
+    }
 }
+
+
+
+
