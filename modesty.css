@@ -118,9 +118,14 @@ blockquote p {
 }
 
 .headshot {
-    max-width: 172px;
+    width: 172px;
+    height: 172px; /* Making the height and width the same */
     margin: 46px 34px 0 0;
+    border-radius: 10%;
+    object-fit: cover; /* This will make sure your image covers the whole circle */
+    object-position: 0% 8%;
 }
+
 
 .row {
     display: flex;
@@ -136,7 +141,7 @@ blockquote p {
 }
 
 .photo-container {
-    flex-basis: 172px;
+    flex-basis: 100px;
     padding: 10px 0 10px 25px;
 }
 
@@ -151,15 +156,15 @@ blockquote p {
     }
 
     .headshot {
-        margin-bottom: -5px;  /* Reduces space below image */
+        margin-bottom: -5px; 
     }
 
     .name-header {
-        margin-top: 5px;  /* Fine-tunes space above name */
+        margin-top: 5px;  
     }
 
     .links {
-        margin-bottom: 0; /* Resetting to zero for mobile */
+        margin-bottom: 0; 
     }
 }
 
