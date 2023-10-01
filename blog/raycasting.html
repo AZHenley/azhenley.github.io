@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>A raycasting engine in 7 easy steps - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Ever wonder how old 3D graphics worked? Let's make a simple raycasting engine, step by step.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="A raycasting engine in 7 easy steps">
+    <meta property="og:description" content="Ever wonder how old 3D graphics worked? Let's make a simple raycasting engine, step by step.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/raycastingdemo.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/raycasting.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on software.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">A raycasting engine in 7 easy steps</h1>
+	<small>9/30/2023</small><br><br>
+
+<p>Another Saturday, another <a href="useless">project</a>.</p>
+
+<p>Let's make a simple raycasting engine&#8212;a fun application of math and art&#8212;just like the early 3D-ish video games from the 1990s. I'll build it incrementally using JavaScript so that you can try each step on this page as we go along.</p>
+
+<p>To test out each result, click on the canvas and use WASD to control the camera.</p>
+
+<h3>Step #1: Draw walls</h3>
+
+<p>We first start with a map. It is a 2D array of 0s representing open space and 1s representing walls. Imagine that it is a top-down view of the world.</p>
+
+<pre class="prettyprint lang-js">
+this.map = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 0, 1, 0, 0, 1],
+    [1, 0, 1, 0, 0, 1, 0, 0, 1],
+    [1, 0, 0, 1, 0, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1]
+];
+</pre>
+
+<p>The raycasting method simulates a 3D environment by casting rays from a player's viewpoint into the 2D map to find the distance to the nearest wall along each ray. These distances are then used to calculate the heights of vertical "slices" of walls to draw on a 2D canvas. By iterating through multiple rays across the player's field of view, the method generates a series of these wall slices, which collectively create the illusion of a 3D environment. Objects appear smaller as they are farther away, so wall slices drawn shorter give the impression of being more distant, creating a 3D effect.</p>
+
+<p>It doesn't take much code. Here is how we handle an individual ray:</p>
+
+<pre class="prettyprint lang-js">
+castRay(rayAngle) {
+    let x = this.player.x;
+    let y = this.player.y;
+    let dx = Math.cos(rayAngle);
+    let dy = Math.sin(rayAngle);
+
+    // Increment x and y until we hit a wall
+    let i = 0;
+    while (this.map[Math.floor(y)][Math.floor(x)] === 0) {
+        x += dx * 0.1;
+        y += dy * 0.1;
+        i++;
+        if (i > 400) break;  // Prevent infinite loops
+    }
+
+    const distance = Math.sqrt((x - this.player.x) ** 2 + (y - this.player.y) ** 2);
+    const wallHeight = 300 / distance;
+
+    return { distance, wallHeight };
+}
+</pre>
+
+<p>Then we draw walls based on the distance that the rays traveled:</p>
+
+<pre class="prettyprint lang-js">
+drawWallSlice(i, wallHeight, sliceWidth) {
+    for (let j = 0; j &lt; wallHeight; j++) {
+        let yPosition = Math.floor(300 - wallHeight / 2 + j);
+        this.ctx.fillStyle = `rgb(180, 0, 180)`;
+        this.ctx.fillRect(i * sliceWidth, yPosition, sliceWidth, 1);
+    }
+}
+</pre>
+
+<p>All of our rays and walls are sourced from this function:</p>
+
+<pre>
+raycast() {
+    const rays = 200;
+    const screenWidth = 800;
+    const sliceWidth = screenWidth / rays;
+    const angleStep = this.player.fov / rays;
+
+    // Walls
+    for (let i = 0; i &lt; rays; i++) {
+        const rayAngle = this.player.angle - (this.player.fov / 2) + i * angleStep;
+        const { distance, wallHeight } = this.castRay(rayAngle);
+        this.drawWallSlice(i, wallHeight, sliceWidth);
+    }
+}
+</pre>
+
+<p>I wired up the basic infrastructure to redraw the screen and accept WASD input that moves the player. Try it by clicking the canvas and using WASD:</p>
+
+<canvas id="raycast01" width="800" height="600"></canvas>
+
+<p>It works! We can improve it though.</p>
+
+
+<h3>Step #2: Dither walls</h3>
+
+<p>Everything is a flat color without texture, which makes it difficult to perceive distance. Let's add a simple pattern to the walls.</p>
+
+<pre class="prettyprint lang-js">
+drawWallSlice(i, wallHeight, ditherPatternSize, sliceWidth) {
+    for (let j = 0; j &lt; wallHeight; j++) {
+        let yPosition = Math.floor(300 - wallHeight / 2 + j);
+
+        // Create a dithering pattern based on the pixel's coordinates
+        let dither = ((i + yPosition) % ditherPatternSize &lt; ditherPatternSize / 2) ? 10 : 0;
+
+        // Adjust color
+        let adjustedColor = 180 + dither;
+
+        this.ctx.fillStyle = `rgb(${adjustedColor}, 0, ${adjustedColor})`;
+        this.ctx.fillRect(i * sliceWidth, yPosition, sliceWidth, 1);
+    }
+}
+</pre>
+
+<p>Try it with the newly improved walls:</p>
+
+<canvas id="raycast02" width="800" height="600"></canvas>
+
+<p>A little better but it is still lacking.</p>
+
+<h3>Step #3: Shade walls</h3>
+
+<p>We can use the distance to adjust the wall color to differentiate near walls and far walls.</p>
+
+<pre class="prettyprint lang-js">
+drawWallSlice(i, distance, wallHeight, ditherPatternSize, sliceWidth) {
+    // Calculate darkness based on distance
+    const darknessFactor = 1 + (distance / 4);
+
+    for (let j = 0; j &lt; wallHeight; j++) {
+        let yPosition = Math.floor(300 - wallHeight / 2 + j);
+
+        // Create a dithering pattern based on the pixel's coordinates
+        let dither = ((i + yPosition) % ditherPatternSize &lt; ditherPatternSize / 2) ? 10 : 0;
+
+        // Adjust color
+        let baseColor = 180 + dither;
+        let adjustedColor = Math.floor(baseColor / darknessFactor);
+
+        this.ctx.fillStyle = `rgb(${adjustedColor}, 0, ${adjustedColor})`;
+        this.ctx.fillRect(i * sliceWidth, yPosition, sliceWidth, 1);
+    }
+}
+</pre>
+
+<p>Now give it a whirl again:</p>
+
+<canvas id="raycast03" width="800" height="600"></canvas>
+
+<p>It is starting to look 3D!</p>
+
+<h3>Step #4: Color sky and ground</h3>
+
+<p>As you can see, just adding a few lines of code at a time makes our environment look much better. This time, we will add a sky and a ground fill color.</p> 
+
+<p>There actually isn't a "sky" or "ground", we are just going to draw the top half of the screen one color and the bottom half a different color. Then we will draw all the walls along the horizon, and bam!</p>
+
+<p>We'll update the raycast function:</p>
+
+<pre class="prettyprint lang-js">
+raycast() {
+    const rays = 200;
+    const screenWidth = 800; 
+    const sliceWidth = screenWidth / rays;
+    const angleStep = this.player.fov / rays;
+    const ditherPatternSize = 8;  
+
+    // Sky
+    this.ctx.fillStyle = 'rgb(20, 0, 20)';
+    this.ctx.fillRect(0, 0, 800, 300);  
+
+    // Ground
+    this.ctx.fillStyle = 'rgb(60, 0, 60)';
+    this.ctx.fillRect(0, 300, 800, 300); 
+
+    // Walls
+    for (let i = 0; i &lt; rays; i++) {
+        const rayAngle = this.player.angle - (this.player.fov / 2) + i * angleStep;
+        const { distance, wallHeight } = this.castRay(rayAngle);
+        this.drawWallSlice(i, distance, wallHeight, ditherPatternSize, sliceWidth);
+    }
+}
+</pre>
+
+<p>Enjoy a stroll:</p>
+
+<canvas id="raycast04" width="800" height="600"></canvas>
+
+<h3>Step #5: Generate level</h3>
+
+<p>Our map is always the same which gets boring fast. We should procedurally generate a new map every time.</p>
+
+<p>I did this by using a standard depth first search approach to generating a maze. It ensures that all the areas are connected, but it ends up being a narrow and windy maze. That can be addressed by randomly adding "rooms" on top of the maze.</p>
+
+<pre class="prettyprint lang-js">
+placeRoom(map, x, y) {
+    // Fill the 3x3 area with 0s
+    for (let dx = 0; dx &lt; 3; dx++) {
+        for (let dy = 0; dy &lt; 3; dy++) {
+            map[y + dy][x + dx] = 0;
+        }
+    }
+}
+</pre> 
+
+<p>Run around a bit then refresh the page to see a different level:</p>
+
+<canvas id="raycast05" width="800" height="600"></canvas>
+
+<h3>Step #6: Draw mini map</h3>
+
+<p>What do you think our engine is missing now?</p>
+
+<p>Given that everything in the environment is the <i>same</i>, I think we need a mini map. A top-down view of the environment will help us keep track of where we are and where we might want to go. We already have the map data, we just need to visualize it in a different way.</p>
+
+<p>We can quite literally draw our map variable as a grid in the corner of the screen that updates based on the player's location.</p>
+
+<pre class="prettyprint lang-js">
+// Draw the map
+for (let y = yStart; y &lt; yEnd; y++) {
+    for (let x = xStart; x &lt; xEnd; x++) {
+        const wall = this.map[y][x];
+        const color = wall ? 'rgb(150, 0, 150)' : 'rgb(0, 0, 0)';
+        this.ctx.fillStyle = color;
+        this.ctx.fillRect((x - xStart) * miniMapScaleX + offsetX, (y - yStart) * miniMapScaleY + offsetY, miniMapScaleX, miniMapScaleY);
+    }
+}
+</pre>
+
+<p>Run through this entire level and see how the mini map works:</p>
+
+<canvas id="raycast06" width="800" height="600"></canvas>
+
+<p>Admit it. That is cool.</p>
+
+
+<h3>Step #7: Make the rest</h3>
+
+<p>There are infinite more features that we could add from here. Different wall textures, doors, objects, and then we could add an objective to make it into a game. We have a solid state though.</p>
+
+<p>I'll leave you at step 7 with my favorite instructions:</p>
+
+<img src="images/drawowl.jpg" class="center" style="max-width:60%;" alt="TODO.">
+
+<p>And if you follow that, then soon your raycasting engine will be capable of producing this:</p>
+
+<img src="images/doomart.jpg" class="center" style="max-width:60%;" alt="TODO.">
+
+<hr>
+
+Find the full source code on <a href="">GitHub</a>.
+
+<br><br><br><br>
+
+<script src="raycast01.js"></script>
+<script src="raycast02.js"></script>
+<script src="raycast03.js"></script>
+<script src="raycast04.js"></script>
+<script src="raycast05.js"></script>
+<script src="raycast06.js"></script>
+
+</body>
+</html>
