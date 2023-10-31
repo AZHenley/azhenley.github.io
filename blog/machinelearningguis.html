@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Machine learnings of GUIs at scale - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Recent research has demonstrated training machine learning models that can identify and interact with GUIs.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Machine learning of GUIs at scale">
+    <meta property="og:description" content="Recent research has demonstrated training machine learning models that can identify and interact with GUIs..">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/robotphones.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/machinelearningguis.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on software.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Machine learning of GUIs at scale</h1>
+	<small>10/31/2023</small><br><br>
+
+<img src="images/robotphones.png" class="center" style="max-width:60%; margin-bottom:12px;border:1px solid #000000;">
+
+
+<p>Imagine if you could say to ChatGPT, <i>"Go try out my app for 5 minutes and let me know what you think about the getting started experience."</i> Or if you could ask questions like... <i>Does my iOS app's GUI follow common practices? Is it accessible? What are some examples of apps that use these specific UI controls on the same screen?</i></p>
+
+<p>If we had a rich database of app GUIs and the right ML models, then we could answer these questions and build a <b>copilot tool</b> that "understands" the visual and interaction designs of GUIs, not just the code!</p> 
+
+<hr>
+
+<p>There have been many attempts to build a database of GUIs. Though, most of them have done so statically by analyzing the source code or bytecode of the app. This has all sorts of limitations: requiring the code, only being able to analyze view hierarchies, and ignoring anything with complex UIs (like drawing on a canvas) that are generated at runtime. Many also require human labelers.</p>
+
+<p>There was a paper at UIST'17 that made huge progress towards such a database: <i>Rico: A Mobile App Dataset for Building Data-Driven Design Applications</i> by Deka et al. (<a href="https://dl.acm.org/doi/abs/10.1145/3126594.3126651">ACM</a>).</p>
+
+<img src="images/ricooverview.png" alt="A figure from the Rico paper. It shows the Rico process: app mining with crowdworkers and automated exploration using actual Android devices, extracting UI traces, and a set of data-driven design applications like UI design search." class="center" style="max-width:60%;">
+
+<p>Their system automatically runs many, many Android apps and elicits interactions from crowdworkers. They collected 72,000 interfaces from 9,700 apps. Then they used the data to train an encoding model to learn embeddings for UI layouts. It can be used to search for UIs:</p>
+
+<img src="images/ricosearch.png" alt="A figure from the Rico paper showing a UI screenshot being used to query a database of UIs with several similar resulting UI screenshots." class="center" style="max-width:90%;">
+
+<p>Then at FSE'21, <i>Frontmatter: Mining Android User Interfaces at Scale</i> by Kuznetsov et al. (<a href="https://dl.acm.org/doi/abs/10.1145/3468264.3473125">ACM</a>) took the research area a major step forward. They contributed a public dataset of GUI data that was statically analyzed from 160,000 Android apps without the need of human labelers.</p>
+
+<img src="images/frontmatteroverview.png" alt="Figure 1 from the Frontmatter paper. It shows the Frontmatter process: select app, download apk, extract UI model, extract API, parse." class="center" style="max-width:90%;">
+
+<p>More recently, <i>Never-ending Learning of User Interfaces</i> by Wu et al. (<a href="https://dl.acm.org/doi/10.1145/3586183.3606824">ACM</a>) was published at UIST'23. They designed an app crawler that installs real apps from the Apple app store and crawls them to learn about the UIs. It uses different heuristics for interacting with UI elements to update its machine learning models as it crawls.</p>
+
+<img src="images/neverendinglearning.png" alt="Figure 2 from the never-ending learning paper. It shows the process of the system arriving at an app screen, taking screenshots, identifying UI elements, simulating a tap, then screenshotting the effect." class="center" style="max-width:80%;">
+
+<p>For example, it takes screenshots of the screen, uses existing models to identify UI elements, then taps or drags an element that it thinks can be interacted with, and based on the effect, will update the model to learn that the element is tappable or draggable. So far, they have used a farm of iPhones to perform more than 500,000 actions on 6,000 apps.</p>
+
+<hr>
+
+<p>With research like this, we are close to having AI that can fully test an application almost as if they are human. There is still the need for a decision-making layer that emulates which UI element to interact with. That way it can test specific tasks rather than poking things at random.</p>
+
+<p>Decades ago, Chi et al. used <i>information foraging theory</i> to accurately predict how users would navigate a webpage (see their CHI'01 <a href="https://dl.acm.org/doi/abs/10.1145/365024.365325">paper</a>). This approach applied to standard user data that these apps collect (i.e., screens viewed and buttons clicked with timestamps) could be used to train a decision-making model for GUIs.</p>
+
+<p>So, who will build a copilot that supports reasoning about and interacting with GUIs in real time?</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
