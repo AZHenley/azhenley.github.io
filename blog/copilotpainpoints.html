@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The pain points of building a copilot - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="TODO.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="The pain points of building a copilot">
+    <meta property="og:description" content="We investigated the process and pain points of building a copilot.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/buildingcopilot.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/copilotpainpoints.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on software.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">The pain points of building a copilot</h1>
+	<small>2/4/2024</small><br><br>
+
+
+<img src="images/buildingcopilot.png" alt="An illustration of engineers building a robot." class="center" style="max-width:70%;border:1px solid #000000;">
+
+<p><i>This post is an informal summary of our paper, "Building Your Own Product Copilot: Challenges, Opportunities, and Needs". See the <a href="https://arxiv.org/abs/2312.14231">preprint</a> for more details. Thanks to my collaborators at Microsoft: Chris Parnin, Gustavo Soares, Rahul Pandita, Jessica Rich, and Sumit Gulwani.</i></p>
+
+<hr>
+
+<p>Companies everywhere are launching <i>copilots</i>&mdash;AI assistants that leverage LLMs to assist with tasks. For example, Office Copilot helps you with Word and Excel, GitHub Copilot helps you write code, Intuit Assist helps with filing taxes in TurboTax, Adobe Firefly helps you generate and edit images, and Dropbox AI answers questions about your documents.</p>
+
+<img src="images/productcopilots.png" alt="A screenshot of two example copilots. Left is Excel and right is Windows." class="center" style="max-width:95%;">
+
+Given the sudden surge in generative AI being integrated into products, we wanted to know what is the <b>process</b> that software engineers follow to build these products, what are the <b>pain points</b>, and what are <b>opportunities</b> for tools.
+
+<p>Towards this, we conducted semi-structured interviews with 26 developers from a variety of companies that are working on copilots. We qualitatively analyzed their responses to identify themes. Then we conducted two focus group sessions with tool builders that involved reviewing our interview findings and then brainstorming possible solutions.</p>
+
+
+<h3>Process of building a copilot</h3>
+
+<p>Given the nondeterministic nature of LLMs, it changes the typical software development process. Through the interviews, we identified this high-level process that the developers are following: exploration, implementation, evaluation, and productization. It is not linear though, rather it is messy and iterative.</p>
+
+<img src="images/buildingcopilotprocess.png" alt="A chart showing the high-level process of building a copilot, with example activities for each step." class="center" style="max-width:95%;">
+
+<p>For example, there are additional risks that product teams are taking on. They must identify business scenarios that they think are feasible to solve using LLMs, tinker with various technologies to see if it works (e.g., LLMs, embeddings, vector databases), evaluate if it is good enough, and then they have to ship it to actual users.</p>
+
+<p>Each and every one of these tasks has pain points for developers.</p>
+
+
+<h3>Pain points</h3>
+
+<p>We identified 6 fundamental pain points to building a copilot:</p>
+
+<ul>
+    <li><b>Prompt engineering</b> is time consuming and requires considerable trial and error. Additionally, it is tedious to parse the output and requires balancing more context with using fewer tokens. Another problem is managing the prompts, prompt templates, what worked, what didn't work, and why changes to them were made. As one developer said, "it's more of an art than a science".</li>
+    <li><b>Orchestration</b> of multiple data sources and prompts is not trivial. Systems attempt to detect the user's intent and route the workflow through multiple prompts, but that increases the surface area of failure cases. Planning and multi-turn workflows are also sought after but prove to be even harder to steer. As many developers told us, it goes "off the rails".</li>
+    <li><b>Testing</b> is fundamental to software development but arduous when LLMs are involved. Every test is a flaky test. Some developers run unit tests multiple tests and look for consensus. Others try to build large benchmarks that can be used to measure how prompts or models impact the results, but it requires expertise and is expensive. When is it "good enough"?</li>
+    <li><b>Best practices</b> on how to work with LLMs was sought after by many of the developers. They resort to following Twitter hashtags or reading arxiv papers to learn, but it doesn't scale and they don't know which resources are good. It is moving fast, and it requires developers to "throw away everything that they've learned and rethink it."</li>
+    <li><b>Safety, privacy, and compliance</b> is a concern in everyone's mind. It requires guardrails to prevent the copilot from causing damage, but you also can't collect telemetry data on how it is being used since that causes privacy issues with the users' data. A safety review is a new, and often tedious, task that software engineers are going through.</li>
+    <li><b>Developer experience</b> is a pain point for anyone involved with building copilots. While there are new tools, like Langchain, they often didn't scale beyond a prototype. For example, prompts are often just string variables in their source code. Developers are having to learn and compare many new tools rather than focusing on the customer problem. They then have to glue these tools together.</li>
+</ul>
+
+
+<h3>Opportunities for tools</h3>
+
+<p>In our focus group sessions with professional tool builders, we identified several opportunities for tools, processes, and techniques to help developers build copilots.</p>
+
+<ul>
+    <li>There needs to be authoring, validation, and debugging support for prompts. For example, a prompt linter could provide quick feedback. Developers also asked for a library or "toolbox" of prompt snippets for common tasks. Additionally, tracing the effect of prompt changes would be of huge value.</li>
+    <li>A lack of transparency and control often leaves users confused. For example, it is often not obbvious to users what information the AI has access to or what actions it can perform. </li>
+    <li>Developers sought after automated metrics of their AIs or a tool that automatically captures user feedback. Unfortunately, the developers also expressed not wanting to learn statistics or machine learning metrics, like BLEU.</li>
+    <li>A one-stop shop for integrating AI into projects remains a challenge. Developers are seeking a place to get started quickly, transition from a playground to an MVP, connect their various data sources to the prompts, and then move the AI components into their existing codebase efficiently.</li>
+</ul>
+
+
+<hr>
+
+<p>It is still the wild, wild west of product copilots. It will be interesting to see how software engineering will evolve, either through new processes or tools, over the next several years.</p> 
+
+<img src="images/buildingcopilotshop.png" alt="An illustration showing hundreds of arguing about how to build a robot." class="center" style="max-width:70%;border:1px solid #000000;">
+
+<p>Read more in the paper: <a href="https://arxiv.org/abs/2312.14231">Building Your Own Product Copilot: Challenges, Opportunities, and Needs</a>.</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
