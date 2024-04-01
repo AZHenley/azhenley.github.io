@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Learning to code with and without AI - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="We studied the impact of AI code generators on novice programmers and how they used the AI.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Learning to code with and without AI">
+    <meta property="og:description" content="We studied the impact of AI code generators on novice programmers and how they used the AI.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/TODO.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/learningwithai.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on software.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Learning to code with and without AI</h1>
+	<small>3/31/2024</small><br><br>
+
+<img src="images/TODO.png" class="center" style="max-width:70%; margin-bottom:24px;">
+
+
+<p><i>This post was co-written with <a href="https://majeed.cc/">Majeed Kazemitabaar</a>, a PhD student at the University of Toronto, whom I've been collaborating with on AI tools for CS education. We summarize two research papers in this post that Majeed led.</i></p>
+
+<hr>
+
+<p>Tools like ChatGPT are capable of solving many introductory programming tasks. In fact, you can often just copy-paste the instructions without any additional effort and get a detailed solution and explanation back.</p> 
+
+<p>This has caused a lot of discussion about the learning effects of LLMs that generate code from natural language descriptions on programming education (e.g., <a href="https://dl.acm.org/doi/abs/10.1145/3511861.3511863">The Robots Are Coming</a>). Educators are concerned about students becoming over-reliant on AI tools and not learning effectively. In contrast, these tools might also potentially lower the barriers of entry to programming, and even broaden participation into computing!</p>
+
+<p>Towards understanding what is really going on here, we had two fundamental questions:</p>
+
+<ul>
+    <li>What is the effect of AI code generators on novices in introductory programming courses?</li>
+    <li>How do novices use AI code generators in introductory programming courses?</li>
+</ul>
+
+<img src="images/noviceaicodingpapers.png" alt="A screenshot of the two research papers described in this post." class="center" style="max-width:100%; border:1px solid #000000;">
+
+<p>The full details of this research can be found in two papers: <a href="https://arxiv.org/abs/2302.07427">Studying the effect of AI Code Generators on Supporting Novice Learners in Introductory Programming</a> (CHI'23) and <a href="https://austinhenley.com/pubs/Kazemitabaar2023Koli_LLMsCS1.pdf">How Novices Use LLM-Based Code Generators to Solve CS1 Coding Tasks in a Self-Paced Learning Environment</a> (Koli Calling'23).</p>
+
+<h3>Methodology</h3>
+
+<p>To answer these questions, we conducted a controlled study over 10 sessions in Fall 2022 with 69 students (ages 10-17) that had no prior Python programming experience. On the first session students were taught the first basic concepts of programming such as variables, conditionals, and loops using <a href="https://scratch.mit.edu/">Scratch</a>. Students were then immediately evaluated for their high-level computational thinking skills using 25 Scratch code-tracing questions.</p>
+
+<p>For the next seven sessions, students were then divided into two groups: the <b>Baseline</b> group and the <b>Codex</b> group. During these seven sessions, both groups of students worked on 45 two-part tasks using <a href="https://github.com/MajeedKazemi/coding-steps">Coding Steps</a>, the tool developed for the study. Coding Steps included novice-friendly documentations and allowed remote TAs to provide real-time feedback on students' submissions. The first part of each task was a <i>code-authoring task</i> in which students had to write code based on the provided instructions, while the second part was a <i>code-modifying task</i> where students had to modify the correct solution to the previous part based on additional requirements. Students in the Codex group only had optional access to the LLM code generator during the code-authoring task.</p>
+
+<p>The code generator was based on <a href="https://openai.com/blog/openai-codex">OpenAI Codex</a> and allowed students to type in a natural language description of a program that it would then convert into Python code.</p>
+
+<p>Lastly, the final two sessions focused on evaluating students' performance in which they did not have access to Codex or other assistances. Both evaluation sessions included ten coding tasks and 40 multiple-choice questions. The first evaluation post-test was conducted a day after the seven training sessions, while the second test was conducted a week later, using similar tasks that were slightly modified.</p>
+
+
+<h3>Learning performance with and without AI</h3>
+
+<p>First, let's look at the results from the seven training sessions. <small><i>See Majeed's CHI'23 <a href="https://arxiv.org/abs/2302.07427">paper</a> for more details.</i></small></p>
+
+<ul>
+    <li>Students in the Codex group made more progress during the seven sessions of training and finished significantly more tasks (91%) than the Baseline group (79%).</li>
+    <li>On code-authoring tasks, students in the Codex group had a significantly higher correctness score (80%) than the Baseline (44%), and overall finished the tasks significantly faster.</li>
+    <li>However, on the code-modifying tasks, both groups performed similarly in terms of correctness, with the Codex group performing slightly better (66%) than the Baseline (58%).</li>
+    <li>Although the first two results were somehow expected, their similar performance on the code-modifying tasks is promising! Students in the Codex group relied heavily on the AI to complete the previous part of the code-modifying tasks, but performed just as well and in some cases better than the Baseline group.</li>
+</ul>
+
+<p>Second, let's look at the results from the two evaluation post-tests that were conducted in the last two sessions.</p>
+
+<ul>
+    <li>On the Immediate Post-test that was conducted a day after the training sessions, both groups performed similarly on coding tasks (Codex: 61%, Baseline: 63%) and multiple-choice questions (Codex: 49%, Baseline: 42%).</li>
+    <li>However, on the Retention Post-test that was conducted a week later, the Codex group was able to retain what they learned slightly better on the coding tasks (Codex: 59%, Baseline: 50%) and multiple-choice questions (Codex: 44%, Baseline: 35%).</li>
+    <li>Focusing on the top 50% students who performed higher on the Scratch pre-test scores, students who had access to Codex performed significantly better (74%) than the Baseline group (60%).</li>
+    <li>Additionally, students in the Codex group were more eager and excited to continue learning about programming, and felt much less stressed and discouraged during the training.</li>
+</ul>
+
+
+<h3>Learning with AI: over-reliance vs. self-regulation</h3>
+
+We performed a thematic analysis on 1666 usages of the AI code generator by students in the Codex group from the seven training sessions. We focused on how they used the tool, what prompts they used, and how did they verify and use the AI-generated code. We discovered various signs of over-reliance and signs of self-regulation that are discussed below. <small><i>See our Koli Calling'23 <a href="https://austinhenley.com/pubs/Kazemitabaar2023Koli_LLMsCS1.pdf">paper</a> for more details.</i></small>
+
+<ul>
+    <li>Students frequently (n=501, 30%) copied the task description to generate the entire code with no prior manual coding attempts. &#x1F630;</li>
+    <li>Sometimes (n=197, 12%) students divided the task into multiple subgoals, and asked the AI to generate *only* the first subgoal instead of the entire task. &#x1F60A;</li>
+    <li>When decomposing the task into multiple subgoals, students sometimes (n=85, 5%) asked for code that was already in their editor. &#x1F630;</li>
+    <li>Although rarely (n=16, 1%), but sometimes students generated code after having the solution to check and compare the AI's output with their own solution. &#x1F60A;</li>
+    <li>Students occasionally (n=89, 5%) wrote prompts that were similar to pseudo-code (e.g. "for num in numbers, if num > large, set large to num"). &#x1F60A;</li>
+    <li>Although most of the times students properly tested the AI-generated code before submitting, there were several (n=63, 4%) instances in which students submitted AI code without testing it. &#x1F630;</li>
+    <li>Although rarely, but sometimes (n=30, 2%) students actively tinkered with the AI-generated code to properly understand the syntax and logic. &#x1F60A;</li>
+    <li>Similarly, sometimes students manually added code (like `print` statements) to the AI-generated code to help them verify that it works correctly. &#x1F60A;</li>
+</ul>
+
+<p>Future tool designers and educators, should promote opportunities for self-regulated use of LLM code generators, while discouraging unregulated usages explained above.</p>
+
+<hr>
+
+For more details, check out the papers, <a href="https://arxiv.org/abs/2302.07427">Studying the effect of AI Code Generators on Supporting Novice Learners in Introductory Programming</a> (CHI'23) and <a href="https://austinhenley.com/pubs/Kazemitabaar2023Koli_LLMsCS1.pdf">How Novices Use LLM-Based Code Generators to Solve CS1 Coding Tasks in a Self-Paced Learning Environment</a> (Koli Calling'23), led by <a href="https://majeed.cc/">Majeed Kazemitabaar</a>.
+
+<p>Stay tuned to hear about the tools we built based on these findings!</p>
+
+<p><i>Special thanks to the other co-authors: Justin Chow, Carl Ka To Ma, Xinying Hou, Barbara Ericson, David Weintrop, and Tovi Grossman.</i></p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
