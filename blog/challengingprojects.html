@@ -14,7 +14,6 @@
 	<link rel="stylesheet" type="text/css" href="../modesty.css">
     <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
 	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 </head>
 <body>
     <div class="card">
@@ -58,6 +57,8 @@
 
 <p><b>Check out the second sequel too: <a href="challengingalgorithms.html">Challenging algorithms and data structures every programmer should try</a>.</b></p>
 
+<hr>
+
 <p>I talk to a lot of students and professional developers that often want to start a side project, but aren't sure what to build. Below is a handful of software projects that taught me a lot. In fact, they're great because you could build them multiple times and learn new things each time. So whenever I don't know what to build or I want to learn a new programming language or framework, I start with one of these:</p>
 
 <ul>
@@ -69,8 +70,7 @@
     <li>Video game console emulator <small>(<i>hard!</i>)</small></li>
 </ul>
 
-
-<br><h3>Text Editor</h3>
+<h3>Text Editor</h3>
 
 <p>We use text editors everyday, but do you know how it really works? Ignoring all of the fancy features that your favorite editor has, how would you implement a textbox that supports a movable text cursor and selecting, inserting, and deleting text? No, you can't use the builtin textbox component from your favorite GUI framework!</p>
 
@@ -82,7 +82,6 @@
 
 <p>After implementing the basic editor, I challenge you to implement two more features: undo/redo and word wrapping. Implementing undo/redo in an efficient way was mind blowing to me! I first tried keeping an array of previous states, then tried the Memento pattern, before finally settling on the Command pattern. Word wrapping forces you to separate the <i>visual</i> aspects of a text line from the memory aspects.</p>
 
-
 <p>Things to learn:</p>
 <ul>
     <li>Data structures for storing the text: array, <a href="https://en.wikipedia.org/wiki/Rope_(data_structure)">rope</a>, <a href="https://en.wikipedia.org/wiki/Gap_buffer">gap buffer</a>, <a href="https://en.wikipedia.org/wiki/Piece_table">piece table</a>.</li>
@@ -90,7 +89,6 @@
     <li>Design patterns for undo/redo: <a href="https://en.wikipedia.org/wiki/Memento_pattern">memento</a>, <a href="https://en.wikipedia.org/wiki/Command_pattern">command</a>.</li>
     <li>Abstractions to separate the visual and memory aspects of the text.</li>
 </ul>
-
 
 <p>Further reading:</p>
 <ul>
@@ -100,7 +98,7 @@
 </ul>
 
 
-<br><h3>2D game - Space Invaders</h3>
+<h3>2D game - Space Invaders</h3>
 
 <p>Even the most simple games require some unique data structures and design patterns. The idea here is to implement a well-defined game from start to finish without getting bogged down on the other fun stuff (e.g., game design and art). Also, it is best if you use a barebones 2D graphics library (e.g., SDL, SFML, PyGame), not a big game engine that'll hide all of the interesting bits from you.</p>
 
@@ -118,7 +116,6 @@
 
 <p>Once you get the basic game working, add a title screen menu, a game over screen, make sure the game runs at the same speed even on different computers, and explore how to implement more interesting enemies with AI. Still not enough? Add shader effects, sound, and online multiplayer!</p>
 
-
 <p>Things to learn:</p>
 <ul>
     <li>Drawing to the screen.</li>
@@ -131,7 +128,6 @@
     <li>Networking for online features.</li>
 </ul>
 
-
 <p>Further reading:</p>
 <ul>
     <li>Game Programming Patterns (<a href="https://amzn.to/2RDtk1K">Amazon</a>, <a href="https://gameprogrammingpatterns.com/contents.html">web</a>)</li>
@@ -141,7 +137,7 @@
 </ul>
 
 
-<br><h3>Compiler - Tiny BASIC</h3>
+<h3>Compiler - Tiny BASIC</h3>
 
 <p>The most-eye opening projects I have worked on are compilers. Even now, if I have a free Sunday afternoon to do some coding, chances are it is a compiler. It is a great feeling when you create something that enables others to create more things. By implementing one I had to learn so much more about the intricacies of compilers that I normally would never think about (e.g., when do expressions get implicitly type converted).</p>
 
@@ -174,7 +170,7 @@
 </ul>
 
 
-<br><h3>Mini Operating System</h3>
+<h3>Mini Operating System</h3>
 
 <p>Over the years I have found myself applying fundamental concepts from operating systems to a variety of domains, like games and even predictive models of human behavior. In a classroom setting the algorithms and data structures used by operating systems might seem abstract or useless, but they really are useful. Implementing an operating system also helped me understand far more about what is going on under the hood.</p>
 
@@ -194,7 +190,6 @@
 
 </ul>
 
-
 <p>Further reading:</p>
 <ul>
     <li>OSDev.org's wiki of resources (<a href="https://wiki.osdev.org/Main_Page">web</a>)</li>
@@ -203,7 +198,7 @@
 </ul>
 
 
-<br><hr><br><p><i>Still not difficult enough for you? Try these two projects:</i></p>
+<hr><p><i>Still not difficult enough for you? Try these two projects:</i></p>
 
 
 <h3>Spreadsheet</h3>
@@ -218,7 +213,7 @@
 </ul>
 
 
-<br><h3>Video game console emulator</h3>
+<h3>Video game console emulator</h3>
 
 <p>Writing an emulator (or virtual machine) for a video game console combines the challenges of writing a compiler, an operating system, and a game engine all into one. It is quite rewarding to play a real game made by someone else with your emulator!</p> 
 
@@ -234,7 +229,7 @@
     <li>PyBoy source code (<a href="https://github.com/Baekalfen/PyBoy">GitHub</a>)</li>
 </ul>
 
-<hr><br>
+<hr>
 
 <p>Please let me know if you have any other project ideas! Here is a list of suggestions from <a href="https://news.ycombinator.com/item?id=21790779">Hacker News</a>, <a href="https://www.reddit.com/r/programming/comments/ean6ch/challenging_projects_every_programmer_should_try/">Reddit</a>, Twitter, and emails I received:</p>
 
