@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mistakes that data science students makes - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="We analyzed common mistakes that students make in an intro data science course.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Mistakes that data science students makes">
+    <meta property="og:description" content="We analyzed common mistakes that students make in an intro data science course.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/datasciencestudent.jpg">
+    <meta property="og:url" content="https://austinhenley.com/blog/datasciencemistakes.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + developer tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Mistakes that data science students makes</h1>
+	<small>4/28/2024</small><br><br>
+
+
+<img src="images/datasciencestudent.jpg" class="center" style="max-width:50%;">
+
+<p><i>This post is an informal summary of our SIGCSE'24 paper, "Investigating Student Mistakes in Introductory Data Science Programming". See the <a href="../pubs/Singh2024SIGCSE_DataScienceMistakes.pdf">paper</a> for more details. Thanks to <a href="https://sites.google.com/view/singhanj13">Anjali Singh</a> for leading this collaboration between Microsoft and University of Michigan!</i></p>
+
+<hr>
+
+<p>What kind of problems do students face in introductory data science courses?</p>
+
+<p>This has been studied many times over in the context of traditional CS1 and CS2 courses, but not for <i>DS1</i> courses. Towards this, we analyzed students' code submissions in a data science course at the University of Michigan. We randomly sampled from 542 notebook submissions by 151 students and qualitatively analyzed them to understand the mistakes and inappropriate strategies.</p>
+
+<p>We categorized the mistakes as:</p> 
+
+<ul>
+	<li>Logical mistakes</li>
+	<li>Semantic mistakes</li>
+	<li>Suboptimal coding</li>
+	<li>Language and environment misconceptions</li>
+</ul>
+
+<h3>Logical mistakes</h3>
+
+<p>A logical error is when the program behaves differently than expected, though it does not throw an error. One cause for this is <i>misunderstanding the data</i>, such as using the wrong columns or values. For example, a student used the column <i>PDAT</i> instead of <i>P_NUMVRC</i> which contradicts what their code comment says. Another example, a student incorrectly used <i>male</i> and <i>female</i> instead of <i>1</i> and <i>2</i> when filtering.</p>
+
+<img src="images/pandasmistakes.png" class="center" style="max-width:90%;">
+
+<p>Another cause is <i>misunderstanding the problem statement</i>. For example, rounding values when the actual value is expected, dividing by the wrong value, or incorrectly ordering dictionary keys. Students also made mistakes <i>handling missing values</i>. For example, when computing a correlation between two columns, a student replaced all missing values in both columns with 0.</p>
+
+<h3>Semantic mistakes</h3>
+
+<p>These semantic mistakes occurred when students used the incorrect function or operator, which may or may not throw a runtime error. For example, students used <i>where()</i> to select rows that meet some criteria without understanding the effect on rows that do not meet the criteria. Another common mistake was to use the full dataframe where they intended to use an intermediate variable or filtered rows. Other semantic mistakes include using bitwise operators on dataframes, invalid operations on dataframe slices, and using <i>groupby()</i> incorrectly.</p>
+
+<h3>Suboptimal coding</h3>
+
+<p>Some students wrote inefficient code that may not scale or violates best practices. For example, students used <i>for</i> loops to iterate over dataframe rows to count the number of rows that satisfy some condition. Instead, vectorized operations should be used (e.g., <i>merge()</i>, <i>join()</i>, <i>groupby()</i>, and <i>map()</i>). Although these functions were taught in the course, students were not penalized for writing suboptimal code. It is likely that students are misapplying their prior knowledge of iteration, perhaps from another programming course, to data science programming.</p>
+
+<h3>Language and environment misconceptions</h3>
+
+<p>Other mistakes were caused by misconceptions about Python or Jupyter notebooks. These include incorrectly specifying paths, using incorrect syntax, not importing libraries, mismatches between cells, out of order cells, and scoping issues. For example, students attempted to use variables that were defined in a different function or in a later cell. Prior studies also found that students struggle to understand how notebooks work.</p>
+
+<h3>Implications</h3>
+
+<p>A list of competencies for introductory data science courses emerged from our study, along with recommendations for how instructors can better support them. These include: programming in computational notebooks, data literacy, programming with data science libraries, programming strategies, and code optimality.</p>
+
+<p>For many students, it is the first time that they are working with a large dataset. Teaching them data literacy and how to understand the dataset domain is of huge importance and is unlike a typical CS1 course. Another major difference between CS1 and DS1, is that data science courses immediately teach libraries (rather than just core programming language constructs) to accomplish tasks. </p>
+
+<img src="images/datasciencepedagogy.png" class="center" style="max-width:98%;">
+
+<p>As part of this project (though only briefly described in the paper), we deployed an LLM-powered AI tutor to a large data science course. It aimed to help students not just with code correctness, but also domain knowledge, data literacy, and data science best practices. The system used not only the student's code, but also the program output, AST information, characteristics of the dataframe, and code optimality metrics. The system also used previously graded assignments from past semesters of the course to provide better feedback.</p>
+
+<hr>
+
+<p>There is still a lot more research needed to understand the challenges of teaching and learning data science. Full details can be found in our SIGCSE'24 paper: <a href="../pubs/Singh2024SIGCSE_DataScienceMistakes.pdf">Investigating Student Mistakes in Introductory Data Science Programming</a>.</p>
+
+<p>If you liked this post, check out:</p>
+
+<ul>
+	<li><a href="notebookpainpoints.html">What's wrong with computational notebooks?</a></li>
+	<li><a href="notebooksatchi2022.html">Computational notebooks research at CHI 2022</a></li>
+	<li><a href="datawrangler.html">Data wrangling with Data Wrangler</a></li>
+	<li><a href="teachingpainpoints.html">The pain points of teaching computer science</a></li>
+</ul>
+
+
+<br><br><br><br>
+
+</body>
+</html>

@@ -8,6 +8,13 @@
     <language>en-us</language>
     <copyright>Austin Z. Henley (2024)</copyright>
     <item>
+      <title>Mistakes that data science students make</title>
+      <pubDate>Sun, 28 Apr 2024 16:00:01 -0400</pubDate>
+      <link>https://austinhenley.com/blog/datasciencemistakes.html</link>
+      <author>azh321@gmail.com (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://austinhenley.com/blog/datasciencemistakes.html">https://austinhenley.com/blog/datasciencemistakes.html</a>]]></description>
+    </item>
+    <item>
       <title>Learning to code with and without AI</title>
       <pubDate>Sun, 31 Mar 2024 23:45:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/learningwithai.html</link>
@@ -530,7 +537,6 @@
       <pubDate>Wed, 4 Sep 2019 11:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/optionalnull.html</link>
       <author>azh321@gmail.com (Austin Z. Henley)</author>
-      <category>Development</category>
       <description><![CDATA[<a href="https://austinhenley.com/blog/optionalnull.html">https://austinhenley.com/blog/optionalnull.html</a>]]></description>
     </item>
     <item>
@@ -538,7 +544,6 @@
       <pubDate>Wed, 17 Jul 2019 11:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/8lessons8games.html</link>
       <author>azh321@gmail.com (Austin Z. Henley)</author>
-      <category>Development</category>
       <description><![CDATA[<a href="https://austinhenley.com/blog/8lessons8games.html">https://austinhenley.com/blog/8lessons8games.html</a>]]></description>
     </item>
     <item>
@@ -546,7 +551,6 @@
       <pubDate>Sun, 7 Jul 2019 11:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/guidehciseresearch.html</link>
       <author>azh321@gmail.com (Austin Z. Henley)</author>
-      <category>Development</category>
       <description><![CDATA[<a href="https://austinhenley.com/blog/guidehciseresearch.html">https://austinhenley.com/blog/guidehciseresearch.html</a>]]></description>
     </item>
     <item>
@@ -554,7 +558,6 @@
       <pubDate>Thu, 27 Jun 2019 11:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/typeinference.html</link>
       <author>azh321@gmail.com (Austin Z. Henley)</author>
-      <category>Development</category>
       <description><![CDATA[<a href="https://austinhenley.com/blog/typeinference.html">https://austinhenley.com/blog/typeinference.html</a>]]></description>
     </item>
     <item>
@@ -562,7 +565,6 @@
       <pubDate>Sun, 9 Sep 2018 11:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/fiveinternships.html</link>
       <author>azh321@gmail.com (Austin Z. Henley)</author>
-      <category>Development</category>
       <description><![CDATA[<a href="https://austinhenley.com/blog/fiveinternships.html">https://austinhenley.com/blog/fiveinternships.html</a>]]></description>
     </item>
     <item>
@@ -570,7 +572,6 @@
       <pubDate>Mon, 14 May 2018 11:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/facultyinterviewquestions.html</link>
       <author>azh321@gmail.com (Austin Z. Henley)</author>
-      <category>Development</category>
       <description><![CDATA[<a href="https://austinhenley.com/blog/facultyinterviewquestions.html">https://austinhenley.com/blog/facultyinterviewquestions.html</a>]]></description>
     </item>
     <item>
@@ -578,7 +579,6 @@
       <pubDate>Fri, 11 Nov 2016 11:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/favwikiarticles.html</link>
       <author>azh321@gmail.com (Austin Z. Henley)</author>
-      <category>Development</category>
       <description><![CDATA[<a href="https://austinhenley.com/blog/favwikiarticles.html">https://austinhenley.com/blog/favwikiarticles.html</a>]]></description>
     </item>
   </channel>
