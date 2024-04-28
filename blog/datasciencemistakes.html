@@ -73,7 +73,7 @@
 
 <p>A logical error is when the program behaves differently than expected, though it does not throw an error. One cause for this is <i>misunderstanding the data</i>, such as using the wrong columns or values. For example, a student used the column <i>PDAT</i> instead of <i>P_NUMVRC</i> which contradicts what their code comment says. Another example, a student incorrectly used <i>male</i> and <i>female</i> instead of <i>1</i> and <i>2</i> when filtering.</p>
 
-<img src="images/pandasmistakes.png" class="center" style="max-width:90%;">
+<img src="images/pandasmistakes.png" class="center" style="max-width:90%;" alt="A student's Python code with two mistakes highlighted.">
 
 <p>Another cause is <i>misunderstanding the problem statement</i>. For example, rounding values when the actual value is expected, dividing by the wrong value, or incorrectly ordering dictionary keys. Students also made mistakes <i>handling missing values</i>. For example, when computing a correlation between two columns, a student replaced all missing values in both columns with 0.</p>
 
@@ -95,7 +95,7 @@
 
 <p>For many students, it is the first time that they are working with a large dataset. Teaching them data literacy and how to understand the dataset domain is of huge importance and is unlike a typical CS1 course. Another major difference between CS1 and DS1, is that data science courses immediately teach libraries (rather than just core programming language constructs) to accomplish tasks. </p>
 
-<img src="images/datasciencepedagogy.png" class="center" style="max-width:98%;">
+<img src="images/datasciencepedagogy.png" class="center" style="max-width:98%;" alt="Table 2 from our paper that shows the 5 competencies we identified along with pedagogical recommendations for each.">
 
 <p>As part of this project (though only briefly described in the paper), we deployed an LLM-powered AI tutor to a large data science course. It aimed to help students not just with code correctness, but also domain knowledge, data literacy, and data science best practices. The system used not only the student's code, but also the program output, AST information, characteristics of the dataframe, and code optimality metrics. The system also used previously graded assignments from past semesters of the course to provide better feedback.</p>
 
