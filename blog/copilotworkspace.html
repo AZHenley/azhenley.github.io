@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>How I would redesign Copilot Workspace - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="TODO.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="How I would redesign Copilot Workspace">
+    <meta property="og:description" content="TODO.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/myoctocat.jpg">
+    <meta property="og:url" content="https://austinhenley.com/blog/copilotworkspace.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + developer tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">How I would redesign Copilot Workspace</h1>
+	<small>4/29/2024</small><br><br>
+
+<img src="images/myoctocat.jpg" class="center" style="max-width:50%;" alt="TODO.">
+
+<p>Today GitHub announced their new project: Copilot Workspace.</p> 
+
+<p>It is a task-oriented tool that lets you describe what you want to do within in a repository, and it will generate an editable plan of action, identify which files are relevant, and propose code changes to implement your requested changes.</p>
+
+<p>I've been using it for a few days and want to share my thoughts.</p>
+
+<p><i>Disclaimer: This project is very, very early stages and still evolving rapidly. My feedback will likely be outdated soon. I've worked previously with the GitHub Next team and I'm huge fans of them&mdash;they are brilliant.</i></p>
+
+<img src="images/copilotworkspace.png" class="center" style="max-width:98%;" alt="TODO.">
+
+<p><b>TL;DR:</b> Copilot Workspace is a great concept. But the UX and framing is entirely wrong and sets the wrong expectation for users. The current prototype is <i>very</i> slow (5+ minutes for one-line code changes) and the generated code is often buggy or has <i>nothing</i> to do with the specification. The generated plan is usually good. ChatGPT does a much better job in my head-to-head comparisons (assuming I already know exactly what code is relevant). I'm still optimistic of where it can go from here.</p>
+
+<p>I don't want to spend much time talking about the performance or accuracy of the tool. It is powered by LLMs and it has all of the same consequences. That part will get better.</p>
+
+<hr>
+
+<p>More importantly, what is the <b>goal</b> of Copilot Workspace?</p>
+
+<img src="images/dohmketweet.jpg" class="center" style="max-width:70%;" alt="TODO.">
+
+<h3>Is the goal for it to implement features and fix bugs?</h3>
+
+<p>That is what Copilot Workspace's user interface conveys to me. It turns my workflow into (1) tell it what I want and (2) do a code review of the result.</p>
+
+<p>However, it doesn't come anywhere close to achieving this. It is very slow, the generated code was not good or was missing, it doesn't provide context, and there isn't a fast feedback loop to iterate. Worst of all, it skips all of the steps where I really dig into the code and build a mental model of how it works. There is value in that process beyond the resulting code.</p>
+
+<p>And it is ok that Copilot Workspace falls short at independently completing tasks, because <b>I don't think this should be the goal</b>.</p>
+
+<h3>Is it for helping me explore?</h3>
+
+<p>Sometimes I really need a pair programmer next to me. Not something to answer questions or write code, but to point out something on my screen and say "hey, go look into that!" or "don't forget about that other thing". I can see Copilot Workspace being valuable for discovering details that I don't know about (and don't know to ask) for a given task. Remember, people can be <a href="naturallanguageui.html">bad with words</a> so there needs to be more <a href="trappedchat.html">proactive</a> AI assistants.</p>
+
+<p>However, using the tool feels like having tunnel vision and it sets the wrong expectations. It frames the process as a code review. If it is for exploring the space, it does so without providing any exploration features. I can't ask it follow up questions, I can't see multiple design options, and I can't use Copilot to <i>quickly</i> iterate on the code.</p>
+
+<h3>Is it for giving me a starting point?</h3>
+
+<p>A lot of times, it can be hard to get started on a task. How great would it be for the AI to tell you here are the relevant files, here are some pitfalls to watch out for, and here are the subtasks you need to go do?</p>
+
+<p>If this is the goal, it is again not achieving it. Currently Copilot Workspace feels like a very "heavy" one-and-done code generator that is difficult to iterate with. Instead, it could start as a conversation that builds up a task plan and list of relevant files incrementally. You should go back and forth between the code and the conversation. As you make changes or discover new information, it automatically updates the task plan.</p>
+
+<hr>
+
+<p>If I had a personal programmer that sat next to me, how would I work with them? Would I give them a sticky note with the task and wait for them to come back with the code for me to verify?</p>
+
+<p>Or would we ask each other clarifying questions, point out significant details, discuss design tradeoffs, and show incremental progress as we work?</p>
+
+<p>I think that an iterative human-in-the-loop flow is not just the ideal UX for developer tools, but also necessary because of how inconsistent LLMs are. The last 4 out of 5 sessions I had with Copilot Workspace, it completely ignored the task specification, including trivial ones like to add a comment! I'd only use code from 2 out of 12 sessions, and those were very simple tasks. The plans it generates continue to overpromise and get my hopes up. It can't handle completing multi-step tasks in one pass and I will struggle anyway with reviewing complex changes in one pass.</p>
+
+<p>This is fundamentally a <b>human problem</b>, even after you solve all the problems of LLMs.</p>
+
+<p>So, how would I redesign Copilot Workspace?</p>
+
+<ul>
+    <li><b>Iteration.</b> The entire process should be iterative. Expressing the task, articulating the plan, selecting which proposed code changes to use, and verifying the result.</li>
+    <li><b>Expectations.</b> It needs to be reframed away from a code review with the red/green diff. Copilot already does this well in VS Code: gray text <i>suggestions</i> that I can quickly accept or reject. It is providing suggestions. In rapid succession. Don't overpromise. You'll lose trust otherwise.</li>
+    <li><b>Exploration.</b> I don't mean exploring the codebase, I mean exploring the solution space. Why can't I see alternatives for each changed code block (again, like Copilot)? Why can't I pick and choose portions of the code to regenerate?</li>
+    <li><b>Explanation.</b> ChatGPT has spoiled me with its ability to answer <i>"why"</i> and <i>"what if"</i> questions about code. Why doesn't Copilot Workspace walk me through the implications of whichever implementation I go with? Why can't I ask it follow ups like <i>"How does this handle X?"</i> or <i>"Why did you do it like this?"</i>.</li>
+    <li><b>Integration.</b> Most of my tools are in VS Code and the information I need to make decisions is probably more easily accessible from in there. I'd put Copilot Workspace inside VS Code. Plus then I can use Copilot to quickly fix all the buggy generated code.</li>
+    <li><b>Validation.</b> One of the most difficult problems is validating code (whether it is written by a human or AI!) yet this tool does nothing to help. Why doesn't it tell me which blocks of code satisfy which items from the specification/plan? Why doesn't it suggest ways to test whether it was successful? Show me evidence!</li>
+</ul>
+
+<hr>
+
+<p>Is Copilot Workspace an autonomous developer that can accomplish tasks on my behalf? No.</p>
+
+<p>But it can be a promising leap forward in augmenting people during cognitively demanding tasks.</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
