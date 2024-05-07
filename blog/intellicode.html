@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exploring 50 user interfaces for AI code suggestions - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="What is the optimal way for AI tools to suggest code in the code editor?">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Exploring 50 user interfaces for AI code suggestions">
+    <meta property="og:description" content="What is the optimal way for AI tools to suggest code in the code editor?">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/singlelinecodesuggestions.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/intellicode.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + developer tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Exploring 50 user interfaces for AI code suggestions</h1>
+	<small>5/7/2024</small><br><br>
+
+<p><i>This post is a summary of our ICSE-SEIP'23 paper, "Towards More Effective AI-Assisted Programming: A Systematic Design Exploration to Improve Visual Studio IntelliCode's User Experience"</a>. See the <a href="../pubs/Vaithilingam2023ICSE_IntelliCode.pdf">paper</a> for more details. Thanks to <a href="https://priyan.info">Priyan Vaithilingam</a> for leading this project!</i></p>
+
+
+<p>AI code suggestions in code editors, such as Copilot and Visual Studio IntelliCode, are fairly common place now.</p>
+
+<img src="images/graytextsuggestion.png" class="center" style="max-width:80%;" alt="Screenshot of a typical gray-text code suggestion that is autocompleting an IF statement.">
+
+<p>What is the optimal way to present these code suggestions to users? Showing the suggestion as inline gray text is common. But are there better ways? What if it is a multi-line change that modifies existing code?</p>
+
+<p>These are the questions we wanted to answer.</p>
+
+<h3>Methodology</h3>
+
+<p>We iteratively explored 50 or so designs for inline code change interfaces in Visual Studio. We filtered our designs down to 19 which we then tested in a series of 7 lab studies involving 61 developers.</p>
+
+<p>The lab studies involved small coding tasks like adding a new property or refactoring. The developers were not informed of the AI code suggestion tool. We used Visual Studio's <i>lightbulb</i> as a baseline interface, where an icon by the line of code pops up and can be clicked to view suggestions.</p> 
+
+<img src="images/intellicodestudymethod.png" class="center" style="max-width:70%;" alt="Illustration of our methodology: multiple parallel designs, filtered through voting, user testing, merging the best ideas, sensemaking, repeat.">
+
+<p>Finally, we conducted a large-scale deployment of the two most promising designs in Visual Studio 2022. One design was released in a public release and the other in an opt-in preview release.</p>
+
+<h3>Designs</h3>
+
+<p>We explored interfaces for three types of interfaces: additive changes, single-line changes, and multi-line changes.</p>
+
+<p><b>Additive change suggestions</b> can involve inserting new code at one or multiple places. We re-used gray text for this:</p>
+
+<img src="images/insertcodesuggestions.png" class="center" style="max-width:80%;" alt="Screenshot of a gray-text suggestion that is inserting code into two non-adjacent lines of code.">
+
+<p><b>Single-line change suggestions</b> can involve adding or deleting tokens on a single line. We tried numerous ways to present this, such as gray text, strike-through, side-by-side diffs, and in-place diffs. Four designs are shown below:</p>
+
+<img src="images/singlelinecodesuggestions.png" class="center" style="max-width:80%;" alt="Four different designs of single-line change suggestions.">
+
+<p><b>Multi-line change suggestions</b> can involve adding or deleting tokens on multiple lines. We tried different variations of the single-line designs for this. Four designs are shown below:</p>
+
+<img src="images/multilinecodesuggestions.png" class="center" style="max-width:98%;" alt="Four different designs of multi-line change suggestions.">
+
+<h3>Results</h3>
+
+<p>There were a <i>a lot</i> of results from these studies so I'll summarize some highlights:</p>
+
+<ul>
+    <li>The baseline (clickable lightbulb) is almost never clicked or noticed.</li>
+    <li>Developers liked small gray-text suggestions (similar to Copilot) though one developer questioned how much time it actually saved.</li>
+    <li>Developers said they won't accept suggestions that are not fully visible onscreen.</li>
+    <li>Developers were not willing to click to expand a large suggestion.</li>
+    <li>Developers preferred diff views over gray text or strike-through for both single-line and multi-line suggestions.</li>
+    <li>Developers wanted to see the original code and the suggestion simultaneously.</li>
+    <li>Developers found that too many large suggestions are distracting.</li>
+    <li>Developers did not like the designs that interweaved suggestions with their original code.</li>
+    <li>Developers did not like the designs that used a popup window.</li>
+</ul>
+
+<p>For the field deployment, we released two designs. (1) An inline additive interface that uses gray text which led to a <b>3.5x increase</b> in usage. (2) An inline single-line interface that uses a diff view which led to a <b>176% increase</b> in accepted suggestions from <b>29% more</b> users.</p>
+
+<h3>Design principles for inline code suggestions</h3>
+
+<p>Through all our interviews and user studies, we inductively came up with five design principles for inline code suggestions:</p>
+
+<ul>
+    <li><b>Glanceable suggestions.</b> Suggestions should be proactively visible to the user to make it easy to discover and take action.</li>
+    <li><b>Juxtaposition.</b> The suggestion should explicitly indicate and juxtapose the existing code affected by the suggestion and the proposed code to improve user comprehension and support quick action.</li>
+    <li><b>Simplicity through familiarity.</b> Reusing existing familiar interface elements to indicate proposed changes reduces visual clutter, improves comprehension, and reduces cognitive load.</li>
+    <li><b>Sufficient visibility for validation.</b> The users should be able to see the whole suggestion when taking the action to prevent premature-commitment.</li>
+    <li><b>Snoozability of suggestions.</b> The user should be able to snooze inline suggestions to prevent interruptions when user intends.</li>
+</ul>
+
+<hr>
+
+<p>For more, see our paper: <a href="../pubs/Vaithilingam2023ICSE_IntelliCode.pdf">Towards More Effective AI-Assisted Programming: A Systematic Design Exploration to Improve Visual Studio IntelliCode's User Experience</a>. Special thanks to my co-authors: Priyan Vaithilingam, Elena Glassman, Peter Groenwegen, Sumit Gulwani, Rohan Malpani, David Pugh, Arjun Radhakrishna, Gustavo Soares, Joey Wang, and Aaron Yim.</p>
+
+<br><br><br><br>
+
+</body>
+</html>
