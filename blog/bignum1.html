@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Making a bignum library for fun - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="How do computer handle really, really big numbers? Let's find out.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Making a bignum library for fun">
+    <meta property="og:description" content="How do computer handle really, really big numbers? Let's find out.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/bignumsnippet.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/bignum1.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I work on AI + developer tools.</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Making a bignum library for fun</h1>
+	<small>6/13/2024</small><br><br>
+
+
+<p>What happens when numbers get too big for a computer to work with?</p>
+
+<p>For example, a 64-bit unsigned integer can be as large as 18,446,744,073,709,551,615. That is... huge. But what if it isn't enough?</p>
+
+<p>Enter <i>bignums</i>, or <a href="https://en.wikipedia.org/wiki/Arbitrary-precision_arithmetic">arbitrary-precision numbers</a>. These very, very large numbers allow you to go beyond CPU limitations for representing integers and performing arithmetic, limited only by the computer's memory.</p>
+
+<img src="images/pythonbignumber.png" class="center" style="max-width:80%;">
+
+<p>If you open up Python and throw some really, really big numbers at it, you'll see that it works without any issue. Although C requires using a library for bignums, Python supports them right out of the box. In fact, you can use big numbers and small numbers, interchangeably and it is completely abstracted away from the programmer.</p>
+
+<hr>
+
+<p>I've always wanted to know how these bignum libraries work, so <b>this is my adventure in learning about them</b>.
+
+<p>Since Python supports them, I thought I'd just go learn from CPython's implementation. It can be found in <a href="https://github.com/python/cpython/blob/main/Objects/longobject.c">longobject.c</a>. Nearly 6000 lines and 100 functions.</p> 
+
+<img src="images/cpythonlongobject.png" class="center" style="max-width:100%;">
+
+<p>Nevermind. It is more fun to learn from doing, so I'll implement a bignum library myself! I'm going to use C but the approach should be similar in most languages. You can see my code on <a href="https://github.com/AZHenley/bignum">GitHub</a>.</p>
+
+<h3>Representing big numbers</h3>
+
+<p>I had an initial theory of how bignums work: treat numbers as strings and manually perform arithmetic on the digits as you would on a piece of paper. So that is what I did.</p>
+
+<pre class="prettyprint lang-c">
+typedef struct {
+    char *digits;
+    int size;
+} BigNum;
+</pre>
+
+<p>This <i>BigNum</i> struct will represent our numbers by storing an array of digits. Next we need a way to initialize a BigNum with a value.</p>
+
+<pre class="prettyprint lang-c">
+void bignum_init(BigNum *n, const char *str) {
+    n-&gt;size = strlen(str);
+    n-&gt;digits = malloc(n-&gt;size * sizeof(char));
+    for (int i = 0; i &lt; n-&gt;size; i++) {
+        // Store digits in reverse. Convert from ASCII.
+        n-&gt;digits[i] = str[n-&gt;size - 1 - i] - '0'; 
+    }
+}
+</pre>
+
+<p>This lets us initialize a BigNum with a value from a string. It allocates memory based on how many digits the number has. It subtracts '0' from the digits to convert the ASCII value to the numeric value (e.g., '3' is 51 in ASCII so subtracting '0' gives us the numeric value, <i>3</i>).</p>
+
+<p>We then store the digits in reverse order. This makes some of the arithmetic logic easier later, like for carrying. So the number 123 will become [3, 2, 1].</p>
+
+<p>Now we can create a BigNum like so:</p>
+
+<pre class="prettyprint lang-c">
+BigNum a;
+bignum_init(&a, "12345678901234567890");
+</pre>
+
+<p>We can free the memory by using:</p>
+
+<pre class="prettyprint lang-c">
+void bignum_free(BigNum *n) {
+    free(n-&gt;digits);
+    n-&gt;digits = NULL;
+    n-&gt;size = 0;
+}
+</pre>
+
+<p>We don't really know if our code is working as expected though, so let's implement a print function.</p>
+
+<pre class="prettyprint lang-c">
+void bignum_print(BigNum *n) {
+    printf("BigNum: ");
+    for (int i = n-&gt;size - 1; i &gt;= 0; i--) {
+        printf("%d", n-&gt;digits[i]);
+    }
+    printf("\n");
+}
+</pre>
+
+<p>It loops through the digits, starting with the last element in the array, and print each of them as integers.</p>
+
+<p>Try it and you'll see we can now represent really big numbers. It is pretty boring though since we can't do anything with them other than look at them.</p>
+
+<h3>Comparison</h3>
+
+<p>It is necessary to compare numbers, like <i>a &gt; b</i> or <i>a == b</i>. We will implement a comparison function to handle greater than, less than, and equal to.</p>
+
+<pre class="prettyprint lang-c">
+int bignum_compare(const BigNum *a, const BigNum *b) {
+    if (a-&gt;size != b-&gt;size) {
+        return a-&gt;size &gt; b-&gt;size ? 1 : -1;
+    }
+    for (int i = a-&gt;size - 1; i &gt;= 0; i--) {
+        if (a-&gt;digits[i] != b-&gt;digits[i]) {
+            return a-&gt;digits[i] &gt; b-&gt;digits[i] ? 1 : -1;
+        }
+    }
+    return 0;
+}
+</pre>
+
+<p>Let's walk through it. First, we compare the <i>size</i> (how many digits) of both numbers. This easily tells us if a number is bigger than another. We return 1 if <i>a &gt; b</i> and -1 if <i>a &lt; b</i>.</p>
+
+<p>If the numbers have the same number of digits, then we do to do a digit by digit comparison. We start with the most significant digit and go until a difference is found or there are no more digits. If the numbers are equal, we return 0.</p>
+
+<p>Here is how you can try it:</p>
+
+<pre class="prettyprint lang-c">
+int main() {
+    BigNum a, b;
+
+    bignum_init(&a, "12345678901234567890");
+    bignum_init(&b, "98765432109876543210");
+
+    bignum_print(&a);
+    bignum_print(&b);
+
+    int cmp = bignum_compare(&a, &b);
+    if (cmp &gt; 0) {
+        printf("a is greater than b\n");
+    } else if (cmp &lt; 0) {
+        printf("a is less than b\n");
+    } else {
+        printf("a is equal to b\n");
+    }
+
+    bignum_free(&a);
+    bignum_free(&b);
+
+    return 0;
+}
+</pre>
+
+<p>You should be greeted with <i>a is less than b</i> when you run it.</p>
+
+<h3>Addition</h3>
+
+<p>We are finally to the fun stuff: arithmetic!</p>
+
+<p>The add function will work the same as you learned in grade school. Start with the least significant digits, add them, carry the 1 if necessary, and repeat for the next column.</p>
+
+<pre class="prettyprint lang-c">
+void bignum_add(BigNum *result, const BigNum *a, const BigNum *b) {
+    int max_size = a-&gt;size &gt; b-&gt;size ? a-&gt;size : b-&gt;size;
+    result-&gt;digits = malloc((max_size + 1) * sizeof(char));
+    int carry = 0;
+    int i;
+
+    for (i = 0; i &lt; max_size || carry; i++) {
+        int sum = carry + (i &lt; a-&gt;size ? a-&gt;digits[i] : 0) + (i &lt; b-&gt;size ? b-&gt;digits[i] : 0);
+        result-&gt;digits[i] = sum % 10; // Store the last digit of the sum.
+        carry = sum / 10; // Carry any overflow.
+    }
+    result-&gt;size = i;
+}
+</pre>
+
+<p>Let's break down how this works. First, we determine how many digits the result might be by taking the size of the bigger number and adding 1. For example, if the addition involved 99 + 3 then our bigger operand is 2 digits but we add 1 to handle the case of carrying over to a third digit (like our example would require). Then we allocate memory for a BigNum of that size.</p>
+
+<p>The loop looks more complex than it is. At each iteration, add the corresponding digits from both operands without going out of bounds of each array. If either of the arrays go out of bounds, treat the digit as a 0. Also handle the carry. Continue the loop while there are still digits or there is a carry.</p>
+
+<p>Test it out on a variety of combinations, big and small, small and big, same sizes, different sizes, etc.</p>
+
+<pre class="prettyprint lang-c">
+int main() {
+    BigNum a, b, sum;
+
+    bignum_init(&a, "12345678901234567890");
+    bignum_init(&b, "98765432109876543210");
+
+    bignum_print(&a);
+    bignum_print(&b);
+
+    bignum_add(&sum, &a, &b);
+    bignum_print(&sum);
+    bignum_free(&sum);
+
+    bignum_free(&a);
+    bignum_free(&b);
+
+    return 0;
+}
+</pre>
+
+<p>It should print the sum as <i>111111111011111111100</i>.</p>
+
+<p>Yippee! Our addition is working!</p>
+
+<h3>Multiplication</h3>
+
+<p>Following a similar pattern as addition, multiplication won't be that difficult to implement. It too will use a grade school algorithm: multiply each digit of the first number by each digit of the second number, and then add all the results together.</p>
+
+<pre class="prettyprint lang-c">
+void bignum_multiply(BigNum *result, const BigNum *a, const BigNum *b) {
+    result-&gt;digits = calloc(a-&gt;size + b-&gt;size, sizeof(char));
+    result-&gt;size = a-&gt;size + b-&gt;size; // Max size we will need.
+
+    for (int i = 0; i &lt; a-&gt;size; i++) {
+        for (int j = 0; j &lt; b-&gt;size; j++) {
+            int index = i + j;
+            result-&gt;digits[index] += a-&gt;digits[i] * b-&gt;digits[j];
+            result-&gt;digits[index + 1] += result-&gt;digits[index] / 10;
+            result-&gt;digits[index] %= 10;
+        }
+    }
+    
+    // Trim any leading zeros
+    while (result-&gt;size > 1 && result-&gt;digits[result-&gt;size - 1] == 0) {
+        result-&gt;size--;
+    }
+}
+</pre>
+
+<p>It starts by determining the upper bound of how many digits the multiplication could produce and allocates them with zeroed values.</p>
+
+<p>Then we have a nested loop based on the lengths of the operands. At each iteration, we multiply the corresponding digits and add it to result's corresponding digit. Then move any overflow from that digit to the next digit. Finally, we remove any leading zeros since we may have overestimated the number of digits.</p>
+
+<p>Let's test everything all together now:</p>
+
+<pre class="prettyprint lang-c">
+int main() {
+    BigNum a, b, sum, product;
+
+    bignum_init(&a, "12345678901234567890");
+    bignum_init(&b, "98765432109876543210");
+
+    bignum_print(&a);
+    bignum_print(&b);
+
+    bignum_add(&sum, &a, &b);
+    bignum_print(&sum);
+    bignum_free(&sum);
+
+    bignum_multiply(&product, &a, &b);
+    bignum_print(&product);
+    bignum_free(&product);
+
+    int cmp_result = bignum_compare(&a, &b);
+    if (cmp_result &gt; 0) {
+        printf("a is greater than b\n");
+    } else if (cmp_result &lt; 0) {
+        printf("a is less than b\n");
+    } else {
+        printf("a is equal to b\n");
+    }
+
+    bignum_free(&a);
+    bignum_free(&b);
+
+    return 0;
+}
+</pre>
+
+<p>Which should yield:</p>
+
+<img src="images/bignumoutput.png" class="center" style="max-width:95%;">
+
+<h3>Is that it?</h3>
+
+<p>There we go, we have demonstrated a working concept of a bignum library. The code can be found on <a href="https://github.com/AZHenley/bignum">GitHub</a>. We can initialize, print, compare, add, and multiply big numbers. I was surprised at how straightforward it all is! Of course, there is still a lot we'd want to add before actually using this (negative values, type conversions, and many more operations).</p>
+
+<p>I'm not done with this adventure though. There are some <i>really interesting</i> optimizations that I want to learn about next.</p>
+
+<p><b>To be continued...</b></p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
