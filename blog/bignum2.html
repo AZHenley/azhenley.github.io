@@ -54,23 +54,23 @@
 	<h1 class="blogtitle">Optimizing a bignum library for fun</h1>
 	<small>6/20/2024</small><br><br>
 
-<p>I'm down a rabbit hole of learning how bignums work. See the first post, <a href="bignum1.html">making a bignum library for fun</a>, where I implement a working arbitrary-precision number library with some basic operations.</p>
+<p>I'm down a rabbit hole of learning how bignums work. In the first post, <a href="bignum1.html">making a bignum library for fun</a>, I implemented a arbitrary-precision number library with some basic operations.</p>
 
 <p>My naive approach represents numbers as strings of decimal digits. The number 321 becomes <i>'3', '2', '1'</i>. Then addition and multiplication is performed similar to how we learned in school to do it digit by digit.</p>
 
 <p>We can do much better!</p>
 
-<p>In this post, I improve how numbers are stored, implement a faster multiplication algorithm, and benchmark the time improvements.</p>
+<p>In this post, I improve how the numbers are stored, implement a faster multiplication algorithm, and benchmark the time improvements.</p>
 
 <hr> 
 
 <h3>More efficient digits</h3>
 
-<p>The most obvious optimization to make is to use a much larger base for the "digits". For example, rather than an array of digits that each range from 0 to 9, we can store an array of number chunks that each range from 0 to a really big number. It will allow us to use memory much, much more efficiently. It will also greatly reduce the number of steps to perform our addition and multiplication since there are fewer digits.</p>
+<p>The most obvious optimization is to use a much larger base for the "digits". For example, rather than an array of digits that each range from 0 to 9, we can store an array of number chunks that each range from 0 to the limit of whatever integer size we use. It will allow us to use memory much, much more efficiently. It will also greatly reduce the number of steps to perform our addition and multiplication since there are fewer digits.</p>
 
 <p>There are tradeoffs for how many bits to use per chunk: memory, arithmetic performance, cache locality, overflow management, native CPU operations, complexity of our code, etc. Looking for inspiration, I saw CPython uses 30-bit digits and GNU Multiple Precision Arithmetic Library uses 64-bit digits on 64-bit CPUs.</p>
 
-<p>I didn't do an in-depth analysis of what an optimal size may be, but even using 30-bit digits means the numbers can get <b>very large</b> with a few digits. Each 30-bit digit can hold 9 decimal digits. For example, <i>987654321</i> will fit inside a <i>single</i> digit and <i>987654321987654321</i> will fit in just two digits! This is already more precision than I've ever needed, and the library can use an arbitrary number of these digits in our bignum.</p>
+<p>I didn't do an in-depth analysis of what an optimal size may be, but even using 30-bit digits means the numbers can get <b>very large</b> with a few digits. Each 30-bit digit can hold 9 decimal digits. For example, <i>987654321</i> will fit in a single 30-bit digit and <i>987654321987654321</i> will fit in just two! This is already more precision than I've ever needed, and the library can use an arbitrary number of these digits in our bignum.</p>
 
 <p>Let's implement the 30-bit digits. It will make our code simpler since the sum of any two digits will not overflow using a <i>uint32</i> and the product won't overflow a <i>uint64</i>.</p>
 

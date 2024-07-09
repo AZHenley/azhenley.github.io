@@ -8,6 +8,13 @@
     <language>en-us</language>
     <copyright>Austin Z. Henley (2024)</copyright>
     <item>
+      <title>Optimizing a bignum library for fun</title>
+      <pubDate>Tue, 9 Jun 2024 15:00:01 -0400</pubDate>
+      <link>https://austinhenley.com/blog/bignum2.html</link>
+      <author>azhenley@cmu.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://austinhenley.com/blog/bignum2.html">https://austinhenley.com/blog/bignum2.html</a>]]></description>
+    </item>
+    <item>
       <title>Making a bignum library for fun</title>
       <pubDate>Thu, 13 Jun 2024 18:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/bignum1.html</link>
