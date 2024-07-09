@@ -56,6 +56,24 @@
 
 <p>I'm down a rabbit hole of learning how bignums work. In the first post, <a href="bignum1.html">making a bignum library for fun</a>, I implemented a arbitrary-precision number library with some basic operations.</p>
 
+<pre class="prettyprint lang-c">
+int main() {
+    BigNum a, b, sum;
+
+    bignum_init(&a, "12345678901234567890");
+    bignum_init(&b, "98765432109876543210");
+
+    bignum_add(&sum, &a, &b);
+    bignum_print(&sum);
+
+    bignum_free(&a);
+    bignum_free(&b);
+    bignum_free(&sum);
+
+    return 0;
+}
+</pre>
+
 <p>My naive approach represents numbers as strings of decimal digits. The number 321 becomes <i>'3', '2', '1'</i>. Then addition and multiplication is performed similar to how we learned in school to do it digit by digit.</p>
 
 <p>We can do much better!</p>
