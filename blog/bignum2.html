@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Optimizing a bignum library for fun - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Can I make math operations run 100x faster on really, really big numbers?">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Optimizing a bignum library for fun">
+    <meta property="og:description" content="Can I make math operations run 100x faster on really, really big numbers?">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/bignumbenchmark.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/bignum2.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azh321@gmail.com">azh321@gmail.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Optimizing a bignum library for fun</h1>
+	<small>6/20/2024</small><br><br>
+
+<p>I'm down a rabbit hole of learning how bignums work. See the first post, <a href="bignum1.html">making a bignum library for fun</a>, where I implement a working arbitrary-precision number library with some basic operations.</p>
+
+<p>My naive approach represents numbers as strings of decimal digits. The number 321 becomes <i>'3', '2', '1'</i>. Then addition and multiplication is performed similar to how we learned in school to do it digit by digit.</p>
+
+<p>We can do much better!</p>
+
+<p>In this post, I improve how numbers are stored, implement a faster multiplication algorithm, and benchmark the time improvements.</p>
+
+<hr> 
+
+<h3>More efficient digits</h3>
+
+<p>The most obvious optimization to make is to use a much larger base for the "digits". For example, rather than an array of digits that each range from 0 to 9, we can store an array of number chunks that each range from 0 to a really big number. It will allow us to use memory much, much more efficiently. It will also greatly reduce the number of steps to perform our addition and multiplication since there are fewer digits.</p>
+
+<p>There are tradeoffs for how many bits to use per chunk: memory, arithmetic performance, cache locality, overflow management, native CPU operations, complexity of our code, etc. Looking for inspiration, I saw CPython uses 30-bit digits and GNU Multiple Precision Arithmetic Library uses 64-bit digits on 64-bit CPUs.</p>
+
+<p>I didn't do an in-depth analysis of what an optimal size may be, but even using 30-bit digits means the numbers can get <b>very large</b> with a few digits. Each 30-bit digit can hold 9 decimal digits. For example, <i>987654321</i> will fit inside a <i>single</i> digit and <i>987654321987654321</i> will fit in just two digits! This is already more precision than I've ever needed, and the library can use an arbitrary number of these digits in our bignum.</p>
+
+<p>Let's implement the 30-bit digits. It will make our code simpler since the sum of any two digits will not overflow using a <i>uint32</i> and the product won't overflow a <i>uint64</i>.</p>
+
+<pre class="prettyprint lang-c">
+typedef struct {
+    uint32_t *digits; // Use 30-bit digits.
+    int size;
+} BigNum;
+
+void bignum_init(BigNum *n, const char *str) {
+    int len = strlen(str);
+    int num_digits = (len + 8) / 9; // Each 30-bit chunk can store up to 9 base-10 digits.
+    n-&gt;size = num_digits;
+    n-&gt;digits = calloc(n-&gt;size, sizeof(uint32_t)); // Initialize with zeros.
+	
+    for (int i = 0; i &lt; len; i++) {
+        int digit_pos = i / 9;
+        int offset = i % 9;
+        uint32_t digit = str[len - 1 - i] - '0'; // Convert from ASCII.
+        uint32_t multiplier = 1;
+        for (int j = 0; j &lt; offset; j++) {
+            multiplier *= 10; // Correctly place the digit.
+        }
+        n-&gt;digits[digit_pos] += digit * multiplier;
+    }
+}
+</pre>
+
+<p>The bignum is now made up of an array of <i>uint32_t</i> instead of <i>char</i>. The <b>bignum_init</b> function will convert a base-10 number string to an array of 30-bit digits. First, it calculates how many 30-bit digits will be needed and initializes them to zero. Then it loops through the string from least significant digit to most significant digit, converting them to chunks of 9 digits, each stored in a <i>uint32_t</i>. It will flow to the next 30-bit digit as needed.</p>
+
+<p>In order to easily test this, we should revise the <b>bignum_print</b> function. Previously, we would just loop through the base-10 digits and print them. Now we have to handle three different cases just for zeros: leading zeros in a digit, a middle chunk that is zero, and the entire bignum being zero.</p>
+
+<pre class="prettyprint lang-c">
+void bignum_print(const BigNum *n) {
+    printf("BigNum: ");
+    int leading = 1;
+    for (int i = n-&gt;size - 1; i &gt;= 0; i--) {
+        if (leading) {
+            printf("%u", n-&gt;digits[i]);
+            leading = 0;
+        } else {
+            printf("%09u", n-&gt;digits[i]); // Print with leading zeros.
+        }
+    }
+    if (leading) {
+        printf("0"); // If the number is zero, print a single zero.
+    }
+    printf("\n");
+}
+</pre>
+
+<p>Try creating a bignum from <i>"987654321987654321"</i>. Does it print correctly? It does for me! Inspect the <i>digits</i> field to validate it is storing them in the way you are imagining.</p>
+
+<h3>Higher-bit arithmetic</h3>
+
+<p>We have to modify the addition and multiplication functions to also operate on these 30-bit digits. They really aren't much different though.</p>
+
+<pre class="prettyprint lang-c">
+void bignum_add(BigNum *result, const BigNum *a, const BigNum *b) {
+    int max_size = a-&gt;size > b-&gt;size ? a-&gt;size : b-&gt;size;
+    result-&gt;digits = calloc(max_size + 1, sizeof(uint32_t)); // Initialize with zeros.
+    uint32_t carry = 0;
+    int i;
+
+    for (i = 0; i &lt; max_size || carry; i++) {
+        uint32_t sum = carry;
+        if (i &lt; a-&gt;size) sum += a-&gt;digits[i];
+        if (i &lt; b-&gt;size) sum += b-&gt;digits[i];
+        result-&gt;digits[i] = sum % 1000000000; // Store the last 30 bits.
+        carry = sum / 1000000000; // Carry any overflow.
+    }
+    result-&gt;size = (carry ? i + 1 : i); // Adjust size if needed.
+}
+</pre>
+
+<p>We still perform addition digit by digit, though this time with 30-bit digits (actually using 10<sup>9</sup> but bear with me).</p>
+
+<p>The updated multiplication is also virtually the same. We use a <i>uint64_t</i> to capture any overflow though.</p>
+
+<pre class="prettyprint lang-c">
+void bignum_multiply(BigNum *result, const BigNum *a, const BigNum *b) {
+    int max_size = a-&gt;size + b-&gt;size;
+    result-&gt;digits = calloc(max_size, sizeof(uint32_t));
+    result-&gt;size = max_size; // Max size we will need.
+
+    for (int i = 0; i &lt; a-&gt;size; i++) {
+        uint64_t carry = 0;
+        for (int j = 0; j &lt; b-&gt;size; j++) {
+            int index = i + j;
+            uint64_t product = (uint64_t)a-&gt;digits[i] * (uint64_t)b-&gt;digits[j] + (uint64_t)result-&gt;digits[index] + carry;
+            result-&gt;digits[index] = product % 1000000000; // Store the last 30 bits of the product
+            carry = product / 1000000000; // Carry any overflow.
+        }
+        result-&gt;digits[i + b-&gt;size] += carry; // Add any carry.
+    }
+	
+    // Trim any leading zeros.
+    while (result-&gt;size > 1 && result-&gt;digits[result-&gt;size - 1] == 0) {
+        result-&gt;size--;
+    }
+}
+</pre>
+
+<p>Try it out. If you add <i>987654321987654321</i> to <i>123456789123456789</i> then you should get <i>1111111111111111110</i>. Multiplying them should give you 121932631356500531347203169112635269.</p>
+
+<h3>Measure it</h3>
+
+<p>Everyone knows that any attempt at optimizing requires a rigorous, scientific benchmark to understand the improvements.</p>
+
+<p>To compare the original base-10 digits to this 30-bit digit version, I'll run add and multiply repeatedly on random numbers. I made a function to generate random bignums from n-length strings.</p>
+
+<p>The benchmarking code:</p>
+
+<pre class="prettyprint lang-c">
+char* generateRandomNumberString(int length) {
+    char *num = malloc((length + 1) * sizeof(char));
+    for (int i = 0; i &lt; length; i++) {
+        num[i] = '0' + (rand() % 10);
+    }
+    num[length] = '\0';
+    return num;
+}
+
+int main() {
+    srand(time(NULL));
+    int iterations = 10000;
+    int numLength = 1000;  // Length of the random numbers.
+
+    double total_addition_time = 0.0;
+    double total_multiplication_time = 0.0;
+
+    for (int i = 0; i &lt; iterations; i++) {
+        char *str1 = generateRandomNumberString(numLength);
+        char *str2 = generateRandomNumberString(numLength);
+
+        BigNum num1, num2, sum, product;
+        bignum_init(&num1, str1);
+        bignum_init(&num2, str2);
+        bignum_init(&sum, "");
+        bignum_init(&product, "");
+
+        // Benchmark addition.
+        clock_t start = clock();
+        bignum_add(&sum, &num1, &num2);
+        clock_t end = clock();
+        total_addition_time += (double)(end - start) / CLOCKS_PER_SEC;
+
+        // Benchmark multiplication.
+        start = clock();
+        bignum_multiply(&product, &num1, &num2);
+        end = clock();
+        total_multiplication_time += (double)(end - start) / CLOCKS_PER_SEC;
+
+        bignum_free(&num1);
+        bignum_free(&num2);
+        bignum_free(&sum);
+        bignum_free(&product);
+        free(str1);
+        free(str2);
+	}
+
+	printf("Total Addition Time: %f seconds\n", total_addition_time);
+	printf("Total Multiplication Time: %f seconds\n", total_multiplication_time);
+	return 0;
+}
+</pre>
+
+<p>How does it compare to the previous base-10 digits implementation on 10,000 operations with 1,000-digit numbers?</p>
+
+<img src="images/bignumbenchmark.png" class="center" style="max-width:95%;" alt="Bar charts comparing addition and multiplication times for base-10 digits and 30-bit digits.">
+
+<p>For addition, it is an 83% improvement from 0.04 seconds to 0.007 seconds. For multiplication, it is a 99% improvement from 63 seconds to 0.43 seconds. <b>Wow!</b> I knew the schoolyard multiplication algorithm with base-10 digits would be slow, but I did not expect this kind of speed up.</p>
+
+<p>We aren't done yet though.</p>
+
+<h3>Faster multiplication</h3>
+
+<p>From one of my college courses, I recalled algorithms for multiplication that are faster than the schoolyard approach we are using. A quick search shows the <a href="https://en.wikipedia.org/wiki/Karatsuba_algorithm">Karatsuba algorithm</a> to be popular for these sorts of things. Instead of multiplying two n-digit numbers, it does multiplication on three n/2-digit numbers, which apparently is a huge improvement.</p>
+
+<img src="images/karatsuba.png" class="center" style="max-width:95%;">
+
+<p>You can see my Karatsuba multiplication function on <a href="https://github.com/AZHenley/bignum/blob/f4ee868f716cff90d4bf67ce8901a741172d34fb/part2/bignum.c#L104">GitHub</a>. I adapted the pseudocode from Wikipedia with the help of Copilot.</p>
+
+<p>How much faster is it?</p>
+
+<p>Is it actually <b>2% slower</b> using the same benchmark parameters.</p>
+
+<p>Why? Apparently Karatsuba can be slower for <i>"smaller"</i> numbers due to overhead and additional operations. In fact, CPython only uses it for numbers with more than 70 30-bit digits. Those are big numbers!</p>
+
+<p>Fair enough, so I changed the benchmark to use random numbers with 10,000 digits instead of 1,000 and did see an improvement: 39.88 seconds for traditional multiplication versus 16.27 seconds for Karatsuba multiplication. A 59% improvement! I suspect it will get better and better as the number length grows.</p>
+
+<hr>
+
+<h3>What is next?</h3>
+
+<p>Alright, so we have made two major optimizations to the bignum library and measured the impact on running time. Using larger digits had a huge effect.</p>
+
+<p>If I were to continue working on this project, I'd focus on <b>usefulness</b>. It is still missing core features that you'd expect from even the most basic bignums:</p>
+
+<ul>
+    <li>Negative numbers</li>
+    <li>Subtraction and division</li>
+    <li>Exponentiation</li>
+    <li>Bitwise operations</li>
+    <li>Converting to/from other types</li>
+	<li>Tests <small>(I bet there are many bugs in my code)</small></li>
+</ul>
+
+
+<br><br><br><br>
+
+</body>
+</html>
