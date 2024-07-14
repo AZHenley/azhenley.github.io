@@ -53,7 +53,7 @@
 	<h1 class="blogtitle">Can ChatGPT do data science?</h1>
 	<small>7/14/2024</small><br><br>
 
-<img src="images/robotdoingscience.jpg" alt="" class="center" style="max-width:60%;border:1px solid #000000;">
+<img src="images/robotdoingscience.jpg" alt="Whimsical sketch of a robot doing science, badly." class="center" style="max-width:60%;border:1px solid #000000;">
 
 <p><i>This post is a summary of our paper, "Conversational Challenges in AI-Powered Data Science: Obstacles, Needs, and Design Opportunities". See the <a href="https://arxiv.org/abs/2310.16164">preprint</a> for more details. Thanks to my collaborators at Microsoft: Bhavya Chopra, Ananya Singha, Anna Fariha, Sumit Gulwani, Chris Parnin, and Ashish Tiwari.</i></p>
 
@@ -78,7 +78,7 @@
 
 <p>We observed the participants write 111 prompts to ChatGPT. They spent 64% of the task time preparing prompts, 27% adapting code, and the remaining time validating code. They often struggled with writing the initial prompt, especially for the feature selection task. They also iterated and refined their prompts many times, especially for the plotting task. To summarize their behavior, they all required multiple steps and the participants struggled with providing the right context to ChatGPT and then to adapt the response from ChatGPT to accomplish the task.</p>
 
-<img src="images/chatgptstudytime.png" alt="" class="center" style="max-width:90%;">
+<img src="images/chatgptstudytime.png" alt="Figure showing the time breakdown per task." class="center" style="max-width:90%;">
 
 <h3>Challenges when communicating with ChatGPT</h3> 
 
@@ -87,7 +87,7 @@
 <p><b>Sharing context is difficult (10 of 14 participants).</b> What information and how much? The data scientists begin prompt writing by figuring out which data and context they need to provide. One even called it "daunting" to get started. Some tried providing raw data, while others took elaborate steps to fetch information they deemed relevant. For example, they wrote new snippets in their notebooks to get information specifically for ChatGPT or they went to Excel to extract snippets of data. Some participants spent considerable effort reformatting information after pasting it into ChatGPT too.</p>
 
 <figure>
-<img src="images/chatgptcontextcount.png" alt="" class="center" style="max-width:100%;">
+<img src="images/chatgptcontextcount.png" alt="Table showing how many participants shared each type of context for each task." class="center" style="max-width:100%;">
 <figcaption><i>Frequency of data context shared by participants for prompt writing for each task.</i></figcaption>
 </figure>
 
@@ -102,7 +102,7 @@
 <p><b>Generation of repeated code (13 of 14 participants).</b> ChatGPT often generated redundant code, such as <i>pandas.read_csv()</i>. Blindly copy pasting such code would cause the participants' dataframes to be over written.</p>
 
 <figure>
-<img src="images/chatgptcodeadaptioncount.png" alt="" class="center" style="max-width:100%;">
+<img src="images/chatgptcodeadaptioncount.png" alt="Table showing how many times a code adaption and validation activity was performed by participants for each task." class="center" style="max-width:100%;">
 <figcaption>Frequency of code adaptation and validation activities performed by participants for each task.</figcaption>
 </figure>
 
@@ -125,7 +125,7 @@
 
 <p>The survey results can be seen below. It looks to be a coin toss for whether data scientists know if a task is suitable for ChatGPT or not. They strongly agree that they should include data in their prompt, it will require multiple back and forths with ChatGPT, and the code will require changes.</p>
 
-<img src="images/chatgptdssurvey.png" alt="" class="center" style="max-width:95%;">
+<img src="images/chatgptdssurvey.png" alt="Figure showing the survey results." class="center" style="max-width:95%;">
 
 <h3>Tool design recommendations</h3>
 
@@ -133,7 +133,7 @@
 
 <p><b>Provide preemptive and fluid context when interacting with AI assistants.</b> Participants spent considerable time writing their prompts and gathering context. 45% of the prompts included data that was manually entered or required additional scripts to obtain. Other interfaces for selecting data.</p>
 
-<img src="images/databrushing.png" alt="" class="center" style="max-width:90%;">
+<img src="images/databrushing.png" alt="A mockup of what a data context selecting interface could look like where you select regions of the screen to include." class="center" style="max-width:90%;">
 
 <p><b>Provide inquisitive feedback loops and validation-aware operations.</b> For open-ended or complex tasks, it can take many interactions with ChatGPT to get to a satisfactory result. Instead, the system could guide the user throughout the task and proactively ask clarifying questions. Rather than the system making assumptions, it could ask or provide options.</p>
 
