@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Can ChatGPT do data science? - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="We conducted two studies to understand the challenges faced by data scientists as they use ChatGPT.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Can ChatGPT do data science?">
+    <meta property="og:description" content="We conducted two studies to understand the challenges faced by data scientists as they use ChatGPT.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/robotdoingscience.jpg">
+    <meta property="og:url" content="https://austinhenley.com/blog/chatgptdatascience.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Can ChatGPT do data science?</h1>
+	<small>7/14/2024</small><br><br>
+
+<img src="images/robotdoingscience.jpg" alt="" class="center" style="max-width:60%;border:1px solid #000000;">
+
+<p><i>This post is a summary of our paper, "Conversational Challenges in AI-Powered Data Science: Obstacles, Needs, and Design Opportunities". See the <a href="https://arxiv.org/abs/2310.16164">preprint</a> for more details. Thanks to my collaborators at Microsoft: Bhavya Chopra, Ananya Singha, Anna Fariha, Sumit Gulwani, Chris Parnin, and Ashish Tiwari.</i></p>
+
+<hr>
+
+<h3>Conversational Challenges in AI-Powered Data Science</h3>
+
+<p>Programmers have found great value in ChatGPT, but can it do data science?</p>
+
+<p>The challenges of using ChatGPT (e.g., providing context, false assumptions, and hallucinations) are made worse for data science tasks. Data scientists work with a variety of resources, like datasets, code, notebooks, visualizations, documentations, and pipelines. The data is often very large and may have quality issues. The tasks and data may require domain expertise which is tedious to fully articulate to a chat assistant. Moreover, these challenges can go both ways, as data scientists have to understand the context, data, code, and assumptions in ChatGPT's responses.</p>
+
+<p>To understand how data scientists use ChatGPT and the challenges they face, we conducted two studies. In the first study, we observed 14 professional data scientists performing a series of common tasks while using ChatGPT. We avoided the use of integrated AI tools to give them complete control over prompt writing while also allowing us to study the fundamentals of interacting with AI for data science. The tasks involved type casting, splitting columns, feature selection, and plotting on the publicly available New York EMS emergency calls dataset.</p>
+
+<figure>
+<img src="images/chatgptstudytask.png" alt="A three part figure from one participant completing a task: their notebook, their prompt to ChatGPT, and ChatGPT's response." class="center" style="max-width:70%;">
+<figcaption><i>An example of one of the participant's working on a task. C shows the context retrieved by the participant, P shows their prompt, and A shows the answer provided by ChatGPT.</i></figcaption>
+</figure>
+
+<p>In the second study, we surveyed 114 professional data scientists to validate and generalize the findings from the observational study. We filtered out any respondents that did not have experience using LLMs for data science tasks. The survey consisted of 8 agree/disagree statements and an open-ended question.</p>
+
+<h3>Prompting behaviors</h3>
+
+<p>We observed the participants write 111 prompts to ChatGPT. They spent 64% of the task time preparing prompts, 27% adapting code, and the remaining time validating code. They often struggled with writing the initial prompt, especially for the feature selection task. They also iterated and refined their prompts many times, especially for the plotting task. To summarize their behavior, they all required multiple steps and the participants struggled with providing the right context to ChatGPT and then to adapt the response from ChatGPT to accomplish the task.</p>
+
+<img src="images/chatgptstudytime.png" alt="" class="center" style="max-width:90%;">
+
+<h3>Challenges when communicating with ChatGPT</h3> 
+
+<p>We observed the following challenges when participants communicated with ChatGPT:</p>
+
+<p><b>Sharing context is difficult (10 of 14 participants).</b> What information and how much? The data scientists begin prompt writing by figuring out which data and context they need to provide. One even called it "daunting" to get started. Some tried providing raw data, while others took elaborate steps to fetch information they deemed relevant. For example, they wrote new snippets in their notebooks to get information specifically for ChatGPT or they went to Excel to extract snippets of data. Some participants spent considerable effort reformatting information after pasting it into ChatGPT too.</p>
+
+<figure>
+<img src="images/chatgptcontextcount.png" alt="" class="center" style="max-width:100%;">
+<figcaption><i>Frequency of data context shared by participants for prompt writing for each task.</i></figcaption>
+</figure>
+
+<p><b>ChatGPT opaquely makes assumptions (14 of 14 participants).</b> Participants were enthusiastic about ChatGPT's ability to infer knowledge about data just from column names. However, it still made many false assumptions, including time formats, data types, and how to handle outliers. This led to some participants using code from ChatGPT that actually hid a data quality issue. One participant expressed the desire for a way to iterate on small changes faster than what is possible in the ChatGPT interface now.</p>
+
+<p><b>Misaligned expectations (13 of 14 participants).</b> The type of response that ChatGPT provides is highly temperamental to the phrasing of the prompt. For example, to include code or no code, an explanation or no explanation, one large code snippet or many small snippets, to use Pandas or another library, etc. Several participants observed that ChatGPT does not have their domain knowledge, which caused incorrect responses. They also complained of excessive explanations for straightforward portions, and we observed all participants skipping to the code.</p>
+
+<h3>Challenges in using ChatGPT's responses</h3>
+
+<p>We observed several challenges faced by participants using the code generated by ChatGPT. Recall that ChatGPT does not have direct access to their notebook, data, or other resources.</p>
+
+<p><b>Generation of repeated code (13 of 14 participants).</b> ChatGPT often generated redundant code, such as <i>pandas.read_csv()</i>. Blindly copy pasting such code would cause the participants' dataframes to be over written.</p>
+
+<figure>
+<img src="images/chatgptcodeadaptioncount.png" alt="" class="center" style="max-width:100%;">
+<figcaption>Frequency of code adaptation and validation activities performed by participants for each task.</figcaption>
+</figure>
+
+<p><b>Data and notebook preferences (11 of 14 participants).</b> The participants follow specific patterns of organizing their code, which ChatGPT did not adhere to. For example, they broke the code from ChatGPT down into small chunks and organized them as separate cells in their notebooks, sometimes in a different order than provided by ChatGPT. A few participants also refactored the generated code to not be parameterized or to not be contained within a function. Similarly, participants often modified ChatGPT's code to get the resulting data in the form they wanted (e.g., how to handle missing data and when to mutate a column versus creating a new column).</p>
+
+<p><b>Code validation (13 of 14 participants).</b> Many participants shared the importance of validating code from LLMs. One remarked that, <i>"affirmative language in responses, like 'Definitely! Here's the code you need', is extremely deceiving"</i> since it conveys a high level of confidence that was unjustified. Although participants did not spend much time verifying the code, they did employ different ways to check the correctness. They manually inspected the resulting dataframe, generated plots, checked for changes in descriptive statistics, and wrote scripts to provide further evidence.</p>
+
+<h3>Strategies for overcoming these challenges</h3>
+
+<p>We also observed strategies to overcome the challenges that data scientists faced:</p>
+
+<p><b>Techniques for prompt construction (11 of 14 participants).</b> We observed the use of one-shot prompting, few-shot prompting, chain of thought prompting, and asking ChatGPT to assume the rule of an expert. They also wrote prompt templates to reduce context switching between ChatGPT and their notebook or spreadsheet.</p>
+
+<p><b>Scaffolding with domain expertise (3 of 14 participants).</b> Participants were cautious of ChatGPT's "understanding" of their data, though we only observed a handful of cases where they attempted to use their own domain expertise to successfully guide ChatGPT. For example, one participant wanted to avoid ChatGPT using any of the time data so they omitted columns that contained 'TIME' or 'ID' in them from the prompt. Another participant did something similar by filtering the columns to those that were of type 'float' first.</p>
+
+<p><b>Choosing an alternative resource (6 of 14 participants).</b> Participants shared reasons why ChatGPT may not be appropriate for their work. Three participants asked about data sharing and privacy for ChatGPT. Other participants said that writing code for processing new data sets is relatively rare, since they often rerun their existing pipelines on new batches of data in the same structure. A few did remark that using LLMs help them save time over performing web searches.</p>
+
+
+<h3>Survey results</h3>
+
+<p>The survey results can be seen below. It looks to be a coin toss for whether data scientists know if a task is suitable for ChatGPT or not. They strongly agree that they should include data in their prompt, it will require multiple back and forths with ChatGPT, and the code will require changes.</p>
+
+<img src="images/chatgptdssurvey.png" alt="" class="center" style="max-width:95%;">
+
+<h3>Tool design recommendations</h3>
+
+<p>From our studies and the related work, we make three recommendations for the design of AI-powered data science tools:</p>
+
+<p><b>Provide preemptive and fluid context when interacting with AI assistants.</b> Participants spent considerable time writing their prompts and gathering context. 45% of the prompts included data that was manually entered or required additional scripts to obtain. Other interfaces for selecting data.</p>
+
+<img src="images/databrushing.png" alt="" class="center" style="max-width:90%;">
+
+<p><b>Provide inquisitive feedback loops and validation-aware operations.</b> For open-ended or complex tasks, it can take many interactions with ChatGPT to get to a satisfactory result. Instead, the system could guide the user throughout the task and proactively ask clarifying questions. Rather than the system making assumptions, it could ask or provide options.</p>
+
+<p><b>Provide transparency about shared context and domain expertise solutions.</b> It can be difficult to know what context is needed and what assumptions are being made. There need to be mechanisms for more efficient sharing of context that goes both ways between the data scientist and the AI. A possible interface for this could be a separate pane that maintains an updated list of assumptions that can be modified at any time.</p>
+
+<hr>
+
+A number of AI-powered data science tools have popped up in recent years yet many of these challenges remain. If you enjoyed this, here are a few of my other posts about AI tools and data science:
+
+<ul>
+    <li><a href="naturallanguageui.html">Natural language is the lazy user interface</a></li>
+    <li><a href="trappedchat.html">Don't trap me in a chat window</a></li>
+    <li><a href="copilotpainpoints.html">The pain points of building a copilot</a></li>
+    <li><a href="inquisitivecodeeditor.html">An inquisitive code editor: Overcome bugs before you know you have them</a></li>
+    <li><a href="datasciencemistakes.html">Mistakes that data science students make</a></li>
+    <li><a href="intellicode.html">Exploring 50 user interfaces for AI code suggestions</a></li>
+</ul>
+
+
+<br><br><br><br>
+
+</body>
+</html>
