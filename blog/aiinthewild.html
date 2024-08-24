@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Evaluating your AI models in the wild - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="How can we know when our AI models are working for users?">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Evaluating your AI models in the wild">
+    <meta property="og:description" content="How can we know when our AI models are working for users?">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/wildrobots.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/aiinthewild.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Evaluating your AI models in the wild</h1>
+	<small>8/24/2024</small><br><br>
+
+<img src="images/wildrobots.png" class="center" style="max-width:80%;" alt="Wild robots in a green field, pixel art.">
+
+
+<p>Let's say we just deployed an AI feature. How do we know when its usage is successful or not? Our offline benchmarks show promising results but you never know how it will go in the wild. We want to log when it fails our users so that we can improve the model.</p>
+
+<img src="images/graytextsuggestion.png" class="center" style="max-width:60%;border:1px solid #000000;" alt="An example UI of AI code suggestions that can be accepted or rejected.">
+
+<p>Obviously, we can start by just counting the feature invocations! If people use it, then it must be working, right?</p>
+
+<img src="images/featureusage.png" class="center" style="max-width:60%;border:1px solid #000000;" alt="Bar chart showing an AI feature usage from the first few days.">
+
+<p>One of our features at Microsoft years ago was seeing decent usage rates as soon as we released it to a small cohort. They were using it multiple times too! But when we started logging more data to understand <i>how</i> it was being used, we found that users were accepting the AI suggestions and then immediately undoing them. That is not good. Repeated usage actually meant it was <b>failing</b> because the first attempt wasn't good enough.</p>
+
+<p>So just looking at usage doesn't tell us how it is being used or whether it is working. More importantly, it doesn't give us scenario data to improve the models.</p>
+
+<p>This is a hard problem because there is <b>a lot</b> of data that could be logged. Privacy and scale prevent you from simply logging everything though. We couldn't just send users' raw data back to our servers. So what indicators can be detected client-side to know when a scenario goes well or goes bad?</p>
+
+<p>A lot of products simply ask the user how things went. You've likely seen AI chat interfaces that display a thumbs up or down. Other products provide an open-ended textbox or show a survey.</p>
+
+<img src="images/claudethumbs.png" class="center" style="max-width:50%;" alt="Claude's thumbs up/down interface.">
+
+<br>
+
+<img src="images/claudefeedback.png" class="center" style="max-width:60%;" alt="Claude's feedback interface after you click thumbs down.">
+
+<p>However, only a single-digit percentage of users interact with these. The data are biased, noisy, and I didn't find the open-ended responses to have much insight.</p>
+
+<h3>What techniques do I find useful then?</h3>
+
+<p><b>When AI suggestions are rejected:</b> Log the rejected suggestions and capture what users do instead as the ground truth. This provides a <i>3-tuple</i>: the input into the model, the output from the model (the rejected suggestion), and what the user did instead. It is difficult to do this for open-ended tasks, though it is easy for things like one-line code completion. This is particularly useful in conjunction with shadow evaluations.</p>
+
+<p><b>When AI suggestions are accepted:</b> Track what the users do <b>after</b> with that content. Store metadata with AI-generated content, then log any future events on that content. Do they delete it shortly after? Undo it? Copy-paste it? Modify it? If they keep it for a while, it was probably good. If they make minor edits, then it could have been better. This can require considerable infrastructure to track the metadata (e.g., the ability to track regions of text in a code editor and know when it is modified) but it is invaluable.</p>
+
+<hr>
+
+<p>At the end of the day, we usually can't know if the AI worked or failed for the user with 100% certainty. But we can certainly improve the model and benchmarks from user behavior.</p>
+
+<p>Read more of my posts about AI:</p>
+
+<ul>
+    <li><a href="intellicode.html">Exploring 50 user interfaces for AI code suggestions</a></li>
+    <li><a href="copilotpainpoints.html">The pain points of building a copilot</a></li>
+    <li><a href="chatgptdatascience.html">Can ChatGPT do data science?</a></li>
+    <li><a href="codeaid.html">CodeAid: A classroom deployment of an LLM-based programming assistant</a></li>
+</ul>
+
+<br><br><br><br>
+
+</body>
+</html>
