@@ -59,8 +59,6 @@
 
 <p>Let's say we just deployed an AI feature. How do we know when its usage is successful or not? Our offline benchmarks show promising results but you never know how it will go in the wild. We want to log when it fails our users so that we can improve the model.</p>
 
-<img src="images/graytextsuggestion.png" class="center" style="max-width:60%;border:1px solid #000000;" alt="An example UI of AI code suggestions that can be accepted or rejected.">
-
 <p>Obviously, we can start by just counting the feature invocations! If people use it, then it must be working, right?</p>
 
 <img src="images/featureusage.png" class="center" style="max-width:60%;border:1px solid #000000;" alt="Bar chart showing an AI feature usage from the first few days.">
@@ -68,6 +66,11 @@
 <p>One of our features at Microsoft years ago was seeing decent usage rates as soon as we released it to a small cohort. They were using it multiple times too! But when we started logging more data to understand <i>how</i> it was being used, we found that users were accepting the AI suggestions and then immediately undoing them. That is not good. Repeated usage actually meant it was <b>failing</b> because the first attempt wasn't good enough.</p>
 
 <p>So just looking at usage doesn't tell us how it is being used or whether it is working. More importantly, it doesn't give us scenario data to improve the models.</p>
+
+<figure>
+	<img src="images/graytextsuggestion.png" class="center" style="max-width:80%;border:1px solid #000000;" alt="An example UI of AI code suggestions that can be accepted or rejected.">
+	<figcaption style="text-align:center;"><small><i>Example scenario where an AI suggestion can be accepted or ignored/rejected by the user.</i></small></figcaption>
+</figure>
 
 <p>This is a hard problem because there is <b>a lot</b> of data that could be logged. Privacy and scale prevent you from simply logging everything though. We couldn't just send users' raw data back to our servers. So what indicators can be detected client-side to know when a scenario goes well or goes bad?</p>
 
