@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ad hoc tools for gathering prompt context - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I made several tools for gathering context while using ChatGPT.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Ad hoc tools for gathering prompt context">
+    <meta property="og:description" content="I made several tools for gathering context while using ChatGPT.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/promptclipper.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/promptcontext.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Ad hoc tools for gathering prompt context</h1>
+	<small>9/30/2024</small><br><br>
+
+
+<p>I use ChatGPT and Claude <b>a lot</b>.</p>
+
+<p>But it is frustrating gathering context for big tasks. Navigating to and copying the code, data, and documentation so that I can paste it into the chat interface is not ideal.</p>
+
+<p>Cursor and Copilot's chat features have better integration with codebases, but they don't let me control the context. From my quick tests, I get better results still by using ChatGPT or Claude directly (though it takes more effort).</p>
+
+<p>Besides, I am often putting together context from a variety of sources (multiple repositories, web pages, images, logs, databases, etc.).</p>
+
+<p>So, time to <b>build my own</b> tooling!</p>
+
+<p>I've been iterating on a handful of small scripts that pipe information into my clipboard:</p>
+
+<ul>
+	<li>Promptclipper: A VS Code extension for copying code blocks</li>
+	<li>git-clipper: A zsh script for copying modified git files</li>
+	<li>web-clipper: A Python script for scraping web pages</li>
+	<li>One-liners with pbcopy</li>
+	<li>Using jflam's clip tool</li>
+</ul>
+
+<hr>
+
+
+<h3>Promptclipper: A VS Code extension for copying code blocks</h3>
+
+<p>My first (naive) attempt was to make a VS Code extension that lets me select which functions, methods, or classes I want to copy to my clipboard.</p>
+
+<img src="images/promptclipper.png" class="center" style="max-width:75%;border:1px solid #000000;" alt="Screenshot of the Promptclipper VS Code extension.">
+
+
+<p>However, it is fairly tedious to pick and choose which functions to copy each time. I use Promptclipper occasionally, but we can do better. <i>The source is available on <a href="https://github.com/AZHenley/promptclipper">GitHub</a>.</i></p>
+
+
+<h3>git-clipper: A zsh script for copying modified git files</h3>
+
+<p>Given that prompt windows are quite large, we can paste entire code files without a problem.</p>
+
+<p>I wrote a zsh script for identifying the modified files in my current git repository, concatenating their contents, and placing it all in the clipboard.</p>
+
+<img src="images/gitclipper.png" class="center" style="max-width:75%;border:1px solid #000000;" alt="Screenshot of the git-clipper source.">
+
+<p>This is handy! <i>The source is available on <a href="https://github.com/AZHenley/prompt-context">GitHub</a>.</i></p>
+
+
+<h3>web-clipper: A Python script for scraping web pages</h3>
+
+<p>Sometimes I will go to a webpage, press CTRL-A (select all), and paste it into my prompt. The formatting is terrible but ChatGPT and Claude seem unbothered.</p>
+
+<p>I made a Python script using the newspaper3k library to extract the main content from a page, while ignoring the HTML, headers, advertisements, and navigation bars. It eliminates a lot of unnecessary data, though it isn't perfect.</p>
+
+<img src="images/webclipper.png" class="center" style="max-width:75%;border:1px solid #000000;" alt="Screenshot of the web-clipper source.">
+
+<p>I haven't found this useful as a standalone tool. Instead I've called it from other scripts. <i>The source is available on <a href="https://github.com/AZHenley/prompt-context">GitHub</a>.</i></p>
+
+
+<h3>One-liners with pbcopy</h3>
+
+<p>The <i>pbcopy</i> command-line tool is powerful. I can concatenate code files then pipe the result so it is all copied to my clipboard with:</p>
+
+<pre class="prettyprint lang-sh">
+cat foo.py bar.py | pbcopy
+</pre>
+
+<p>Or if I want to recursively concatenate all Python files in my repository:</p>
+
+<pre class="prettyprint lang-sh">
+cat **/*.py | pbcopy
+</pre>
+
+<p>I made a script that uses the <i>find</i> command to fetch <i>all</i> code files recursively in a directory (you can add whatever file extensions you might need).</p>
+
+<pre class="prettyprint lang-sh">
+extensions=("*.c" "*.cpp" "*.py" "*.js" "*.ts" "*.java" "*.go" "*.rb" "*.php" "*.swift")
+
+find_command="find . -type f \\("
+for ext in "${extensions[@]}"; do
+	find_command+="-name \"$ext\" -o "
+done
+
+find_command="${find_command::-4}\\)"
+eval "$find_command -exec cat {} + | pbcopy"
+</pre>
+
+<p>Now I can claim this a one-liner by running <i>all-code-clipper</i>. <i>The source is available on <a href="https://github.com/AZHenley/prompt-context">GitHub</a>.</i> I was going to package all of these scripts up into a single tool where I can pipe things together, but...</p>
+
+
+<h3>An existing tool: jflam's clip</h3>
+
+<p>It turns out that John Lam has already made a much nicer tool: <a href="https://github.com/jflam/clip">clip</a>. It lets you use glob patterns to select files, concatenates them all together, appends the filename to each file, and stores it to your clipboard (or to a file).</p>
+
+<p>A few examples:</p>
+
+<pre class="prettyprint lang-sh">
+clip *.html *.css
+</pre>
+
+<pre class="prettyprint lang-sh">
+clip **/*.py
+</pre>
+
+<pre class="prettyprint lang-sh">
+clip > saved_clipboard.txt
+</pre>
+
+<img src="images/jflamclip.png" class="center" style="max-width:90%;" alt="Screenshot of my terminal showcasing clip.">
+
+<p>A must-have tool.</p>
+
+<p>I've started keeping project-specific <i>clip</i> scripts to gather relevant groups of files that I need repeatedly (e.g., all the files for my web app's front-end or related to authentication).</p>
+
+<hr>
+
+<p>Eventually the UX of interacting with AI will catch up. We won't have manually gather context&mdash;we will be able to point, make vague associations, or say "like that website I went to this morning".</p>
+
+<p>Until then...</p>
+
+
+
+<br><br><br><br>
+
+</body>
+
+</html>
