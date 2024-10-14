@@ -64,6 +64,12 @@ td {
 
 pre {
     overflow-x:auto;
+    border-radius: 5px;
+}
+
+.editor {
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
 p {
