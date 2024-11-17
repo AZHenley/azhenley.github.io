@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mirror: An LLM-powered programming-by-example programming language - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="What if we could only code by using examples? Can we integrate AI into traditional programming languages?">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Mirror: An LLM-powered programming-by-example programming language">
+    <meta property="og:description" content="What if we could only code by using examples? Can we integrate AI into traditional programming languages?">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/mirrorexample.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/mirrorlang.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Mirror: An LLM-powered programming-by-example programming language</h1>
+	<small>11/17/2024</small><br><br>
+
+    <img src="images/mirrorexample.png" class="center" style="max-width:100%; margin-bottom:12px; border: 1px solid black;">
+
+
+<p>Programming <i>by example</i> is a technique where users provide examples of the outcome they want, and the system generates code that can perform it. For example, in Excel, you can demonstrate how you want a column formatted through an example or two, and Excel will learn a pattern and apply it to the rest.</p>
+
+<p>But what if there was a programming language that <b>only</b> allows programming by example? Can we integrate AI <i>into</i> traditional programming languages?</p>
+
+<img src="images/TODO.gif" class="center" style="max-width:90%;" alt="">
+
+
+<hr>
+
+<h3>Overview of Mirror</h3>
+
+<p>I wanted to take the idea of programming by example to the extreme. In the Mirror language, all you can do is define functions through a set of example input-outputs pairs, then call the functions. That is it. Everything must be expressed through examples.</p>
+
+<p>Let's start with a really simple example of how we would express an <i>is_even</i> function:</p>
+
+<pre style="border: 1px solid black;">
+signature is_even(x: number) -> bool
+example is_even(0) -> true
+example is_even(1) -> false
+example is_even(222) -> true
+example is_even(-99) -> false
+</pre>
+
+<p>You provide the function name, parameters and their types, and the return type. Then you provide one or more examples with the expected result. It uses a strict syntax and supports a handful of basic types. You can create as many functions as you need and then chain them together.</p>
+
+<p>After parsing using a traditional recursive descent parser, the "compiler" uses an LLM to generate JavaScript that satisfies the constraints expressed by the examples. You can see the generated code to verify if it is correct, or you can provide more examples and recompile it.</p>
+
+<p>You can call your functions, either chaining them or passing literals as arguments, and it will execute the generated JavaScript, and print out the result of each.</p>
+
+<pre style="border: 1px solid black;">
+is_even(123456)
+</pre>
+
+
+<p>You can declare as many functions as you'd like, use a variety of types (numbers, bools, strings, lists, etc.), and chain the functions together.</p>
+
+<p>That is the entire language.</p>
+
+<p>Here is a more complex example:</p>
+
+<pre style="border: 1px solid black;">
+signature foo(x: number, y: number) -> number
+example foo(10, 3) = 101010
+example foo(1, 1) = 1
+example foo(0, 10) = 0
+
+signature bar(x: number) -> string
+example bar(9) = "length is 1"
+example bar(3210) = "length is 4"
+
+bar(foo(123, 3))
+</pre>
+
+<!-- <pre style="border: 1px solid black;">
+signature foo(x: number, y: number) -> number
+example foo(10, 3) = 101010
+example foo(1, 1) = 1
+example foo(0, 10) = 0
+foo(123, 3)
+</pre> -->
+
+<!-- <pre style="border: 1px solid black;">
+signature bar(a: string) -> dict{string}
+example bar("food") = {"f": "1", "o": "2", "d": "1"}
+bar("tree")
+bar("anakin")
+</pre> -->
+
+
+<h3>How to use Mirror</h3>
+
+<p>I made a playground that you can run in your browser. You can download the single HTML file and single JS file, and run it yourself. You'll use your own OpenAI key. Download Mirror from <a href="https://github.com/AZHenley/Mirror">GitHub</a>.</p>
+
+<img src="images/mirrorplayground.png" class="center" style="max-width:90%;" alt="Screenshot of the Mirror playground running the browser.">
+
+<p>You could also use it as a JS library (though it needs some cleaning up).</p>
+
+
+<h3>Implementation</h3>
+
+<p>So how does this magnificient piece of art work? There are two classes, the parser and the "compiler".</p>
+
+<p>The parser is a simple recursive descent parser that returns three things: the function signature objects, the set of examples for each function, and the function calls. The grammar is below:</p>
+
+<pre style="border: 1px solid black;">
+program = {signature | example | expression}
+signature = "signature" name "(" parameters ")" "->" type
+example = "example" name "(" literals ")" "=" literal
+expression = name "(" subexpression ")"
+subexpression = (expression | literal) {"," (expression | literal)}
+literals = literal {"," literal}
+literal = string | number | "true" | "false" | "[" literal "]" |  "{" literal ":" literal "}"
+parameters = parameter {"," parameter}
+parameter = name ":" type
+type = "string" | "number" | "bool" | "list[" type "]" | "dict{" type "}"
+// name, string, number are tokens
+</pre>
+
+<p>The other part is the "compiler". I keep using quotes because an OpenAI LLM is actually doing the code generation. It uses a prompt to request that a JavaScript function is generated to satisfy the set of examples.</p>
+
+<hr>
+
+<p>Mirror is a proof of concept of how AI can be integrated into traditional programming languages. Just because I don't want to code using natural language doesn't mean I can't harness the power of LLMs!</p>
+
+
+<br><br><br><br>
+
+</body>
+
+</html>
