@@ -91,7 +91,7 @@ is_even(123456)
 
 <p>That is the entire language.</p>
 
-<p>Here is a more complex example:</p>
+<p>Here are more examples:</p>
 
 <pre style="border: 1px solid black;">
 signature foo(x: number, y: number) -> number
@@ -106,20 +106,18 @@ example bar(3210) = "length is 4"
 bar(foo(123, 3))
 </pre>
 
-<!-- <pre style="border: 1px solid black;">
-signature foo(x: number, y: number) -> number
-example foo(10, 3) = 101010
-example foo(1, 1) = 1
-example foo(0, 10) = 0
-foo(123, 3)
-</pre> -->
+<pre style="border: 1px solid black;">
+signature m(x: list[number]) -> number
+example m([2,9,5]) = 9
+m([6,3])
+</pre>
 
-<!-- <pre style="border: 1px solid black;">
-signature bar(a: string) -> dict{string}
-example bar("food") = {"f": "1", "o": "2", "d": "1"}
-bar("tree")
-bar("anakin")
-</pre> -->
+<pre style="border: 1px solid black;">
+signature counts(a: string) -> dict{string}
+example counts("food") = {"f": "1", "o": "2", "d": "1"}
+counts("tree")
+counts("anakin")
+</pre>
 
 
 <h3>How to use Mirror</h3>
@@ -144,10 +142,11 @@ example = "example" name "(" literals ")" "=" literal
 expression = name "(" subexpression ")"
 subexpression = (expression | literal) {"," (expression | literal)}
 literals = literal {"," literal}
-literal = string | number | "true" | "false" | "[" literal "]" |  "{" literal ":" literal "}"
+literal = string | number | "true" | "false" | "[" literals "]" |  "{" keyvalue {"," keyvalue} "}"
+keyvalue = literal ":" literal
 parameters = parameter {"," parameter}
 parameter = name ":" type
-type = "string" | "number" | "bool" | "list[" type "]" | "dict{" type "}"
+type = "string" | "number" | "bool" | "list[" type "]" | "dict[" type "," type "]"
 // name, string, number are tokens
 </pre>
 
