@@ -8,6 +8,13 @@
     <language>en-us</language>
     <copyright>Austin Z. Henley (2024)</copyright>
     <item>
+      <title>My 25-year adventure in AI and ML</title>
+      <pubDate>Tue, 31 Dec 2024 19:00:01 -0400</pubDate>
+      <link>https://austinhenley.com/blog/25yearsofai.html</link>
+      <author>azhenley@cmu.edu (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://austinhenley.com/blog/25yearsofai.html">https://austinhenley.com/blog/25yearsofai.html</a>]]></description>
+    </item>
+    <item>
       <title>Mirror: An LLM-powered programming-by-example programming language</title>
       <pubDate>Sun, 17 Nov 2024 14:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/mirrorlang.html</link>
