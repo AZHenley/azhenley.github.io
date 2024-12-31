@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My 25-year adventure in AI and ML - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="This is the 25-year story of how I fell into the field of AI.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="My 25-year adventure in AI and ML">
+    <meta property="og:description" content="This is the 25-year story of how I fell into the field of AI.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/neuralavatar.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/25yearsofai.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">My 25-year adventure in AI and ML</h1>
+	<small>12/31/2024</small><br><br>
+
+
+<p>I never intended on working with AI or ML. It more so happened along the way naturally from using whatever tools I needed for the task, and eventually it took over. I didn't even realize it at the time.</p>
+
+<p>Given that it is New Year's Eve, it seems appropriate to look back on my career to see how I got here. Let's go back to the year 2000 and walkthrough the major AI/ML concepts I learned since then.</p>
+
+<hr>
+
+
+<h3>If statements and random numbers</h3>
+
+<p>I've talked about how I got into programming before: <a href="mycomputingstory.html">Learning HTML was too hard so I made a compiler instead</a>. But along the way, I also tried to make video games (like any kid).</p>
+
+<p>The first project I remember making in VB6 was a game based on <a href="https://en.wikipedia.org/wiki/Tamagotchi">Tamagotchi</a> pets.</p>
+
+<img src="images/tamagotchi.png" class="center" style="max-width:80%;border:1px solid #000000;" alt="">
+
+<p>Unfortunately, I had no idea how to make the pet "come alive".</p>
+
+<p>The best I came up with was a timer that triggers some effect every <i>X</i> seconds plus some conditionals. Increase pet's hunger every 10 seconds. Decrement health every 3 seconds if hunger level is great than 5. Faint if health reaches 0.</p>
+
+<p>Not a fun game at all.</p>
+
+<p>Fast forward to high school. The biggest game I made at the time without giving up was a 2d space shooter where you defended yourself against waves of enemies while collecting simple powerups. A pretty standard exercise for a wanna-be game developer. For this, I hard coded a long, long sequence of if statements that used random numbers, how long you've been playing, how many shots you have fired, your hp, etc. to determine which wave of enemies to send out next. Finally, it felt <i>dynamic</i> and not entirely predictable. It was even almost fun. But no one would play it more than a few minutes. (Unfortunately, I can't find any screenshots from this era.)</p>
+
+<img src="images/programminggameaibook.jpg" class="center" style="max-width:50%;border:1px solid #000000;" alt="">
+
+<p>Somewhere in the mid-2000s, I purchased the book <i>Programming Game AI by Example</i> (<a href="https://amzn.to/3VVu1DN">Amazon</a>). It took a few years to prove useful though...</p>
+
+
+<h3>State machines and higher-order functions</h3>
+
+<p>In college, I took it up a notch with my <a href="makinggames.html">games</a>. They were played by millions, and I even made money! My coding skills were finally maturing, I could put what I read in books into practice, and my roommate spent every waking moment making games.</p>
+    
+<p>I used state machines for the enemies. Factory pattern to spawn objects. Higher order functions to make enemies and weapons composable. Each unit, each weapon, and each bullet was given a set of behavior functions that would execute each frame to determine what happens next (e.g., the weapon will shoot bullets in bursts that are in the shape of a narrow cone that oscillates left and right 25 degrees; the bullets will slightly home into the nearest target and have a 1% chance of richocheting)</p>
+
+<img src="images/ermy.png" class="center" style="max-width:80%;border:1px solid #000000;" alt="">
+
+<p>I found that incrementally adding a bit of dynamism (i.e., based on the game state and the player's input) and variation (i.e., changing behaviors through randomness and composability) made my games much, much more fun. It required layers though. I needed to add this to everything: sprites, particle emitters, sound effects, enemies, bullets, and animations, not just the enemy behaviors.</p>
+
+<p>The games started to feel alive!</p>
+
+<img src="images/darkestdays2.gif" class="center" style="max-width:80%;border:1px solid #000000;" alt="">
+
+
+<p>But this isn't AI, right? In the end, it is just some handcrafted if statements and well-architectured function calls. <i>Hmmm</i>.</p>
+
+
+<h3>First-order logic, knowledge representation, support vector machines, and neural networks</h3>
+
+<p>After graduating, I enrolled in a MS program at the very last minute (as in, after the deadline and just before the Spring semester started). That meant most of the courses were full. I signed up for the only ones available, which included Artificial Intelligence and Neural Networks. I was hoping for a compilers course!</p>
+
+<p>I was disappointed when I found out that neither of these courses involved any coding or how to implement what we learned. They were very high level and we spent a lot of arguing over definitions.</p>
+
+<img src="images/aibook.jpg" class="center" style="max-width:50%;border:1px solid #000000;" alt="">
+
+
+<p>The AI course consisted of in-class discussions dissecting the famous book, <i>Artificial Intelligence: A Modern Approach, Third Edition</i> (<a href="https://amzn.to/4gDFmRq">Amazon</a>). I learned about planning, agents, first-order logic, and knowledge representation. It gave me some vocabulary for thinking about these problems but I wasn't able to make the leap of applying any of it. <i>Sorry, <a href="https://www.norvig.com">Norvig</a></i>.</p>
+
+<img src="images/neuralnetworkbook.jpg" class="center" style="max-width:50%;border:1px solid #000000;" alt="">
+
+
+<p>The neural network course was heavy on theory. We covered perceptrons, support vector machines, feedforward networks, hopfield models, and back propagation. The textbook wasn't useful so I won't link to it. I asked the professor how I could actually build a neural network and he said, <i>"I think there is a MATLAB package"</i>. Welp.</p>
+
+<p>I spent the summer and fall trying to put this knowledge to use.</p>
+
+<img src="images/neuralavatar.png" class="center" style="max-width:80%;border:1px solid #000000;" alt="">
+
+
+<p>I built a program for low-bandwidth video chat. I used OpenCV to detect the face, extract regions of the face, and then a classifier to determine the state of those regions. For example, is the mouth curving up? Is the left brow raised? Is the right eye open? I had several hundreds of labeled face images from some open database back then. The application sent the binary states over a socket to be used to draw an avatar using OpenGL.</p>
+
+<p>It didn't work well. It was tedious to modify, it was extremely sensitive to lighting, minor changes to parameters would have big consequences, OpenCV was a pain to use, and training took forever.</p>
+
+<p>I really had no idea what I was doing, but I eventually learned a lot and got it somewhat working! Here is a [very amateur] demo video that I uploaded in January 2013:</p>
+
+<div style="display: flex; justify-content: center;">
+    <iframe
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/GN3tjmGpdBY?si=0ODIfjFG7SqBxeOh"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+<p>Over 1000 views!</p>
+
+<h3>Decision trees, clustering, and recommendation algorithms</h3>
+
+<p>As I got into my PhD, I needed statistical methods to analyze log data from code editors. Can I identify when a programmer is stuck or lost in the code? Can I predict which file they'll navigate to next? Can I accurately recommend code of interest?</p>
+
+<img src="images/cfar.png" class="center" style="max-width:80%;border:1px solid #000000;" alt="">
+
+<p>I learned how to use the <a href="https://en.wikipedia.org/wiki/C4.5_algorithm">C4.5 algorithm</a> to generate decision trees, <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-means</a> and <a href="https://en.wikipedia.org/wiki/DBSCAN">DBCSCAN</a> to cluster events, and <a href="https://en.wikipedia.org/wiki/Apriori_algorithm">Apriori</a> and <a href="https://en.wikipedia.org/wiki/Collaborative_filtering">collaborative filtering</a> to find associations between events. Although fairly simple, these are surprisingly powerful. In fact, I'd say that most of the time that you think you need a big neural network, you don't!</p>
+
+<img src="images/wandercode.png" class="center" style="max-width:95%;" alt="">
+
+<br>
+
+<img src="images/dbscan.png" class="center" style="max-width:95%;" alt="">
+
+<p>These methods got the job done. I published papers , did a bunch of internships, and built developer tools involving these, and eventually graduated.</p>
+
+<p>If you want to read more about some of these projects, I recommend starting with:</p>
+
+<ul>
+<li>Data analysis on how developers look for information: <i>Foraging and Navigations, Fundamentally: Developers' Predictions of Value and Cost</i> (<a href="../pubs/Piorkowski2016FSE_ValueCost.pdf">pdf</a>)</li>
+<li>My Microsoft internship experience report: <a href="featurestheywanted.html">When users never use they features they asked for</a></li>
+</ul>
+
+
+<h3>Intelligent user interfaces</h3>
+
+<p>As a new tenure-track professor in 2018, I needed a schtick that I would base all my research around. I chose <i>intelligent developer tools</i>, though it was much fuzzier of a concept in my head back then. My first week on the job, I submitted a grant proposal where I'd use predictive models to preemptively identify and correct programmers' misconceptions.</p>
+
+<p>The <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1850027">abstract</a> of the proposal said:</p>
+
+<blockquote>In particular, this project will develop novel tool designs that accomplish three mutually supportive goals: (1) identify misconceptions that novice programmers have about their program's behavior by leveraging program analysis techniques and predictive models, (2) correct novice programmers' misconceptions and explain the rationale without disrupting the programmers, and (3) prevent future misconceptions by generating test code for the novice programmers that will catch unintended changes to the program's behavior.</blockquote>
+
+<p>I summarized that project in my post, <a href="inquisitivecodeeditor.html">An inquisitive code editor: Overcome bugs before you know you have them</a>.</p>
+
+<p>Next, I collaborated on a <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2008408">project</a> where we'd use models to predict the information needs of programmers and generate user interfaces for them on the fly (e.g., if they're looking through their git history for relevant code, generate a visualization comparing a recommended set of commits).</p>
+
+<p>Then I tied all this work together into my grand vision: <i>Inquisitive Programming Environments as Learning Environments for Novices and Experts</i>. You can see the proposal (<a href="../pubs/Henley2021NSFCAREER.pdf">pdf</a>) and my blog post on how I wrote it (<a href="500kgrant.html">What a $500,000 grant proposal looks like</a>).</p>
+
+<img src="images/grantoverview.png" class="center" style="max-width:90%;border:1px solid #000000;" alt="">
+
+<p>However, I <a href="leavingacademia.html">resigned</a> right around the time I was notified the grant was being funded, so I didn't get to make more progress.</p>
+
+
+<h3>Program synthesis and large-language models</h3>
+
+<p>In 2022, I joined the program synthesis team at Microsoft. Now I was immersed in AI. It was perfect timing because ChatGpt was released 9 months later and the world forced LLMs upon everything.</p>
+
+<img src="images/datawranglerbyexample.gif" alt="A gif of me performing the New Column by Example operation." class="center" style="max-width:100%;">
+
+<p>Although I was on an AI team, I pushed back against applying AI for everything. What is the user problem we are trying to solve? Do we really need an LLM or could a few if statements suffice? Are we sure that natural language is the appropriate interface for this? I went on to share my opinions: <a href="naturallanguageui.html">Natural language is the lazy interface</a> and <a href="trappedchat.html">Don't trap me in a chat window</a>.</p>
+
+<p>I worked on <i>a lot</i> of cool projects. Including:</p>
+
+    <ul>
+        <li>Investigating whether existing LLM attention weights can be used to predict where a human developer will look next
+          <ul style="margin-bottom:0;">
+            <li><i>Follow-up Attention: An Empirical Study of Developer and Neural Model Code Exploration</i> (<a href="../pubs/Paltenghi2024IEEE_FollowUpAttention.pdf">pdf</a>)</li>
+          </ul>
+        </li>
+        <li>An AI tutor for data science
+          <ul style="margin-bottom:0;">
+            <li>Motivation: <a href="teachingpainpoints.html">The pain points of teaching computer science</a></li>
+            <li>Motivation: <a href="datasciencemistakes.html">Mistakes that data science students make</a></li>
+          </ul>
+        </li>
+        <li>IntelliCode's user experience for multi-line code edit suggestions
+          <ul style="margin-bottom:0;">
+            <li><a href="intellicode.html">Exploring 50 user interfaces for AI code</a></li>
+          </ul>
+        </li>
+        <li>LLM-based tools for data scientists
+          <ul style="margin-bottom:0;">
+            <li>Motivation: <a href="chatgptdatascience.html">Can ChatGPT do data science?</a> for motivation</li>
+            <li>Tool: <i>Improving Steering and Verification in AI-Assisted Data Analysis with Interactive Task Decomposition</i> (<a href="../pubs/Kazemitabaar2024UIST_LLMSteering.pdf">pdf</a>)</li>
+            <li>Tool: <a href="datawrangler.html">Data Wrangling with Data Wrangler</a></li>
+          </ul>
+        </li>
+        <li>LLM-based tools for students
+          <ul style="margin-bottom:0;">
+            <li>Motivation: </li>
+            <li>Tool: <a href="codeaid.html">CodeAid: A classroom deployment of an LLM-based programming assistant</a></li>
+            <li>Tool: <i>Exploring the Design Space of Cognitive Engagement Techniques with AI-Generated Code for Enhanced Learning</i> (<a href="../pubs/Kazemitabaar2025IUI_.pdf">pdf</a>)</li>
+          </ul>
+        </li>
+        <li>Empirical study of how companies are building copilots
+          <ul style="margin-bottom:0;">
+            <li><a href="copilotpainpoints.html">The pain points of building a copilot</a></li>
+          </ul>
+        </li>
+      </ul>
+
+<p>Since <a href="leavingmicrosoft.html">leaving</a> Microsoft, I continue to tinker on my own AI tools, such as <a href="mirrorlang.html">Mirror</a> and <a href="promptcontext.html">Promptclipper</a>.
+
+
+<hr>
+
+<p>It has been a fun 20 years.</p>
+
+<p>What's next? I'm not sure yet, but I'm going to keep building.</p>
+
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small>
+    <br><br><br><br>
+
+</body>
+</html>
