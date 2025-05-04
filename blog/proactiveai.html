@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Where are the proactive AI coding tools? - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I want tools that act like a developer sitting next to me would.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="The design of software engineering course projects">
+    <meta property="og:description" content="I want tools that act like a developer sitting next to me would.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/whereisclippy.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/proactiveai.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Where are the proactive AI coding tools?</h1>
+	<small>5/4/2025</small><br><br>
+
+<img src="images/whereisclippy.png" class="center" style="max-width:60%; border: 1px solid black;" alt="TODO.">
+
+
+<p>I've been asking for and working on <b>proactive</b> AI coding tools for several years.</p>
+
+<ul>
+    <li>In 2019, I got a grant to research a <a href="inquisitivecodeeditor.html">code editor</a> that helps you overcome bugs before you know you have them.</li>
+    <li>In 2021, I claimed that Stack Overflow had <a href="stackoverflow.html">all the data needed to build a model</a> that predicts what future problems a developer will face (and the solutions).</li>
+    <li>In 2022, I proposed an <a href="aiterminal.html">AI terminal</a> that would fix your errors for you automagically.</li>
+    <li>In 2022, my team designed and evaluated <a href="intellicode.html">50 user interfaces</a> for proactive code suggestions.</li>
+    <li>In early 2023, shortly after ChatGPT came out, I argued that natural language is a <a href="naturallanguageui.html">lazy UI</a> and that good UIs <a href="trappedchat.html">guide and nudge</a> instead.</li>
+</ul>
+
+<img src="images/chatuiunleashed.png" class="center" style="max-width:40%; border: 1px solid black;" alt="TODO.">
+
+<p>It is now 2025. What is the state of proactive tooling? Have agents taken over yet? Will my <a href="aiterminal.html">environment issues</a> automatically get resolved before I even see the error message? Can Cursor get SSL working properly for my vibe-coded app when I forget to set it up? Can Copilot <a href="copilotworkspace.html">interrupt me</a> before I go down a rabbit hole to fix the wrong thing?</p>
+
+<p>No, not really.</p>
+
+<p>But they can still proactively make suggestions about what code to change next.</p>
+
+<img src="images/badgraytextsuggestion.png" class="center" style="max-width:90%; border: 1px solid black;" alt="TODO.">
+
+<p>Or they can reactively make suggestions based on a prompt.</p>
+
+<img src="images/cursorplan.png" class="center" style="max-width:90%; border: 1px solid black;" alt="TODO.">
+
+
+<p>I just read a really interesting paper about the pros and cons of proactive AI coding tools that got me thinking about the topic again. (<a href="https://dl.acm.org/doi/10.1145/3706598.3713357">Assistance or Disruption? Exploring and Evaluating the Design and Trade-offs of Proactive AI Programming Support</a>)</p>
+
+<figure>
+<img src="images/codellaboratordesign.png" class="center" style="max-width:80%; border: 1px solid black;" alt="TODO.">
+<figcaption style="text-align:center"><small>Figure 1 from the <a href="https://dl.acm.org/doi/10.1145/3706598.3713357">paper</a> showing their system design dimensions.</small></figcaption>
+</figure>
+
+<p>They designed a proactive AI code tool, Codellaborator, that goes beyond typical gray-text suggestions by being strategic about the <i>timing</i>, the <i>visual</i> indicators, and the <i>scopes</i> of interaction for code suggestions.</p>
+
+<p>It is just the tip of the iceburg though.</p>
+
+<p>Why aren't the commercial tools in this space pushing harder on the user experience like this? They seem to be taking the shotgun approach: <i>more suggestions in more places and more often</i>. <b>But I don't want more suggestions!</b> I don't need more code thrown at me. I want a small number of high-value episodes of <i>assistance</i> as if a professional developer was sitting beside me.</p>
+
+<p>Autocomplete is great, but there is opportunity for so much more.</p>
+
+<p>In fact, I <a href="copilotworkspace.html">previously</a> said:</p>
+
+<blockquote>If I had a personal programmer that sat next to me, how would I work with them? Would I give them a sticky note with the task and wait for them to come back with the code for me to verify?
+<br><br>
+Or would we ask each other clarifying questions, point out significant details, discuss design tradeoffs, and show incremental progress as we work?</blockquote>
+
+<p>Innovating on the user experience is hard, so instead, companies continue to ship an integration with <i>yet-another-model</i> that generates code.</p>
+
+<hr>
+
+<p>Read more of my thoughts on the topic:</p>
+
+<ul>
+    <li><a href="naturallanguageui.html">Natural language is the lazy user interface</a></li>
+    <li><a href="trappedchat.html">Don't trap me in a chat window</a></li>
+    <li><a href="copilotmodes.html">Coding with Copilot for acceleration and exploration</a></li>
+    <li><a href="copilotworkspace.html">How I would redesign Copilot Workspace</a></li>
+    <li><a href="aiterminal.html">An AI assistant for command line errors</a></li>
+    <li><a href="inquisitivecodeeditor.html.html">An inquisitive code editor: Overcome bugs before you know you have them</a></li>
+    <li><a href="stackoverflow.html">Stack Overflow knows your future problem</a></li>
+    <li><a href="intellicode">Exploring 50 user interfaces for AI code suggestions</a></li>
+</ul>
+
+
+<br><br><br><br>
+
+</body>
+</html>
