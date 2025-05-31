@@ -1,58 +1,61 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Parsing RISC-V assembly">
-    <meta name="author" content="">
-
-    <title>Parsing RISC-V assembly - Austin Z. Henley</title>
-
-    <link href="../bootstrap.min.css" rel="stylesheet">
-    <link href="../style.css" rel="stylesheet">
-	<style>img {max-width:100%} p {padding-bottom:3px}</style>
-
+<html>
+<head>
+	<title>Parsing RISC-V assembly - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I wrote my own parser for RISC-V.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Parsing RISC-V assembly">
+    <meta property="og:description" content="I wrote my own parser for RISC-V.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/riscvassembly.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/parsingriscv.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
 	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-
-  </head>
-
-  <body>
-
-    <div class="container">
-
-	<div class="jumbotron" style="padding-top:0px;padding-bottom:0px; background-color:transparent;">
-  	<div class="row">
-			<div class="col-md-6 text-right" style="padding-left:0px;margin-left:0px;">
-				<h3 style="margin-bottom:0;padding-bottom:0;">Austin Z. Henley</h3>
-				I work on AI + dev tools.
-			</div>
-			<div class="col-md-6 text-left" style="padding-left:6px;margin-left:0px;margin-top:0px;"><br>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
 				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
 				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
 				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
 			</div>
-	  </div>	
-	</div>
+		  </div>
+		</div>
+	  </div>
 
-	<hr style="margin-top:-10px;margin-bottom:10px"/>
-	<b><ul style="text-align:center;">
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../index.html">Home</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../publications.html">Publications</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../teaching.html">Teaching</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../blog.html" style="text-decoration: underline;">Blog</a></li> |
-	<li style="display:inline;margin-left:4px;margin-right:4px;"><a href="../Henley_Vita.pdf">CV</a></li>
-	</ul></b>
-	<hr style="margin-top:1px"/>
-	
-	<div class="row" style="margin-top:-8px">
-		<div class="col-md-12">
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
 
+	<h1 class="blogtitle">Parsing RISC-V assembly</h1>
+	<small>10/26/2020</small><br><br>
 
-<br><h3>Parsing RISC-V assembly</h3><small>10/26/2020</small><br><br>
+<img src="images/riscvassembly.png" class="center" style="max-width:75%;" alt="">
 
-<img src="images/riscvassembly.png" class="center-block" style="max-width:75%;margin-bottom:19px;border:1px solid orange">
 
 <p>Recently, I needed to analyze some RISC-V assembly code for a research project and then calculate some basic metrics, but I couldn't find a suitable tool. Ok, I'll just grab a parser from one of the smaller open-source assemblers. This wasn't successful though since the ones I looked at use crude, regex-based parsers that don't maintain information about the structure.</p>
 
@@ -64,7 +67,7 @@
 
 <p>The source code for the parser can be found on <a href="https://github.com/AZHenley/riscv-parser">GitHub</a>. If you want to know more about RISC-V assembly, see my colleague's <a href="https://web.eecs.utk.edu/~smarz1/courses/ece356/notes/assembly/">lecture notes</a>.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">The grammar</h4>
+<h3>The grammar</h3>
 
 <p>The core of most assembly languages is beautifully simple. A source file is composed of zero or more labels, instructions, directives, and comments. We can represent it in EBNF like so:</p>
 
@@ -105,11 +108,11 @@ symbol ::= ([a-zA-Z0-9]('.'?[a-zA-Z0-9])*) | (\"(\\[^\n]|[^"\n])*\")
 
 <p>But wait! How do we know that an instruction or register was used properly? I decided to keep the grammar as minimal as possible and to verify such things later on. That means that this grammar will accept some code that is not allowed, but that in the next step we can prune out. For example, "xor xor, xor, xor, xor" will be parsed just fine, despite it not being legal RISC-V assembly. We can fix that.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Using the parser for your project</h4>
+<h3>Using the parser for your project</h3>
 
 <p>If you are interested in using the parser for your own project, there may be a few things you'll want to add. Namely, a <b>verification step</b>, similar to a semantic analysis step in compilers, that checks some of the following things:</p>
 
-<ul style="margin-top: -9px;">
+<ul>
     <li>Instruction/directive exists</li>
     <li>Number of operands is correct for the given instruction/directive</li>
     <li>Operand is of correct type (e.g., literal value or register)</li>
@@ -172,7 +175,7 @@ void Parser::Instruction() {
 
 <p>Similarly, you can add an <b>emitter step</b> if you were building an assembler. In this scenario, you would look up the corresponding binary representation of each instruction and operand, emitting those to a file as you parse. You can see how a compiler does this in the emitting portion of my <a href="https://austinhenley.com/blog/teenytinycompiler3.html">Let's make a Teeny Tiny compiler</a> tutorial.</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Features the grammar omits</h4>
+<h3>Features the grammar omits</h3>
 
 <p>A notable feature that cannot be parsed with this parser is math expressions. Luckily, this is a fairly easy thing to add! I have previously written a tutorial on parsing that covers math expressions. See part 1 of <a href="teenytinycompiler1.html">Let's make a Teeny Tiny compiler</a>. The GNU assembler supports two prefix operators, - and ~ for negation and complementation, and these binary operators from highest precedence to lowest: *, /, %, &lt;, &lt;&lt;, &gt;, &gt;&gt;, |, &, ^, !, +, -.</p>
 
@@ -187,7 +190,7 @@ unary ::= ["+" | "-"] symbol
 
 <p>Preprocessor features (i.e., #include and #define) and multi-line comments are left as an exercise to the reader... &#128578;</p>
 
-<h4 style="margin-top:22px;margin-bottom:15px;">Final thoughts</h4>
+<h3>Final thoughts</h3>
 
 <p>The core of assemblers really are quite simple. They do little more than string substitution, so parsing should be trivial. Assembly languages aren't even recursive! You just need to replace instruction mnemonics and operands with their respective binary representation. However, the mainstream assemblers allow constructs that make parsing a little more complicated, plus assembly languages are not standardized. Despite all this, this article should prove that these problems can be solved if you take them step by step.</p> 
 
