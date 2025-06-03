@@ -57,7 +57,7 @@
 
     <img src="images/stateborders.png" class="center" style="max-width:60%; margin-bottom:28px; border:1px solid #000000;">
 
-<p>An app can easily check a user's location (with permission), but figuring out <i>where</i> that location is, is far more difficult. For example, a web app can use <i>geolocation.getCurrentPosition()</i> to get a user's location in the form of latitude and longitude coordinates. But how do you convert coordinates to country, state, or city? Well, you have to look it up, somehow.</p>
+<p>An app can easily check a user's location (with permission), but figuring out <i>where</i> that location is, is far more difficult. For example, a web app can use <i>geolocation.getCurrentPosition()</i> to get a user's location in the form of latitude and longitude coordinates. But how do you convert coordinates to country, state, or city? Well, you have to look it up, somehow. (I later learned this is called <i>reverse geocoding</i>.)</p>
     
 <p>At the startup I worked at, we paid several thousands of dollars per year for the Google Maps API to do a reverse lookup (that decision was made long before I joined). Given the coordinates, it gave us back a full address. We only cared about the state they were in, so we ignored the rest. If the user didn't allow us to check their location, we simply showed a state selection screen:</p>
 
