@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mapping latitude and longitude to country, state, or city - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I made a library that takes GPS coordinates and gives you the state.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Mapping latitude and longitude to country, state, or city">
+    <meta property="og:description" content="I made a library that takes GPS coordinates and gives you the state.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/borderstexas50.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/coord2state.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="scripts/coord2state.min.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Mapping latitude and longitude to country, state, or city</h1>
+	<small>7/3/2025</small><br><br>
+
+<p>An app can easily check a user's location (with permission), but figuring out <i>where</i> that location is, is far more difficult. For example, a web app can use <i>geolocation.getCurrentPosition()</i> to get a user's location in the form of latitude and longitude coordinates. But how do you convert coordinates to country, state, or city? Well, you have to look it up, somehow.</p>
+    
+<p>At the startup I worked at, we paid several thousands of dollars per year for the Google Maps API to do a reverse lookup (that decision was made long before I joined). Given the coordinates, it gave us back a full address. We only cared about the state they were in, so we ignored the rest. If the user didn't allow us to check their location, we simply showed a state selection screen:</p>
+
+<img src="images/stateselection.png" class="center" style="max-width:70%; border: 1px solid black;" alt="">
+
+
+<p>We paid thousands of dollars a year, just for users to avoid this screen!? Yep.</p>
+
+<p>Shortly after I joined the company, I tried to find a library that lets you lookup the state from coordinates, but I didn't find one. It seemed like the sort of thing that should exist. There are a lot of products that want to show you the nearest store. Some products use the user's IP address to determine the location. Or we could have done a simple distance check to a set of known points. Either would have been good enough.</p>
+
+<p>Now that I don't have a need for such a library, I went down the rabbit hole and made <b><a href="https://github.com/AZHenley/coord2state">coord2state</a></b>, based on actual US state borders for quick lookups. It is a single JavaScript file with no dependencies that can run client-side to determine which state a given latitude and longitude point falls in. It is 260 KB and is 99.9% accurate compared to the US Census Bureau's borderlines. You could have 100% accuracy if you were ok with 21 MB! It is on <a href="https://github.com/AZHenley/coord2state">GitHub</a> and <a href="https://www.npmjs.com/package/coord2state">NPM</a>.</p>
+
+<p>Try it:</p>
+
+
+<div style="font-family: sans-serif; padding: 1em; border: 1px solid #ccc; max-width: 400px; border-radius: 8px;">
+  <div style="margin-bottom: 1em;">
+    <label style="margin-right: 1em;">
+      Lat:
+      <input id="lat" type="number" value="42.9" step="0.1" style="width: 100px; margin-left: 0.3em;">
+    </label>
+    <label>
+      Lon:
+      <input id="lon" type="number" value="-75.4" step="0.1" style="width: 100px; margin-left: 0.3em;">
+    </label>
+  </div>
+  <button id="btn" style="padding: 0.4em 1em; border: none; background-color: #007acc; color: white; border-radius: 4px; cursor: pointer;">
+    Lookup
+  </button>
+  <p id="out" style="margin-top: 1em; font-weight: bold;">State code: ?</p>
+</div><br>
+
+
+<hr>
+
+<h3>How does it work?</h3>
+
+<p>The US Census Bureau publishes border <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html">data</a> for use in GIS software. I downloaded the state borders from 2024, which came in a 50 MB binary file detailing the vectors of each border. Luckily there are several Python libraries that make these files easy to work with.</p>
+
+<pre class="prettyprint lang-py">
+states = gpd.read_file("tl_2024_us_state.shp")
+lon, lat = -74.0060, 40.7128 # New York
+match = states[states.geometry.contains(Point(lon, lat))].iloc[0]["NAME"]
+</pre>
+
+<p>I could just wrap this up in my own web API and avoid the expensive Google Maps API. It would work well, but that is boring. My goal is to do it all client-side.</p>
+
+<p>At a first glance, the borders are <i>really</i> detailed.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>State</th>
+        <th>Vertices</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Texas</td><td>62855</td></tr>
+      <tr><td>Virginia</td><td>49707</td></tr>
+      <tr><td>Minnesota</td><td>40293</td></tr>
+      <tr><td>West Virginia</td><td>35242</td></tr>
+      <tr><td>Idaho</td><td>35120</td></tr>
+      <tr><td>Kentucky</td><td>34623</td></tr>
+      <tr><td>North Dakota</td><td>32441</td></tr>
+      <tr><td>North Carolina</td><td>32133</td></tr>
+      <tr><td>Georgia</td><td>30758</td></tr>
+      <tr><td>Arkansas</td><td>29782</td></tr>
+      <tr><td>Tennessee</td><td>28874</td></tr>
+      <tr><td>Montana</td><td>26724</td></tr>
+      <tr><td>Maryland</td><td>26093</td></tr>
+      <tr><td>Mississippi</td><td>25719</td></tr>
+      <tr><td>Iowa</td><td>24200</td></tr>
+      <tr><td>Louisiana</td><td>21547</td></tr>
+      <tr><td>Oklahoma</td><td>21192</td></tr>
+      <tr><td>Florida</td><td>20603</td></tr>
+      <tr><td>Missouri</td><td>20283</td></tr>
+      <tr><td>South Dakota</td><td>19954</td></tr>
+      <tr><td>Illinois</td><td>19761</td></tr>
+      <tr><td>Maine</td><td>18932</td></tr>
+      <tr><td>South Carolina</td><td>17509</td></tr>
+      <tr><td>Ohio</td><td>17354</td></tr>
+      <tr><td>New Hampshire</td><td>16608</td></tr>
+      <tr><td>Indiana</td><td>16241</td></tr>
+      <tr><td>Wisconsin</td><td>16184</td></tr>
+      <tr><td>Pennsylvania</td><td>15994</td></tr>
+      <tr><td>Alaska</td><td>15329</td></tr>
+      <tr><td>Oregon</td><td>14581</td></tr>
+      <tr><td>Nebraska</td><td>13992</td></tr>
+      <tr><td>Alabama</td><td>13638</td></tr>
+      <tr><td>Kansas</td><td>13285</td></tr>
+      <tr><td>Vermont</td><td>12119</td></tr>
+      <tr><td>California</td><td>12103</td></tr>
+      <tr><td>Arizona</td><td>10816</td></tr>
+      <tr><td>Michigan</td><td>10705</td></tr>
+      <tr><td>New York</td><td>10276</td></tr>
+      <tr><td>Nevada</td><td>9537</td></tr>
+      <tr><td>Wyoming</td><td>8591</td></tr>
+      <tr><td>Washington</td><td>7945</td></tr>
+      <tr><td>New Jersey</td><td>7896</td></tr>
+      <tr><td>Colorado</td><td>7513</td></tr>
+      <tr><td>Utah</td><td>7490</td></tr>
+      <tr><td>District of Columbia</td><td>7365</td></tr>
+      <tr><td>New Mexico</td><td>7097</td></tr>
+      <tr><td>Delaware</td><td>5345</td></tr>
+      <tr><td>Massachusetts</td><td>4783</td></tr>
+      <tr><td>Hawaii</td><td>3519</td></tr>
+      <tr><td>Connecticut</td><td>3204</td></tr>
+      <tr><td>Rhode Island</td><td>2669</td></tr>
+    </tbody>
+  </table>
+
+<p>Thousands and thousands of vertices for a single state seems like way more precision than we need. For example, North Dakota has 32,441 vertices despite it being a rectangle with three straight sides and one jagged side that follows a river.</p>
+
+<img src="images/bordersnorthdakota.png" class="center" style="max-width:90%; border: 1px solid black;" alt="">
+
+<p>Surely we could simplify the borders a bit without losing much accuracy? The <a href="https://github.com/shapely/shapely">Shapely</a> library already implements the <a href="https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm">Douglas-Peucker algorithm</a> for simplifying lines. It removes points that don't change the overall shape within a specified tolerance.</p>
+
+<p>With a tolerance of 0.5&deg; (not an angle, but a linear distance measured in degrees of latitude/longitude), it reduces the number of vertices by 99.9% for most states. For example, Texas is reduced from 62,855 vertices to 14!</p>
+
+<img src="images/borderstexas50.png" class="center" style="max-width:80%; border: 1px solid black;" alt="">
+
+<p>You can see that it oversimplifies by quite a bit though. It takes going down to 0.01&deg; tolerance to make the differences indiscernible at this resolution, and yet it still reduces the vertices for most states by 99%. Texas is reduced by 98.8% to 756 vertices:</p>
+
+<img src="images/borderstexas01.png" class="center" style="max-width:80%; border: 1px solid black;" alt="">
+
+<p>How much accuracy are we losing though? In terms of total area, it is a very small amount of error. Far less than 1%. I set up an experiment that compares the original geometry with the simplified geometry by testing 1,000,000 random points within the US.</p>
+
+<img src="images/bordersnotebook.png" class="center" style="max-width:95%;" alt="">
+
+<p>A tolerance of 0.1&deg; gives an accuracy of 99.3%!</p>
+
+<p>Alright, that seems like it is <i>probably</i> accurate enough for most use cases. But none of this matters unless we can get the size down. I'd really like it to be less than 1 MB if this is going to run client side.</p>
+
+<p>I need to convert the geometry data into an easier to use JSON format along with some JavaScript code that can look up which polygon a given point is in. Again, we can use an existing library to do all the hard work for us. <a href="https://github.com/geopandas/geopandas">Geopandas</a> can load the geometry data and convert it to JSON. ChatGPT wrote a Python script that injects the JSON into this JavaScript template (it does <i>find and replace</i> on "geojson" with the JSON literal):</p>
+
+<img src="images/bordersjstemplate.png" class="center" style="max-width:80%;" alt="">
+
+<p>Ok, so now I have a working JS library that I could potentially ship. Next, I need to measure how much space it takes! A tolerance of 0.1&deg; results in a 168 KB size JS file. We can minify it though. That brings it down to 55 KB.</p>
+
+<p>That is definitely usable as a client-side library!!!</p>
+
+<p>I wrapped it all up into a Jupyter notebook that compares accuracy and file size based on tolerance so that I could find the ideal size to go with. The results:</p>
+
+<table style="width:90%;">
+  <thead>
+    <tr>
+      <th>Tolerance</th>
+      <th>Accuracy</th>
+      <th>Size</th>
+      <th>Minified</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.000&deg; (baseline)</td>
+      <td>100.0000%</td>
+      <td>72 MB</td>
+      <td>21 MB</td>
+    </tr>
+    <tr>
+      <td>0.001&deg;</td>
+      <td>99.9909%</td>
+      <td>4.2 MB</td>
+      <td>1.2 MB</td>
+    </tr>
+    <tr>
+      <td>0.005&deg;</td>
+      <td>99.9505%</td>
+      <td>1.5 MB</td>
+      <td>439 KB</td>
+    </tr>
+    <tr>
+      <td>0.010&deg;</td>
+      <td>99.9067%</td>
+      <td>870 KB</td>
+      <td>260 KB</td>
+    </tr>
+    <tr>
+      <td>0.050&deg;</td>
+      <td>99.6473%</td>
+      <td>257 KB</td>
+      <td>81 KB</td>
+    </tr>
+    <tr>
+      <td>0.100&deg;</td>
+      <td>99.3468%</td>
+      <td>168 KB</td>
+      <td>55 KB</td>
+    </tr>
+    <tr>
+      <td>0.500&deg;</td>
+      <td>96.3959%</td>
+      <td>96 KB</td>
+      <td>34 KB</td>
+    </tr>
+    <tr>
+      <td>1.000&deg;</td>
+      <td>92.3244%</td>
+      <td>89 KB</td>
+      <td>33 KB</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>These results show that a small drop in accuracy gives a huge drop in file size.</p>
+
+<h3>Can it be improved?</h3>
+
+<p>It is worth pointing out that my evaluation of accuracy is limited. The benchmark randomly chooses points within the bounding box of the continental US, but the population of the US does not follow a random distribution. The test could be expanded to generate points based on a population density map.</p>
+
+<p>Also, testing points that are obviously in the center of a state is not interesting. It is near borders that we actually care about. The overall results will hide areas with high error rates, such as islands or narrow borders. The next step would be to identify these areas and build a test set for them.</p> 
+
+<p>I casually scanned the 10 most populous cities to see if they were being impacted by the simplfied borders. At 0.1&deg;, there are some issues, such as a sliver of Staten Island being considered New Jersey. 😬 Don't come after me, please. At 0.01&deg;, the problem goes away.</p>
+
+<p>It could improve results to use a different precision for states based on their population or density.</p>
+
+<p>A side effect of the geometry simplication is that there are some very small gaps between states. Based on your use case, you'll need to handle the case of the point not being within any state borders. In these rare cases, you could fall back to a different method, such as distance checking centroid points or adding an episilon to all state borders. (The user may also be in another country or in the ocean...)</p>
+
+<p>It is also possible to apply my exact approach to any other borders, such as the city borders also provided by the US Census Bureau. However, this is going to require significant memory, so you wouldn't want to ship it as a client-side JS library. You'll want a more efficient data structure for doing the lookup too (e.g., <a href="https://en.wikipedia.org/wiki/Binary_space_partitioning">binary space partioning</a>).</p>
+
+<hr>
+
+<p>For most casual use cases, the library will be fine as is. You can find it on <a href="https://github.com/AZHenley/coord2state">GitHub</a> and <a href="https://www.npmjs.com/package/coord2state">NPM</a>.</p>
+
+<pre class="prettyprint lang-sh">
+npm install coord2state
+</pre>
+
+<br><br><br><br>
+
+  <script>
+    document.getElementById("btn").onclick = () => {
+      const lat = parseFloat(document.getElementById("lat").value);
+      const lon = parseFloat(document.getElementById("lon").value);
+      const state = getState(lat, lon);
+      document.getElementById("out").textContent =
+        state ? `State code: ${state}` : "No state found.";
+    };
+  </script>
+</body>
+</html>
