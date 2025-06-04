@@ -171,17 +171,17 @@ match = states[states.geometry.contains(Point(lon, lat))].iloc[0]["NAME"]
 
 <p>Thousands and thousands of vertices for a single state seems like way more precision than we need. For example, North Dakota has 32,441 vertices despite it being a rectangle with three straight sides and one jagged side that follows a river.</p>
 
-<img src="images/bordersnorthdakota.png" class="center" style="max-width:90%; border: 1px solid black;" alt="">
+<img src="images/bordersnorthdakota.png" class="center" style="max-width:95%; border: 1px solid black;" alt="">
 
 <p>Surely we could simplify the borders a bit without losing much accuracy? The <a href="https://github.com/shapely/shapely">Shapely</a> library already implements the <a href="https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm">Douglas-Peucker algorithm</a> for simplifying lines. It removes points that don't change the overall shape within a specified tolerance.</p>
 
 <p>With a tolerance of 0.5&deg; (not an angle, but a linear distance measured in degrees of latitude/longitude), it reduces the number of vertices by 99.9% for most states. For example, Texas is reduced from 62,855 vertices to 14!</p>
 
-<img src="images/borderstexas50.png" class="center" style="max-width:80%; border: 1px solid black;" alt="">
+<img src="images/borderstexas50.png" class="center" style="max-width:95%; border: 1px solid black;" alt="">
 
 <p>You can see that it oversimplifies by quite a bit though. It takes going down to 0.01&deg; tolerance to make the differences indiscernible at this resolution, and yet it still reduces the vertices for most states by 99%. Texas is reduced by 98.8% to 756 vertices:</p>
 
-<img src="images/borderstexas01.png" class="center" style="max-width:80%; border: 1px solid black;" alt="">
+<img src="images/borderstexas01.png" class="center" style="max-width:95%; border: 1px solid black;" alt="">
 
 <p>How much accuracy are we losing though? In terms of total area, it is a very small amount of error. Far less than 1%. I set up an experiment that compares the original geometry with the simplified geometry by testing 1,000,000 random points within the US.</p>
 
