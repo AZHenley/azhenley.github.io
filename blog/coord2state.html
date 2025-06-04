@@ -274,7 +274,7 @@ match = states[states.geometry.contains(Point(lon, lat))].iloc[0]["NAME"]
 
 <p>It could improve results to use a different precision for states based on their population or density.</p>
 
-<p>A side effect of the geometry simplication is that there are some very small gaps between states. Based on your use case, you'll need to handle the case of the point not being within any state borders. In these rare cases, you could fall back to a different method, such as distance checking centroid points or adding an episilon to all state borders. (The user may also be in another country or in the ocean...)</p>
+<p>A side effect of the geometry simplication is that there are some very small gaps between states. Based on your use case, you'll need to handle the case of the point not being within any state borders. In these rare cases, you could fall back to a different method, such as distance checking centroid points, adding an episilon to all state borders, or simply asking the user. (The user may also be in another country or in the ocean...)</p>
 
 <p>It is also possible to apply my exact approach to any other borders, such as the city borders provided by the US Census Bureau. However, this is going to require significant memory, so you wouldn't want to ship it as a client-side JS library. You'll want a more efficient data structure for doing the lookup too (e.g., <a href="https://en.wikipedia.org/wiki/Binary_space_partitioning">binary space partioning</a>).</p>
 
