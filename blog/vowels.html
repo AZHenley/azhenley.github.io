@@ -70,7 +70,7 @@ def has_vowels(s: str) -> bool:
     ...
 </pre>
 
-<p>This is the function stub I'm filling in. If there is at least one vowel in the input string, return True, otherwise return False.</p>
+<p>This is the function stub I'm filling in. If there is at least one vowel in the input string, return True, otherwise return False. You can find the code from this post on <a href="https://github.com/AZHenley/vowels">GitHub</a>.</p>
 
 
 <h3>Method #1: For loop</h3>
@@ -558,6 +558,8 @@ def has_vowel(s: str) -> bool:
 <p>I also compared the <i>re.search</i> method to a pre-compiled regex (<i>re.compile</i>). The difference is quite large for small strings (0.009 seconds versus 0.2 seconds for 100,000 calls each with length 10) but neglible for long strings (0.234 seconds versus 0.235 seconds for 10,000 calls each with length 1000). CPython actually always compiles the regex and caches it, even if we don't explicitly call compile. See the logic in <a href="https://github.com/python/cpython/blob/main/Lib/re/__init__.py#L174">re/__init__.py</a>. The difference then is just whether we include the compilation work and cache lookups in the benchmark time.</p>
 
 <p>To summarize, for very short strings, <i>loop_in</i> is the fastest. At a length of 25, it is matched by regex. For longer strings, regex reigns supreme. Comparing <i>loop_in</i> to <i>set_intersection</i>, if vowels tend to appear early in the string, <i>loop_in</i> wins. If strings are long (>500 characters) or have sparse vowels, <i>set_intersection</i> wins.</p>
+
+<p>You can find all the code on <a href="https://github.com/AZHenley/vowels">GitHub</a>.</p>
 
 <hr>
 
