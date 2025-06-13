@@ -90,7 +90,7 @@ def has_vowel(s):
 <p>Except it does bother me that we are calling <i>lower()</i> which will always create a copy (appending to a string will <a href="pythonstringsaremutable.html">sometimes</a> mutate it in place but lower does <a href="https://github.com/python/cpython/blob/a58026a5e3da9ca2d09ef51aa90fe217f9a975ec/Objects/unicodectype.c#L192">not</a>). We can fix it easily:</p>
 
 <pre class="prettyprint lang-py">
-def has_vowel(s):
+def loop_in(s):
     for c in s:
         if c in "aeiouAEIOU":
             return True 
@@ -103,7 +103,7 @@ def has_vowel(s):
 <p>It is really just a more Pythonic form of:</p>
 
 <pre class="prettyprint lang-py">
-def has_vowel(s):
+def loop_or(s):
     for c in s.lower():
         if c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u':
             return True 
@@ -116,7 +116,7 @@ def has_vowel(s):
 <p>And if we want to be exhaustive, then we should try a nested for loop:</p>
 
 <pre class="prettyprint lang-py">
-def has_vowel(s):
+def nested_loop(s):
     vowels = "aeiouAEIOU"
     for c in s:
         for v in vowels:
@@ -131,7 +131,7 @@ def has_vowel(s):
 <p>Time to get interesting. Here is my favorite solution that I thought of:</p>
 
 <pre class="prettyprint lang-py">
-def has_vowel(s):
+def set_intersection(s):
     return set(s) & set("aeiouAEIOU")
 </pre>
 
@@ -145,7 +145,7 @@ def has_vowel(s):
 <h3>Method #5: Generator Expression</h3>
 
 <pre class="prettyprint lang-py">
-def has_vowel(s):
+def any_gen(s):
     return any(c in "aeiouAEIOU" for c in s)
 </pre>
 
@@ -157,7 +157,7 @@ def has_vowel(s):
 <p>Now that I'm getting into the functional headspace, we have to try recursion:</p>
 
 <pre class="prettyprint lang-py">
-def has_vowel(s):
+def recursion(s):
     if not s:
         return False
     return s[0] in "aeiouAEIOU" or has_vowel(s[1:])
@@ -172,7 +172,7 @@ def has_vowel(s):
 
 <pre class="prettyprint lang-py">
 import re
-def has_vowel(s):
+def regex(s):
     return bool(re.search(r'[aeiouAEIOU]', s))
 </pre>
 
@@ -183,7 +183,7 @@ def has_vowel(s):
 
 <pre class="prettyprint lang-py">
 import re
-def contains_vowel(s):
+def regex_replace(s):
     return len(re.sub(r'[aeiouAEIOU]', '', s)) != len(s)
 </pre>
 
@@ -195,7 +195,7 @@ def contains_vowel(s):
 <p>Now that we have the obvious approaches, what else can we do?</p>
 
 <pre class="prettyprint lang-py">
-def has_vowel(s):
+def filter_lambda(s):
     return bool(list(filter(lambda x: x in "aeiouAEIOU", s)))
 </pre>
 
@@ -207,7 +207,7 @@ def has_vowel(s):
 <p>Similar but perhaps a bit better:</p>
 
 <pre class="prettyprint lang-py">
-def has_vowel(s):
+def map_lambda(s):
     return any(map(lambda x: x in "aeiouAEIOU", s))
 </pre> 
 
@@ -220,7 +220,7 @@ def has_vowel(s):
 
 <pre class="prettyprint lang-py">
 primes = [i for i in range(2, 1000) if factorial(i - 1) % i == (i - 1)]
-def has_vowel(s: str) -> bool:
+def prime(s: str) -> bool:
     vowels = "aeiouAEIOU"
     vowel_primes_dict = {c: primes[ord(c)] for c in vowels}
     try:
@@ -256,54 +256,54 @@ def has_vowel(s: str) -> bool:
   </thead>
   <tbody>
     <tr>
-      <td>method_loop_in</td>
+      <td>loop_in</td>
       <td>0.001219</td>
     </tr>
     <tr>
-      <td>method_regex</td>
+      <td>regex</td>
       <td>0.002039</td>
     </tr>
     <tr>
-      <td>method_any_gen</td>
+      <td>any_gen</td>
       <td>0.002735</td>
     </tr>
     <tr>
-      <td>method_regex_replace</td>
+      <td>regex_replace</td>
       <td>0.003047</td>
     </tr>
     <tr>
-      <td>method_map</td>
+      <td>map_lambda</td>
       <td>0.003179</td>
     </tr>
     <tr>
-      <td>method_recursion</td>
+      <td>recursion</td>
       <td>0.004066</td>
     </tr>
     <tr>
-      <td>method_filter</td>
+      <td>filter_lambda</td>
       <td>0.004234</td>
     </tr>
     <tr>
-      <td>method_set_intersection</td>
+      <td>set_intersection</td>
       <td>0.004465</td>
     </tr>
     <tr>
-      <td>method_loop_or</td>
+      <td>loop_or</td>
       <td>0.008870</td>
     </tr>
     <tr>
-      <td>method_nested_loop</td>
+      <td>nested_loop</td>
       <td>0.010895</td>
     </tr>
     <tr>
-      <td>method_prime</td>
+      <td>prime</td>
       <td>0.016482</td>
     </tr>
   </tbody>
 </table>
 
 
-<p>Ok, this looks reasonable. All of the methods look fast at this length. Some notable things to call out: the simple <i>method_loop_in</i> is the winner but the very similar <i>method_loop_or</i> is quite slow. Regex search is fast&mdash;much faster than I expected actually. My beloved set intersection is plenty fast for real world use but doesn't look great in the ranking. Even the recursion beats it. Unsurprising, the prime number joke is slow. But not <i>that</i> slow.</p>
+<p>Ok, this looks reasonable. All of the methods look fast at this length. Some notable things to call out: the simple <i>loop_in</i> is the winner but the very similar <i>loop_or</i> is quite slow. Regex search is fast&mdash;much faster than I expected actually. My beloved set intersection is plenty fast for real world use but doesn't look great in the ranking. Even the recursion beats it. Unsurprising, the prime number joke is slow. But not <i>that</i> slow.</p>
 
 <p>The spread gets much more noticeable as the string length increases. Here are the results when the string length is 100:</p>
 
@@ -316,47 +316,47 @@ def has_vowel(s: str) -> bool:
   </thead>
   <tbody>
     <tr>
-      <td>method_regex</td>
+      <td>regex</td>
       <td>0.003778</td>
     </tr>
     <tr>
-      <td>method_regex_replace</td>
+      <td>regex_replace</td>
       <td>0.005480</td>
     </tr>
     <tr>
-      <td>method_loop_in</td>
+      <td>loop_in</td>
       <td>0.008526</td>
     </tr>
     <tr>
-      <td>method_any_gen</td>
+      <td>any_gen</td>
       <td>0.015479</td>
     </tr>
     <tr>
-      <td>method_set_intersection</td>
+      <td>set_intersection</td>
       <td>0.015495</td>
     </tr>
     <tr>
-      <td>method_map</td>
+      <td>map_lambda</td>
       <td>0.021085</td>
     </tr>
     <tr>
-      <td>method_filter</td>
+      <td>filter_lambda</td>
       <td>0.026546</td>
     </tr>
     <tr>
-      <td>method_recursion</td>
+      <td>recursion</td>
       <td>0.040774</td>
     </tr>
     <tr>
-      <td>method_prime</td>
+      <td>prime</td>
       <td>0.077477</td>
     </tr>
     <tr>
-      <td>method_loop_or</td>
+      <td>loop_or</td>
       <td>0.082003</td>
     </tr>
     <tr>
-      <td>method_nested_loop</td>
+      <td>nested_loop</td>
       <td>0.104956</td>
     </tr>
   </tbody>
@@ -379,77 +379,77 @@ def has_vowel(s: str) -> bool:
   </thead>
   <tbody>
     <tr>
-      <td>method_regex</td>
+      <td>regex</td>
       <td>0.002079</td>
       <td>0.003778</td>
       <td>0.020088</td>
       <td>0.181247</td>
     </tr>
     <tr>
-      <td>method_regex_replace</td>
+      <td>regex_replace</td>
       <td>0.003012</td>
       <td>0.005480</td>
       <td>0.027443</td>
       <td>0.245306</td>
     </tr>
     <tr>
-      <td>method_set_intersection</td>
+      <td>set_intersection</td>
       <td>0.004241</td>
       <td>0.015495</td>
       <td>0.082475</td>
       <td>0.601355</td>
     </tr>
     <tr>
-      <td>method_loop_in</td>
+      <td>loop_in</td>
       <td>0.001170</td>
       <td>0.008526</td>
       <td>0.076880</td>
       <td>0.763442</td>
     </tr>
     <tr>
-      <td>method_any_gen</td>
+      <td>any_gen</td>
       <td>0.002662</td>
       <td>0.015479</td>
       <td>0.137218</td>
       <td>1.356772</td>
     </tr>
     <tr>
-      <td>method_map</td>
+      <td>map_lambda</td>
       <td>0.003090</td>
       <td>0.021085</td>
       <td>0.192258</td>
       <td>1.915244</td>
     </tr>
     <tr>
-      <td>method_filter</td>
+      <td>filter_lambda</td>
       <td>0.004305</td>
       <td>0.026546</td>
       <td>0.244302</td>
       <td>2.424177</td>
     </tr>
     <tr>
-      <td>method_loop_or</td>
+      <td>loop_or</td>
       <td>0.007713</td>
       <td>0.082003</td>
       <td>0.769124</td>
       <td>7.814960</td>
     </tr>
     <tr>
-      <td>method_nested_loop</td>
+      <td>nested_loop</td>
       <td>0.008718</td>
       <td>0.104956</td>
       <td>0.797087</td>
       <td>8.455867</td>
     </tr>
     <tr>
-      <td>method_prime</td>
+      <td>prime</td>
       <td>0.016113</td>
       <td>0.077477</td>
       <td>2.619118</td>
       <td>203.579320</td>
     </tr>
     <tr>
-      <td>method_recursion</td>
+      <td>recursion</td>
       <td>0.004064</td>
       <td>0.040774</td>
       <td>DNF</td>
@@ -474,77 +474,77 @@ def has_vowel(s: str) -> bool:
   </thead>
   <tbody>
     <tr>
-      <td>method_regex</td>
+      <td>regex</td>
       <td>0.002083</td>
       <td>0.004288</td>
       <td>0.025301</td>
       <td>0.235313</td>
     </tr>
     <tr>
-      <td>method_regex_replace</td>
+      <td>regex_replace</td>
       <td>0.002950</td>
       <td>0.005264</td>
       <td>0.027415</td>
       <td>0.244298</td>
     </tr>
     <tr>
-      <td>method_set_intersection</td>
+      <td>set_intersection</td>
       <td>0.004346</td>
       <td>0.015110</td>
       <td>0.080171</td>
       <td>0.660243</td>
     </tr>
     <tr>
-      <td>method_loop_in</td>
+      <td>loop_in</td>
       <td>0.001444</td>
       <td>0.011158</td>
       <td>0.100641</td>
       <td>0.989452</td>
     </tr>
     <tr>
-      <td>method_any_gen</td>
+      <td>any_gen</td>
       <td>0.003282</td>
       <td>0.019758</td>
       <td>0.179111</td>
       <td>1.770298</td>
     </tr>
     <tr>
-      <td>method_map</td>
+      <td>map_lambda</td>
       <td>0.003757</td>
       <td>0.026654</td>
       <td>0.252468</td>
       <td>2.528173</td>
     </tr>
     <tr>
-      <td>method_filter</td>
+      <td>filter_lambda</td>
       <td>0.004106</td>
       <td>0.026335</td>
       <td>0.244043</td>
       <td>2.424267</td>
     </tr>
     <tr>
-      <td>method_loop_or</td>
+      <td>loop_or</td>
       <td>0.011777</td>
       <td>0.123697</td>
       <td>1.029399</td>
       <td>10.184211</td>
     </tr>
     <tr>
-      <td>method_nested_loop</td>
+      <td>nested_loop</td>
       <td>0.010682</td>
       <td>0.106838</td>
       <td>1.046352</td>
       <td>10.762563</td>
     </tr>
     <tr>
-      <td>method_prime</td>
+      <td>prime</td>
       <td>0.016026</td>
       <td>0.076423</td>
       <td>2.605674</td>
       <td>205.035926</td>
     </tr>
     <tr>
-      <td>method_recursion</td>
+      <td>recursion</td>
       <td>0.005025</td>
       <td>0.053011</td>
       <td>DNF</td>
