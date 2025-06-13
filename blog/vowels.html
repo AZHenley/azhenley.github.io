@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The fastest way to detect a vowel in a string - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="TODO.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="The fastest way to detect a vowel in a string">
+    <meta property="og:description" content="TODO.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/vowelscode.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/100.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">The fastest way to detect a vowel in a string</h1>
+	<small>6/13/2025</small><br><br>
+
+    <img src="images/vowelscode.png" class="center" style="max-width:80%; margin-bottom:28px; border:1px solid #000000;">
+
+
+<p>I was nerdsniped recently: <i>What is the best way to detect if a string has a vowel in it?</i></p>
+
+<p>This is trivial, right?</p>
+
+<p>But as I started getting into it, I realized there is much more to this. I challenged myself to come up with as many ways to detect a vowel as possible. I even asked a few friends to give it a go. Which is the fastest? Which should never be used? Which is the most clever?</p> 
+
+<p>This post involves 11 different methods of detecting a vowel, algorithmic analysis, dissembling Python bytecode, inspecting the CPython implementation, and even looking at compiled regex opcodes. Let's go.</p>
+
+<pre class="prettyprint lang-py">
+def has_vowels(s: str) -> bool:
+    ...
+</pre>
+
+<p>This is the function stub I'm filling in. If there is at least one vowel in the input string, return True, otherwise return False.</p>
+
+
+<h3>Method #1: For loop</h3>
+
+<p>I started with the naive approach:</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    for c in s.lower():
+        if c in "aeiou":
+            return True 
+    return False 
+</pre>
+
+<p>This is reasonable, readable, and probably without performance issues.</p>
+
+<p>Except it does bother me that we are calling <i>lower()</i> which will always create a copy (appending to a string will <a href="pythonstringsaremutable.html">sometimes</a> mutate it in place but lower does <a href="https://github.com/python/cpython/blob/a58026a5e3da9ca2d09ef51aa90fe217f9a975ec/Objects/unicodectype.c#L192">not</a>). We can fix it easily:</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    for c in s:
+        if c in "aeiouAEIOU":
+            return True 
+    return False 
+</pre>
+
+
+<h3>Method #2: For loop, C-style</h3>
+
+<p>It is really just a more Pythonic form of:</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    for c in s.lower():
+        if c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u':
+            return True 
+    return False 
+</pre>
+
+
+<h3>Method #3: Nested for loop</h3>
+
+<p>And if we want to be exhaustive, then we should try a nested for loop:</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    vowels = "aeiouAEIOU"
+    for c in s:
+        for v in vowels:
+            if c == v:
+                return True
+    return False
+</pre>
+
+
+<h3>Method #4: Set intersection</h3>
+
+<p>Time to get interesting. Here is my favorite solution that I thought of:</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    return set(s) & set("aeiouAEIOU")
+</pre>
+
+<p>It is short, clean, and a little bit clever.</p>
+
+<p>Put the input string into a set, put the vowels into another set, and do set intersection. Sets are quite efficient. Inserting into the first set is <i>O(n)</i>, the second set is constant length so creating it is <i>O(1)</i>, and the set intersection is proportional to the smaller of the two sets, which is constant length, so <i>O(1)</i>, for a overall time complexity of <i>O(n)</i>.</p>
+
+<p>However, it will process the entire input string rather than terminate at the first vowel. For really long strings where vowels show up early, it will do a lot of useless work.</p>
+
+
+<h3>Method #5: Generator Expression</h3>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    return any(c in "aeiouAEIOU" for c in s)
+</pre>
+
+<p>People love one liners. I channeled my inner Pythonista and came up with a generator expression like this. I think the performance will be equivalent to the first method, plus a bit of overhead for the generator object.</p>
+
+
+<h3>Method #6: Recursion</h3>
+
+<p>Now that I'm getting into the functional headspace, we have to try recursion:</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    if not s:
+        return False
+    return s[0] in "aeiouAEIOU" or has_vowel(s[1:])
+</pre>
+
+<p>CPython won't bode well with this. It will create a new string for every character in the input string, and it will crash if the string length is over 1000 (max recursion limit).</p>
+
+
+<h3>Method #7: Regex search</h3>
+
+<p>Whenever strings are involved, someone will say to use regex.</p>
+
+<pre class="prettyprint lang-py">
+import re
+def has_vowel(s):
+    return bool(re.search(r'[aeiouAEIOU]', s))
+</pre>
+
+<p>In the best case, I expect this to have performance similar to the C-style loop with some additional overhead to initialize.</p>
+
+
+<h3>Method #8: Regex replace</h3>
+
+<pre class="prettyprint lang-py">
+import re
+def contains_vowel(s):
+    return len(re.sub(r'[aeiouAEIOU]', '', s)) != len(s)
+</pre>
+
+<p>This will replace all vowels and then compare the string lengths to see if any were removed. It is inefficient because it won't short circuit and it creates a copy of the string.</p>
+
+
+<h3>Method #9: Filter</h3>
+
+<p>Now that we have the obvious approaches, what else can we do?</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    return bool(list(filter(lambda x: x in "aeiouAEIOU", s)))
+</pre>
+
+<p>It works but it is wasteful and won't terminate early.</p>
+
+
+<h3>Method #10: Map</h3>
+
+<p>Similar but perhaps a bit better:</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    return any(map(lambda x: x in "aeiouAEIOU", s))
+</pre> 
+
+<p>Using lambdas does increase your coolness, but is this an improvement over what we have so far? The book <a href="https://amzn.to/3TnesDf">Effective Python</a> says, <i>"list comprehensions are clearer than the map and filter built-in functions because they don't require lambda expressions"</i>. So it is less readable and likely less efficient than some of the other methods.</p>
+
+
+<h3>Method #11: Prime numbers</h3>
+
+<p>One of my former students, <a href="https://g.regory.dev/">Gregory Croisdale</a>, came up with an off-the-wall creative approach:</p>
+
+<pre class="prettyprint lang-py">
+primes = [i for i in range(2, 1000) if factorial(i - 1) % i == (i - 1)]
+def has_vowel(s: str) -> bool:
+    vowels = "aeiouAEIOU"
+    vowel_primes_dict = {c: primes[ord(c)] for c in vowels}
+    try:
+        s_num = reduce(lambda acc, v: acc * primes[ord(v)], s, 1)
+        v_num = reduce(lambda acc, v: acc * vowel_primes_dict[v], vowels, 1)
+        return gcd(s_num, v_num) != 1
+    except Exception:
+        return False
+</pre>
+
+<p>It maps each character of the input string and each vowel to a unique prime, encodes the input string as the product of its characters' primes, and returns True if the GCD of that product with the product of vowel-primes exceeds 1 (meaning it shares a vowel prime). 🤯</p>
+
+<h3><s>Method #12: Threads</s></h3>
+
+<p>What about parallelizing the search using threads? Break it up into <i>n</i> substrings and use one of the above methods on all the substrings. I tried. It was really, really slow. Perhaps if the strings were enormous (as in >1GB) and I <a href="https://docs.python.org/3/howto/free-threading-python.html">disabled the GIL</a>.</p>
+
+<hr>
+
+<h3>Benchmark</h3>
+
+<p>Alright, 11 methods covers the gamut of approaches that I can think of. Time to benchmark them!</p>
+
+<p>I compared all of these functions on random strings, with and without vowels, of varying lengths. It generates 2000 random strings (half with no vowels) and runs each of the methods on that string 5 times. This is done 3 times and reports the fastest total time.</p>
+
+<p>First, I tried it with a string length of 10 since the context of checking for vowels was in users' names.</p>
+
+<table style="width:90%;">
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Time (seconds)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>method_loop_in</td>
+      <td>0.001219</td>
+    </tr>
+    <tr>
+      <td>method_regex</td>
+      <td>0.002039</td>
+    </tr>
+    <tr>
+      <td>method_any_gen</td>
+      <td>0.002735</td>
+    </tr>
+    <tr>
+      <td>method_regex_replace</td>
+      <td>0.003047</td>
+    </tr>
+    <tr>
+      <td>method_map</td>
+      <td>0.003179</td>
+    </tr>
+    <tr>
+      <td>method_recursion</td>
+      <td>0.004066</td>
+    </tr>
+    <tr>
+      <td>method_filter</td>
+      <td>0.004234</td>
+    </tr>
+    <tr>
+      <td>method_set_intersection</td>
+      <td>0.004465</td>
+    </tr>
+    <tr>
+      <td>method_loop_or</td>
+      <td>0.008870</td>
+    </tr>
+    <tr>
+      <td>method_nested_loop</td>
+      <td>0.010895</td>
+    </tr>
+    <tr>
+      <td>method_prime</td>
+      <td>0.016482</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<p>Ok, this looks reasonable. All of the methods look fast at this length. Some notable things to call out: the simple <i>method_loop_in</i> is the winner but the very similar <i>method_loop_or</i> is quite slow. Regex search is fast&mdash;much faster than I expected actually. My beloved set intersection is plenty fast for real world use but doesn't look great in the ranking. Even the recursion beats it. Unsurprising, the prime number joke is slow. But not <i>that</i> slow.</p>
+
+<p>The spread gets much more noticeable as the string length increases. Here are the results when the string length is 100:</p>
+
+<table style="width:90%;">
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Time (seconds)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>method_regex</td>
+      <td>0.003778</td>
+    </tr>
+    <tr>
+      <td>method_regex_replace</td>
+      <td>0.005480</td>
+    </tr>
+    <tr>
+      <td>method_loop_in</td>
+      <td>0.008526</td>
+    </tr>
+    <tr>
+      <td>method_any_gen</td>
+      <td>0.015479</td>
+    </tr>
+    <tr>
+      <td>method_set_intersection</td>
+      <td>0.015495</td>
+    </tr>
+    <tr>
+      <td>method_map</td>
+      <td>0.021085</td>
+    </tr>
+    <tr>
+      <td>method_filter</td>
+      <td>0.026546</td>
+    </tr>
+    <tr>
+      <td>method_recursion</td>
+      <td>0.040774</td>
+    </tr>
+    <tr>
+      <td>method_prime</td>
+      <td>0.077477</td>
+    </tr>
+    <tr>
+      <td>method_loop_or</td>
+      <td>0.082003</td>
+    </tr>
+    <tr>
+      <td>method_nested_loop</td>
+      <td>0.104956</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<p>Both regex methods pull ahead! The prime number is no longer last? The loop with the <i>or</i> and the nested loops are the slowest. Wow.</p>
+
+<p>Here is a full table showing length 10, 100, 1000, and 10000.</p>
+
+<table style="width:90%;">
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>10 length</th>
+      <th>100 length</th>
+      <th>1000 length</th>
+      <th>10000 length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>method_regex</td>
+      <td>0.002079</td>
+      <td>0.003778</td>
+      <td>0.020088</td>
+      <td>0.181247</td>
+    </tr>
+    <tr>
+      <td>method_regex_replace</td>
+      <td>0.003012</td>
+      <td>0.005480</td>
+      <td>0.027443</td>
+      <td>0.245306</td>
+    </tr>
+    <tr>
+      <td>method_set_intersection</td>
+      <td>0.004241</td>
+      <td>0.015495</td>
+      <td>0.082475</td>
+      <td>0.601355</td>
+    </tr>
+    <tr>
+      <td>method_loop_in</td>
+      <td>0.001170</td>
+      <td>0.008526</td>
+      <td>0.076880</td>
+      <td>0.763442</td>
+    </tr>
+    <tr>
+      <td>method_any_gen</td>
+      <td>0.002662</td>
+      <td>0.015479</td>
+      <td>0.137218</td>
+      <td>1.356772</td>
+    </tr>
+    <tr>
+      <td>method_map</td>
+      <td>0.003090</td>
+      <td>0.021085</td>
+      <td>0.192258</td>
+      <td>1.915244</td>
+    </tr>
+    <tr>
+      <td>method_filter</td>
+      <td>0.004305</td>
+      <td>0.026546</td>
+      <td>0.244302</td>
+      <td>2.424177</td>
+    </tr>
+    <tr>
+      <td>method_loop_or</td>
+      <td>0.007713</td>
+      <td>0.082003</td>
+      <td>0.769124</td>
+      <td>7.814960</td>
+    </tr>
+    <tr>
+      <td>method_nested_loop</td>
+      <td>0.008718</td>
+      <td>0.104956</td>
+      <td>0.797087</td>
+      <td>8.455867</td>
+    </tr>
+    <tr>
+      <td>method_prime</td>
+      <td>0.016113</td>
+      <td>0.077477</td>
+      <td>2.619118</td>
+      <td>203.579320</td>
+    </tr>
+    <tr>
+      <td>method_recursion</td>
+      <td>0.004064</td>
+      <td>0.040774</td>
+      <td>DNF</td>
+      <td>DNF</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The regex methods are unbelievably fast regardless of string length. The C-style loops are very slow. I expected regex to be similar to these!? The prime number method begins to explode and everything else does just fine.</p>
+
+<p>But I was also curious about how sparse vowels would impact the results. I reran the benchmark with vowels always placed in the last 10% of the string.</p>
+
+<table style="width:90%;">
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>10 length</th>
+      <th>100 length</th>
+      <th>1000 length</th>
+      <th>10000 length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>method_regex</td>
+      <td>0.002083</td>
+      <td>0.004288</td>
+      <td>0.025301</td>
+      <td>0.235313</td>
+    </tr>
+    <tr>
+      <td>method_regex_replace</td>
+      <td>0.002950</td>
+      <td>0.005264</td>
+      <td>0.027415</td>
+      <td>0.244298</td>
+    </tr>
+    <tr>
+      <td>method_set_intersection</td>
+      <td>0.004346</td>
+      <td>0.015110</td>
+      <td>0.080171</td>
+      <td>0.660243</td>
+    </tr>
+    <tr>
+      <td>method_loop_in</td>
+      <td>0.001444</td>
+      <td>0.011158</td>
+      <td>0.100641</td>
+      <td>0.989452</td>
+    </tr>
+    <tr>
+      <td>method_any_gen</td>
+      <td>0.003282</td>
+      <td>0.019758</td>
+      <td>0.179111</td>
+      <td>1.770298</td>
+    </tr>
+    <tr>
+      <td>method_map</td>
+      <td>0.003757</td>
+      <td>0.026654</td>
+      <td>0.252468</td>
+      <td>2.528173</td>
+    </tr>
+    <tr>
+      <td>method_filter</td>
+      <td>0.004106</td>
+      <td>0.026335</td>
+      <td>0.244043</td>
+      <td>2.424267</td>
+    </tr>
+    <tr>
+      <td>method_loop_or</td>
+      <td>0.011777</td>
+      <td>0.123697</td>
+      <td>1.029399</td>
+      <td>10.184211</td>
+    </tr>
+    <tr>
+      <td>method_nested_loop</td>
+      <td>0.010682</td>
+      <td>0.106838</td>
+      <td>1.046352</td>
+      <td>10.762563</td>
+    </tr>
+    <tr>
+      <td>method_prime</td>
+      <td>0.016026</td>
+      <td>0.076423</td>
+      <td>2.605674</td>
+      <td>205.035926</td>
+    </tr>
+    <tr>
+      <td>method_recursion</td>
+      <td>0.005025</td>
+      <td>0.053011</td>
+      <td>DNF</td>
+      <td>DNF</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Regex still dominates, but my beloved set intersection method does much better.</p>
+
+<p>I also compared the <i>re.search</i> method to a pre-compiled regex (<i>re.compile</i>). The difference is quite large for small strings (0.009 seconds versus 0.2 seconds for 100,000 calls each with length 10) but neglible for long strings (0.234 seconds versus 0.235 seconds for 10,000 calls each with length 1000). CPython actually always compiles the regex and caches it, even if we don't explicitly call compile. See the logic in <a href="https://github.com/python/cpython/blob/main/Lib/re/__init__.py#L174">re/__init__.py</a>. The difference then is just whether we include the compilation work and cache lookups in the benchmark time.</p>
+
+<p>To summarize, for very short strings, <i>loop_in</i> is the fastest. At a length of 25, it is matched by regex. For longer strings, regex reigns supreme. Comparing <i>loop_in</i> to <i>set_intersection</i>, if vowels tend to appear early in the string, <i>loop_in</i> wins. If strings are long (>500 characters) or have sparse vowels, <i>set_intersection</i> wins.</p>
+
+<hr>
+
+
+<h3>How is regex so fast?</h3>
+
+<p>I was <i>really</i> surprised to see regex be that much faster. I expected it to have an overhead cost and then for it to converge with the basic loop method. I had to dig into this.</p>
+
+<p>What is going on here? Let's inspect the Python bytecode for these methods.</p>
+
+<pre class="prettyprint lang-py">
+def has_vowel(s):
+    for c in s:
+        if c in "aeiouAEIOU":
+            return True 
+    return False 
+</pre>
+
+<pre class="prettyprint lang-py">
+import re
+def has_vowel(s):
+    return bool(re.search(r'[aeiouAEIOU]', s))
+</pre>
+
+<p>The bytecode for the loop approach:</p>
+
+<pre class="prettyprint">
+   LOAD_FAST          s
+   GET_ITER
+L1 FOR_ITER      
+   STORE_FAST         c
+
+   LOAD_FAST          c
+   LOAD_CONST         'aeiouAEIOU'
+   CONTAINS_OP        0     
+   POP_JUMP_IF_TRUE   L2  
+   JUMP_BACKWARD      L1    
+
+L2 LOAD_FAST          c
+   SWAP
+   POP_TOP
+   RETURN_VALUE
+
+L3 END_FOR
+   POP_TOP
+   RETURN_CONST      None
+
+</pre>
+
+<p>The meat consists of the 7 opcodes starting at label L1. Let's go through them one by one. <i>FOR_ITER</i> pops the iterator and tries to get the next character (if there isn't one, it jumps to L3). <i>STORE_FAST</i> stores the current character into a local variable. <i>LOAD_FAST</i> places the character back onto the stack. <i>LOAD_CONST</i> pushes the vowel string onto the stack. <i>CONTAINS_OP</i> pops the two items off the stack, performs the <i>in</i> check, and pushes True or False to the stack. <i>POP_JUMP_IF_TRUE</i> jumps to L2 if the character was a vowel, otherwise continue. <i>JUMP_BACKWARD</i> goes back to L1 to repeat the process.</p>
+
+<p>These 7 opcodes execute for <b>every</b> single character. They are simple (except maybe <i>CONTAINS_OP</i>) though there is certainly some redudant work (like putting the vowel string on the stack each time).</p>
+
+<p>Compare it to the regex bytecode:</p>
+
+<pre class="prettyprint">
+  LOAD_GLOBAL        re
+  LOAD_ATTR          search
+  PUSH_NULL      
+  LOAD_CONST         '[aeiouAEIOU]'
+  LOAD_FAST          s
+  CALL               2
+  RETURN_VALUE
+</pre>
+
+<p>It just calls out to a C function. Looking at the implementation of CPython's regex engine (<a href="https://github.com/python/cpython/blob/main/Modules/_sre/sre.c">sre.c</a> and <a href="https://github.com/python/cpython/blob/main/Modules/_sre/sre_lib.h">sre_lib.h</a>), it creates an internal representation of the regex, iterates using a single for loop, and uses a table lookup (not a nested loop). The relevant code is found in the if block on line 1825 in sre_lib.h:</p>
+
+<img src="images/cpythonregex.png" class="center" style="max-width:95%;">
+
+<p>I wanted to get an idea of what the internal representation of the regex looks like, so I ran <i>re.compile("[aeiouAEIOU]", re.DEBUG)</i>, which prints out:</p>
+
+<pre class="prettyprint">
+IN
+    LITERAL 97
+    LITERAL 101
+    LITERAL 105
+    LITERAL 111
+    LITERAL 117
+    LITERAL 65
+    LITERAL 69
+    LITERAL 73
+    LITERAL 79
+    LITERAL 85
+
+0: INFO    14 0b100 1 1    (to 15)
+    in
+5: CHARSET [0x00000000, 0x00000000, 0x00208222, 0x00208222,
+            0x00000000, 0x00000000, 0x00000000, 0x00000000]
+14: FAILURE
+15: IN      11             (to 27)
+17: CHARSET [0x00000000, 0x00000000, 0x00208222, 0x00208222,
+            0x00000000, 0x00000000, 0x00000000, 0x00000000]
+26: FAILURE
+27: SUCCESS
+</pre>
+
+<p>The literals are the individual vowels, uppercase and lowercase. <i>CHARSET</i> does a single lookup to see if the current character is a vowel using a bitmap. Very clever! (I'm not sure why it has a second check rather than just continuing.)</p>
+
+<p>The huge performance difference we are seeing is a combination of the interpreter overhead and the optimized regex engine.</p>
+
+<hr>
+
+<p>Well, that was a fun rabbit hole. The results really were not what I expected. Regex are <b>really fast</b> and non-Pythonic code can be slow in comparison. In the end, should any of this change how you do string searches? No, not really. Do what ever is the easiest to maintain unless you are working with millions of strings and care about milliseconds. It was fun learning how all this works though.</p>
+
+<p>Now I can answer the question: <i>What is the fastest way to detect a vowel in a string?</i> A bitmap in C, probably.</p>
+
+
+<br><br><small>There are Amazon affiliate links on this page.</small>
+
+<br><br><br><br>
+
+</body>
+</html>
+
