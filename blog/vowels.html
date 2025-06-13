@@ -160,7 +160,7 @@ def any_gen(s):
 def recursion(s):
     if not s:
         return False
-    return s[0] in "aeiouAEIOU" or has_vowel(s[1:])
+    return s[0] in "aeiouAEIOU" or recursion(s[1:])
 </pre>
 
 <p>CPython won't bode well with this. It will create a new string for every character in the input string, and it will crash if the string length is 1000 (max recursion limit).</p>
