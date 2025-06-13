@@ -163,7 +163,7 @@ def has_vowel(s):
     return s[0] in "aeiouAEIOU" or has_vowel(s[1:])
 </pre>
 
-<p>CPython won't bode well with this. It will create a new string for every character in the input string, and it will crash if the string length is over 1000 (max recursion limit).</p>
+<p>CPython won't bode well with this. It will create a new string for every character in the input string, and it will crash if the string length is 1000 (max recursion limit).</p>
 
 
 <h3>Method #7: Regex search</h3>
