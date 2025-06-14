@@ -672,7 +672,9 @@ IN
 
 <p>Now I can answer the question: <i>What is the fastest way to detect a vowel in a string?</i> A bitmap in C, probably.</p>
 
-<p><b>Update:</b> <a href="https://news.ycombinator.com/item?id=44271428">Kranar</a> found that Python's <i>find()</i>, implemented in <a href="https://github.com/python/cpython/blob/6eb6c5dbfb528bd07d77b60fd71fd05d81d45c41/Objects/stringlib/fastsearch.h#L50">fastsearch.h</a> in C, outperforms the regex considerably. This reinforces that the CPython interpreter is the reason for the large performance differences.</p>
+<hr>
+
+<p><b>Update #1:</b> <a href="https://news.ycombinator.com/item?id=44271428">Kranar</a> found that Python's <i>find()</i>, implemented in <a href="https://github.com/python/cpython/blob/6eb6c5dbfb528bd07d77b60fd71fd05d81d45c41/Objects/stringlib/fastsearch.h#L50">fastsearch.h</a> in C, outperforms the regex considerably. This reinforces that the CPython interpreter is the reason for the large performance differences.</p>
 
 <pre class="prettyprint lang-py">
 def vowel_find(s):
@@ -680,6 +682,25 @@ def vowel_find(s):
         if s.find(c) != -1:
             return True
     return False
+</pre> 
+
+<p><b>Update #2:</b> <a href="https://news.ycombinator.com/item?id=44274121">a_e_k</a> found an even better solution that is beautifully simple! Simply swapping the loops is much faster than the regex and <i>find</i> solutions:</p>
+
+<pre class="prettyprint lang-py">
+def loop_in_perm(s):
+        for c in "aeiouAEIOU":
+            if c in s:
+                return True
+        return False
+</pre> 
+
+<p>More than twice as fast as <i>find</i> on short strings and 16x faster than regex on long strings.</p>
+
+<p>Swapping the loops also improves the <i>any</i> solution, making it comparable to <i>find</i>:</p>
+
+<pre class="prettyprint lang-py">
+  def any_gen_perm(s):
+      return any(c in s for c in "aeiouAEIOU")
 </pre> 
 
 <br><br><small>There are Amazon affiliate links on this page.</small>
