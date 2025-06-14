@@ -59,7 +59,7 @@
 <p><small><i>See the discussion of this post on <a href="https://news.ycombinator.com/item?id=44270717">Hacker News</a>, <a href="https://lobste.rs/s/lied71/fastest_way_detect_vowel_string">Lobste.rs</a>, and <a href="https://www.reddit.com/r/programming/comments/1lanhgu/the_fastest_way_to_detect_a_vowel_in_a_string/">Reddit</a>.</i></small></p>
 
 
-<p>I was nerdsniped recently: <i>What is the best way to detect if a string has a vowel in it?</i></p>
+<p>I was nerd-sniped recently: <i>What is the best way to detect if a string has a vowel in it?</i></p>
 
 <p>This is trivial, right?</p>
 
@@ -459,6 +459,10 @@ def prime(s: str) -> bool:
     </tr>
   </tbody>
 </table>
+
+<p>A graph of the same data (inspired by <a href="https://lobste.rs/s/lied71/fastest_way_detect_vowel_string#c_k8scwj">pronoiac</a>):</p>
+
+<img src="images/vowelsgraph.png" class="center" style="max-width:95%; border:1px solid #000000;">
 
 <p>The regex methods are unbelievably fast regardless of string length. The C-style loops are very slow. I expected regex to be similar to these!? The prime number method begins to explode and everything else does just fine.</p>
 
