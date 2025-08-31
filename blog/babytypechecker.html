@@ -247,7 +247,7 @@ def is_compatible(a: Type, b: Type) -&gt; bool:
     return False
 </pre>
 
-<p>So far we cover threee common cases: (1) if either side is <i>Any</i> then it is always compatible, if their outer types don't match (e.g., an <i>int</i> and a <i>List</i>) then it is not compatible, and (3) if both are primitives then their names must match (e.g., <i>int</i> vs <i>str</i>).</p>
+<p>So far we cover three common cases: (1) if either side is <i>Any</i> then it is always compatible, if their outer types don't match (e.g., an <i>int</i> and a <i>List</i>) then it is not compatible, and (3) if both are primitives then their names must match (e.g., <i>int</i> vs <i>str</i>).</p>
 
 <p>The compatibility rules will grow in complexity. Should you be able to use an <i>int</i> where a <i>float</i> is expected? What about union types, like <i>int | None</i>? If you inherit from another type, can you use them interchangeably?</p>
 
