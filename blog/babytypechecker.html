@@ -384,7 +384,14 @@ a: int = greet("hi")          # ❌ assigning str to int
 b: str = add(1, "two")        # ❌ argument type mismatch
 </pre>
 
-<p>Run the baby type checker on it and it will catch all the type errors!</p>
+<p>Run the baby type checker on it and it will catch all the type errors! In fact, there are two different type errors on the last line.</p>
+
+<pre class="prettyprint">
+8:4: return type str incompatible with int
+10:0: assigned str but annotation is int
+11:16: argument type mismatch
+11:0: assigned int but annotation is str
+</pre>
 
 <p><i>Note: If you're following along with the code on <a href="https://github.com/AZHenley/babytypechecker">GitHub</a> code, you can use --trace with babytypechecker.py to see a detailed output, including every individual type check that passed.</i></p>
 
@@ -569,25 +576,18 @@ class UnionType(Type):
     def __str__(self) -&gt; str: return " | ".join(map(str, self.options))
 </pre>
 
-<p>Now to test with a new example program:</p>
+<p>Now we can test the union types:</p>
 
 <pre class="prettyprint lang-py">
 from typing import Union, Optional
 
-x: int | str = 0          # ok
-x = "hi"                  # ok
-x = None                  # ❌ assign None where int | str expected
-
-y: Optional[int] = None   # ok
-y = 3                     # ok
-y = "nope"                # ❌ str vs int | None
-
-def f(v: Union[int, str]) -> int:
-    return v              # ❌ return int | str vs expected int
+a: Union[int, str] = 1  
+b: Union[bool, str] = "Hi"
+c: Optional[int] = None
+d: Union[bool, int] = "oops"   # ❌ str not in union
 </pre>
 
-
-<h3>Type narrowing (isinstance, is None, casts, unions)</h3>
+<h3>Type narrowing</h3>
 
 <p>We need to consider how types evolve inside control flow. When code checks whether a value is <i>None</i> or uses <i>isinstance</i>, the checker refines its knowledge of that variable. For example, if the conditional, <i>if x is not None</i>, is true, then inside that branch the type is narrowed. Assertions can also narrow types after runtime checks.</p>
 
@@ -654,18 +654,14 @@ def visit_Assert(self, n: ast.Assert) -&gt; None:
 <pre class="prettyprint lang-py">
 from typing import Optional
 
-def f(x: Optional[int], y: object):
+def f(x: Optional[int]):
     if x is not None:
-        z = x + 1          # ✔︎ x narrowed to int
-    if None is x:
-        x + 1              # ❌ using None as int
-    if isinstance(y, (int, str)):
-        y + 1              # ✔︎ ok if int
+        _ = x + 1      # ✔︎ good path: x narrowed to int
     else:
-        y + 1              # ❌ not int here (narrowed false-branch)
+        x + 1          # ❌ bad path: here x is None
 </pre>
 
-<p>We have type narrowing! Magic.</p>
+<p>We have type narrowing! Magic. Go ahead and test on the prior examples too to make sure we didn't break anything.</p>
 
 <h3>What's left?</h3>
 
