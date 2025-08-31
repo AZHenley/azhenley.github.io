@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Baby's first type checker - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Let's build a Python type checker in 300 lines of code.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Baby's first type checker">
+    <meta property="og:description" content="Let's build a Python type checker in 300 lines of code.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/babytypechecker.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/babytypechecker.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Baby's first type checker</h1>
+	<small>8/31/2025</small><br><br>
+
+    <img src="images/babytypechecker.png" class="center" style="max-width:40%; margin-bottom:28px; border:1px solid #000000;">
+
+
+<p>Have you ever wondered how type checking works? Me too&mdash;let's make one!</p>
+
+<p>Python allows optional type annotations like this:</p>
+
+<pre class="prettyprint lang-py">
+def foobar(name: str | None) -&gt; str:
+    return "Fizz!"
+buzz: int = 42
+</pre>
+
+<p>A type checker goes through the code to make sure that the kinds of values you use match what your functions and variables expect. In the example above, it would check if <i>foobar</i> always returns a <i>str</i>. Type checking can catch errors early and also act as documentation.</p> 
+
+<p>Some languages require type checking before you compile or run your code, like C++, while others, like Python, don't have a built-in type checker at all. Instead you either just wait until you have runtime errors or you use third-party tools, such as <a href="https://mypy-lang.org">Mypy</a>, <a href="https://microsoft.github.io/pyright/#/">Pyright</a>, or <a href="https://pyrefly.org">Pyrefly</a> to type check.</p>
+
+<p><i>Note: Python has an interesting history with typing. If you want to learn more, see the <a href="https://typing.python.org/en/latest/spec/index.html">specification</a> for the Python type system, the <a href="https://docs.python.org/3/library/typing.html">typing</a> module's documentation, or the <a href="https://peps.python.org/topic/typing/">PEPs</a> (Python Enhancement Proposals) related to types.</i></p>
+
+<h3>Our approach</h3>
+
+<p>Our baby type checker will take a Python code file, parse it, find type annotations, and then check whether the actual types are compatible with how they are used. Once we know something's type, we propagate it through the program, verifying that the types are used in appropriate ways, while also picking up more type information along the way.</p>
+
+<!-- **Show an image of the FIND ANNOTATIONS and CHECK COMPATIBILITY. -->
+
+<p>Here is an example snippet that we will eventually be able to type check:</p>
+
+<pre class="prettyprint lang-py">
+from __future__ import annotations
+
+def greet(name: str | None) -&gt; str:
+    if name is None:
+        return 42                    # ❌ int but expected str
+    return "Hello, " + name
+
+age: int = "42"                      # ❌ str but expected int
+
+def length(xs: list[int]) -&gt; int:
+    return len(xs) + xs              # ❌ cannot add list and int
+</pre>
+
+<p>We will support primitive types, containers, functions, assignments, binary operators, indexing, type unions, and a few scenarios of type narrowing. In 350 lines of code, it will catch a surprising number of type errors in actual Python. But type checking gets complicated so there will be a lot that we won't cover.</p>
+
+<p>Follow along with the code on <a href="https://github.com/AZHenley/babytypechecker">GitHub</a>. I'll omit bits in this article for brevity.</p>
+
+<p>Anyway, show me the code!</p>
+
+<img src="images/showmethecode.png" class="center" style="max-width:50%; border:1px solid #000000;">
+
+
+<h3>Finding the type annotations</h3>
+
+<p>First, we have to parse the Python code. Luckily, Python's <a href="https://docs.python.org/3/library/ast.html">ast</a> module makes this easy.</p>
+
+<pre class="prettyprint lang-py">
+import ast, sys, pprint
+
+def main(path: str) -&gt; None:
+    src = open(path, encoding="utf-8").read()
+    tree = ast.parse(src, filename=path, type_comments=True)
+    pprint.pp(ast.dump(tree, indent=4))
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python3 babytypechecker.py &lt;python-file&gt;")
+        raise SystemExit(1)
+    main(sys.argv[1])
+</pre>
+
+<p>If you run this on our example code snippet from before, you will see the text representation of the code's AST. If you read through it, you will see the import statement, the greet function's definition, and so on:</p>
+
+<pre class="prettyprint">
+('Module(\n'
+ '    body=[\n'
+ '        ImportFrom(\n'
+ "            module='__future__',\n"
+ '            names=[\n'
+ "                alias(name='annotations')],\n"
+ '            level=0),\n'
+ '        FunctionDef(\n'
+ "            name='greet',\n"
+ '            args=arguments(\n'
+ '                args=[\n'
+ '                    arg(\n'
+ "                        arg='name',\n"
+ '                        annotation=BinOp(\n'
+ "                            left=Name(id='str', ctx=Load()),\n"
+ '                            op=BitOr(),\n'
+ '                            right=Constant(value=None)))]),\n'
+ '            body=[\n'
+ '                If(\n'
+ '                    test=Compare(\n'
+ "                        left=Name(id='name', ctx=Load()),\n"
+ ...
+</pre>
+
+<p>All we care about right now is (1) finding type annotations and (2) saving them so we can reference them later.</p>
+
+<p>To walk Python's ast, we can subclass <i>ast.NodeVisitor</i> and implement functions for the specific kind of AST node we want to process, such as <i>visit_FunctionDef</i> for function definitions. Anytime the Python parser sees a function definition, it will call our function. Python defines <a href="https://docs.python.org/3/library/ast.html">80ish</a> different AST node classes (most are irrelevant to us). We will add a visitor function for the nodes that can carry type annotations.</p>
+
+<p>Here is how we can find and save the type annotations for functions and variable assignments:</p>
+
+<pre class="prettyprint lang-py">
+from __future__ import annotations
+import ast, sys
+
+class SymbolCollector(ast.NodeVisitor):
+    def __init__(self) -&gt; None:
+        self.table: dict[str, str] = {}
+
+    # record function signatures
+    def visit_FunctionDef(self, node: ast.FunctionDef) -&gt; None:
+        params = [
+            ast.unparse(p.annotation) if p.annotation else "Any"
+            for p in node.args.args
+        ]
+        ret = ast.unparse(node.returns) if node.returns else "Any"
+        self.table[node.name] = f"({', '.join(params)}) -&gt; {ret}"
+        self.generic_visit(node) # Continues into child nodes.
+
+    # record top-level annotated variables
+    def visit_AnnAssign(self, node: ast.AnnAssign) -&gt; None:
+        if isinstance(node.target, ast.Name):
+            self.table[node.target.id] = ast.unparse(node.annotation)
+
+def main(path: str) -&gt; None:
+    src  = open(path, encoding="utf-8").read()
+    tree = ast.parse(src, filename=path, type_comments=True)
+    coll = SymbolCollector()
+    coll.visit(tree)
+    for name, type_str in coll.table.items():
+        print(f"{name}: {type_str}")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python3 babytypechecker.py &lt;python-file&gt;")
+        raise SystemExit(1)
+    main(sys.argv[1])
+</pre>
+
+<p>Run it on our example code from earlier:</p>
+
+<pre class="prettyprint">
+greet: (str | None) -&gt; str
+age: int
+length: (list[int]) -&gt; int
+</pre>
+
+<p>Now we are able to identify these type annotations (but not all type annotations supported by Python, yet) and see our symbol table, which maps names to declared types.</p>
+
+
+<h3>Check simple assignments</h3>
+
+<p>Once we know what type a variable is supposed to be, the next step is to compare it with the value being assigned. In other words, does the declared type on the left-hand side of an assignment match the inferred type on the right-hand side? If there is no annotation, we just save the inferred type for later use.</p>
+
+<pre class="prettyprint lang-py">
+x: int = 5
+</pre>
+
+<p>In this case, the left side is an <i>int</i> and the right side is a number literal which we will infer as an <i>int</i>.</p>
+
+<p>Here is how we handle these annotated assignments:</p>
+
+<pre class="prettyprint lang-py">
+def visit_AnnAssign(self, n: ast.AnnAssign) -&gt; None:
+    ann = self.eval_ann(n.annotation) # Get the annotation.
+    rhs = self.eval_expr(n.value) if n.value else ANY # Get the rhs type.
+    if is_compatible(rhs, ann):
+        # The lhs and rhs are compatible.
+        self.note(n, f"assign {ast.unparse(n.target)}: {ann} ← {rhs} ✔︎")
+    else:
+        # Not compatible.
+        self.err(n, f"assigned {rhs} but annotation is {ann}")
+    # Keep track of the type for later.
+    if isinstance(n.target, ast.Name):
+        self.scopes[-1][n.target.id] = ann
+</pre>
+
+<p><i>Note: I'm skipping over some of the plumbing, like the eval helper functions and the scopes list of dictionaries. You can see the full code on <a href="https://github.com/AZHenley/babytypechecker">GitHub</a>.</i></p>
+
+<p>We specify which types are compatible with one another in <i>is_compatible</i>:</p>
+
+<pre class="prettyprint lang-py">
+def is_compatible(a: Type, b: Type) -&gt; bool:
+    if isinstance(a, AnyType) or isinstance(b, AnyType):
+        return True
+    if type(a) is not type(b):
+        return False
+    if isinstance(a, Primitive):
+        return a.name == b.name
+    return False
+</pre>
+
+<p>So far we cover threee common cases: (1) if either side is <i>Any</i> then it is always compatible, if their outer types don't match (e.g., an <i>int</i> and a <i>List</i>) then it is not compatible, and (3) if both are primitives then their names must match (e.g., <i>int</i> vs <i>str</i>).</p>
+
+<p>The compatibility rules will grow in complexity. Should you be able to use an <i>int</i> where a <i>float</i> is expected? What about union types, like <i>int | None</i>? If you inherit from another type, can you use them interchangeably?</p>
+
+<p>Also, for each kind of type we want to support, we will create our own class to represent it, like this:</p>
+
+<pre class="prettyprint lang-py">
+class Type:
+    def __str__(self) -&gt; str: return self.__class__.__name__
+    __repr__ = __str__
+
+class AnyType(Type): pass
+ANY = AnyType()
+
+@dataclass(frozen=True)
+class Primitive(Type):
+    name: str
+    def __str__(self) -&gt; str: return self.name
+</pre>
+
+<p>If you recall the example program we want to type check:</p>
+
+<pre class="prettyprint lang-py">
+from __future__ import annotations
+
+def greet(name: str | None) -&gt; str:
+    if name is None:
+        return 42                    # ❌ int but expected str
+    return "Hello, " + name
+
+age: int = "42"                      # ❌ str but expected int
+
+def length(xs: list[int]) -&gt; int:
+    return len(xs) + xs              # ❌ cannot add list and int
+</pre>
+
+<p>What will the baby type checker catch?</p>
+
+<pre class="prettyprint">
+8:0: assigned str but annotation is int
+</pre>
+
+<p>Look, it catches a type error!!!</p>
+
+
+<h3>Check function calls</h3>
+
+<p>Next we will type check functions. This involves several pieces: the return type in the function signature, every return statement in the body, the type of all the parameters in the signature, the type of all the arguments in every call site, the return type at every call site, and expand the compatibility check. Similar to variable assignments before, we want to compare the function definition to the usage of the function.</p>
+
+<p>We can track the function signatures like this:</p>
+
+<pre class="prettyprint lang-py">
+@dataclass(frozen=True)
+class CallableType(Type):
+    positional: list[Type]
+    ret: Type
+
+def visit_FunctionDef(self, n: ast.FunctionDef) -&gt; None:
+    params = [self.eval_ann(a.annotation) for a in n.args.args]
+    ret    = self.eval_ann(n.returns)
+    self.scope()[n.name] = CallableType(params, ret)   # record
+
+    # inner scope for the body
+    self.push({a.arg: t for a, t in zip(n.args.args, params)})
+    self.expected_ret.append(ret)
+    self.generic_visit(n)
+    self.pop(); self.expected_ret.pop()
+</pre>
+
+<p>And we check the call sites:</p>
+
+<pre class="prettyprint lang-py">
+def visit_Call(self, n: ast.Call) -&gt; Type:
+    callee_t = self.eval_expr(n.func)
+    if isinstance(callee_t, CallableType):
+        ok = True
+        # arity check
+        if len(n.args) != len(callee_t.positional):
+            self.err(n, f"expected {len(callee_t.positional)} args, got {len(n.args)}")
+            ok = False
+        for actual, expected in zip(n.args, callee_t.positional):
+            if not is_compatible(self.eval_expr(actual), expected):
+                self.err(actual, "argument type mismatch")
+                ok = False
+        if ok:
+            self.note(n, f"call {ast.unparse(n.func)} ✔︎ arg-types ok")
+        return callee_t.ret
+    self.err(n, "calling non-callable value")
+    return ANY
+</pre>
+
+<p>And the return statements:</p>
+
+<pre class="prettyprint lang-py">
+def visit_Return(self, n: ast.Return) -&gt; None:
+    expected = self.expected_ret[-1]
+    got = self.eval_expr(n.value) if n.value else Primitive("None")
+    if is_compatible(got, expected):
+        self.note(n, f"return {got} ✔︎")
+    else:
+        self.err(n, f"return type {got} incompatible with {expected}")  
+</pre>
+
+<p>And then add another branch to <i>is_compatible</i>:</p>
+
+<pre class="prettyprint lang-py">
+    if isinstance(a, CallableType):
+        if len(a.positional) != len(b.positional):
+            return False
+        return all(is_compatible(x, y) for x, y in zip(a.positional, b.positional)) \
+               and is_compatible(a.ret, b.ret)
+</pre>
+
+<p>If you go try to run this now, the baby type checker will make a weird complaint about the call to <i>len()</i>. Why is that? Well, no where in our code do we define this function so the type checker doesn't know about it.</p>
+
+<pre class="prettyprint lang-py">
+self.scopes[0]["len"] = CallableType([ListType(ANY)], Primitive("int"))
+</pre>
+
+<p>This is a bandaid solution where we hardcode that <i>len</i> is a function that takes an argument of type <i>Any</i> and returns an <i>int</i>.</p>
+
+<p>Here is a different example program to highlight the function type checking:</p>
+
+<pre class="prettyprint lang-py">
+def add(x: int, y: int) -&gt; int:
+    return x + y              # ✔︎ ok
+
+def greet(name: str) -&gt; str:
+    return "Hello, " + name   # ✔︎ ok
+
+def bad() -&gt; int:
+    return "oops"             # ❌ return type str vs expected int
+
+a: int = greet("hi")          # ❌ assigning str to int
+b: str = add(1, "two")        # ❌ argument type mismatch
+</pre>
+
+<p>Run the baby type checker on it and it will catch all the type errors!</p>
+
+<p><i>Note: If you're following along with the code on <a href="https://github.com/AZHenley/babytypechecker">GitHub</a> code, you can use --trace with babytypechecker.py to see a detailed output, including every individual type check that passed.</i></p>
+
+
+<h3>Lists and dictionaries</h3>
+
+<p>We want to support more than just simple primitive types. What would Python be without lists and dictionaries?! It is actually pretty easy to add. We need to parse the annotations, infer literals, support indexing, extend the compatibility check, and add our classes to represent lists and dictionaries.</p>
+
+<p>First, we have to parse the annotations in <i>eval_ann</i>. It is just a matter of understanding how Python organizes the AST:</p>
+
+<pre class="prettyprint lang-py">
+# list[T], List[T], dict[K, V], Dict[K, V]
+if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name):
+    head = node.value.id
+    if head in ("list", "List"):
+        return ListType(self.eval_ann(node.slice))
+    if head in ("dict", "Dict"):
+        if isinstance(node.slice, ast.Tuple) and len(node.slice.elts) == 2:
+            k = self.eval_ann(node.slice.elts[0])
+            v = self.eval_ann(node.slice.elts[1])
+            return DictType(k, v)
+</pre>
+
+<p>Second, we need to expand <i>is_compatible</i> to compare the inner type(s):</p>
+
+<pre class="prettyprint lang-py">
+    if isinstance(a, ListType):
+        return is_compatible(a.item, b.item)
+    if isinstance(a, DictType):
+        return is_compatible(a.key, b.key) and is_compatible(a.value, b.value)
+</pre>
+
+<p>Third, we need to infer the types from list literals by checking the type of all the elements:</p>
+
+<pre class="prettyprint lang-py">
+def visit_List(self, n: ast.List) -&gt; Type:
+    if not n.elts:
+        return ListType(ANY)
+    first = self.eval_expr(n.elts[0])
+    for e in n.elts[1:]:
+        if not is_compatible(first, self.eval_expr(e)):
+            self.err(e, "list elements have different types")
+    return ListType(first)
+</pre>
+
+<p>Inferring the types from dictionary lists is a similar process but also involves the keys:</p>
+
+<pre class="prettyprint lang-py">
+def visit_Dict(self, n: ast.Dict) -&gt; Type:
+    if not n.keys:
+        return DictType(ANY, ANY)
+    k0, v0 = self.eval_expr(n.keys[0]), self.eval_expr(n.values[0])
+    for k, v in zip(n.keys[1:], n.values[1:]):
+        if not is_compatible(k0, self.eval_expr(k)):
+            self.err(k, "dict keys type mismatch")
+        if not is_compatible(v0, self.eval_expr(v)):
+            self.err(v, "dict values type mismatch")
+    return DictType(k0, v0)
+</pre>
+
+<p>Fourth, we have to get the type of indexing a list or dictionary and pass it along:</p>
+
+<pre class="prettyprint lang-py">
+def visit_Subscript(self, n: ast.Subscript) -> Type:
+    container = self.eval_expr(n.value)
+    index_t   = self.eval_expr(n.slice)
+    if isinstance(container, ListType):
+        if not is_compatible(index_t, Primitive("int")):
+            self.err(n.slice, "list index must be int")
+        return container.item
+    if isinstance(container, DictType):
+        if not is_compatible(index_t, container.key):
+            self.err(n.slice, f"dict key type {index_t} incompatible with {container.key}")
+        return container.value
+    self.note(n, "subscript of unknown container  ↯")
+    return ANY
+</pre>
+
+<p>It looks at the container being indexed as well as the index expression. If it is a list, the index has to be an int and returns the element type. If it is a dictionary, it checks that the key type matches and returns the value type.</p>
+
+<p>Lastly, our types:</p>
+
+<pre class="prettyprint lang-py">
+@dataclass(frozen=True)
+class ListType(Type):
+    item: Type
+    def __str__(self) -&gt; str: return f"list[{self.item}]"
+
+@dataclass(frozen=True)
+class DictType(Type):
+    key: Type
+    value: Type
+    def __str__(self) -&gt; str: return f"dict[{self.key}, {self.value}]"
+</pre>
+
+<p>So there aren't any new concepts for supporting containers, just expanding the existing mechanics of the type checker. Come up with some tests to throw at the dictionary checking.</p>
+
+
+<h3>Type unions</h3>
+
+<p>Now for a new concept: Programs can allow a variable or expression to hold different types of values at different points in time. These are known as union types, e.g., <i>int | None</i> means that the value can either be an <i>int</i> or <i>None</i>. Python has multiple ways to write this (from different Python versions), such as <i>Optional[int]</i>, <i>Union[int, None]</i>, or just <i>int | None</i>.</p>
+
+<p>To support union types, we have to make changes to the type checker to allow for all possible scenarios of a union. In particular, we need to parse union annotations, normalize unions, extend the compatibility check, and add our union type.</p>
+
+<p>To parse unions, we expand <i>eval_ann</i>:</p>
+
+<pre class="prettyprint lang-py">
+    # A | B
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.BitOr):
+        return make_union(self.eval_ann(node.left), self.eval_ann(node.right))
+
+    # list[T], List[T], dict[K,V], Dict[K,V], Optional[T], Union[...]
+    if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name):
+        head = node.value.id
+        if head in ("list", "List"):
+            return ListType(self.eval_ann(node.slice))
+        if head in ("dict", "Dict"):
+            if isinstance(node.slice, ast.Tuple) and len(node.slice.elts) == 2:
+                k = self.eval_ann(node.slice.elts[0])
+                v = self.eval_ann(node.slice.elts[1])
+                return DictType(k, v)
+        if head == "Optional":
+            return make_union(self.eval_ann(node.slice), Primitive("None"))
+        if head == "Union":
+            elts = node.slice.elts if isinstance(node.slice, ast.Tuple) else [node.slice]
+            return make_union(*(self.eval_ann(e) for e in elts))
+</pre>
+
+<p>Once again the parsing aspect isn't particularly interesting, it just involves understanding how Python builds the AST so you can capture the information correctly for all cases.</p>
+
+<p>We are using a helper, <i>make_union</i> that creates our union type and normalizes. So given any number of types, it inlines any nested unions and deduplicates them while also swallowing other types if there is an Any. For example:</p>
+
+<pre class="prettyprint lang-py">
+make_union(int, int) -&gt; int
+make_union(int, str) -&gt; int | str
+make_union(int | str, str) -&gt; int | str
+make_union(Any, int) -&gt; Any
+make_union(list[Any], list[int]) -&gt; list[Any]
+</pre>
+
+<p>The implementation of <i>make_union</i> and another helper function:</p>
+
+<pre class="prettyprint lang-py">
+def _flatten_union(*parts: Type) -&gt; Tuple[Type, ...]:
+    opts: List[Type] = []
+    for p in parts:
+        if isinstance(p, UnionType):
+            opts.extend(p.options)
+        else:
+            opts.append(p)
+    uniq: List[Type] = []
+    for t in opts:
+        if not any(is_compatible(t, u) and is_compatible(u, t) for u in uniq):
+            uniq.append(t)
+    return tuple(uniq)
+
+def make_union(*parts: Type) -&gt; Type:
+    flat = _flatten_union(*parts)
+    if any(isinstance(t, AnyType) for t in flat):
+        return ANY
+    return flat[0] if len(flat) == 1 else UnionType(flat)
+</pre>
+
+<p>Now to extend the compatibility check:</p>
+
+<pre class="prettyprint lang-py">
+    if isinstance(a, UnionType) and isinstance(b, UnionType):
+        # every option in a must be compatible with some option in b
+        return all(any(is_compatible(x, y) for y in b.options) for x in a.options)
+    if isinstance(a, UnionType):
+        return any(is_compatible(opt, b) for opt in a.options)
+    if isinstance(b, UnionType):
+        return any(is_compatible(a, opt) for opt in b.options)
+</pre>
+
+<p>Lastly, our union class:</p>
+
+<pre class="prettyprint lang-py">
+@dataclass(frozen=True)
+class UnionType(Type):
+    options: Tuple[Type, ...]
+    def __str__(self) -&gt; str: return " | ".join(map(str, self.options))
+</pre>
+
+<p>Now to test with a new example program:</p>
+
+<pre class="prettyprint lang-py">
+from typing import Union, Optional
+
+x: int | str = 0          # ok
+x = "hi"                  # ok
+x = None                  # ❌ assign None where int | str expected
+
+y: Optional[int] = None   # ok
+y = 3                     # ok
+y = "nope"                # ❌ str vs int | None
+
+def f(v: Union[int, str]) -> int:
+    return v              # ❌ return int | str vs expected int
+</pre>
+
+
+<h3>Type narrowing (isinstance, is None, casts, unions)</h3>
+
+<p>We need to consider how types evolve inside control flow. When code checks whether a value is <i>None</i> or uses <i>isinstance</i>, the checker refines its knowledge of that variable. For example, if the conditional, <i>if x is not None</i>, is true, then inside that branch the type is narrowed. Assertions can also narrow types after runtime checks.</p>
+
+<p>To support type narrowing, we actually just need to identify the AST nodes where a type can be narrowed and push the newly narrowed types down each branch.</p>
+
+<pre class="prettyprint lang-py">
+def visit_If(self, n: ast.If) -&gt; None:
+    narrows_true: dict[str, Type] = {}
+    narrows_false: dict[str, Type] = {}
+
+    # isinstance(x, SomeClass) -&gt; refine only the true branch
+    if (isinstance(n.test, ast.Call) and isinstance(n.test.func, ast.Name)
+        and n.test.func.id == "isinstance" and len(n.test.args) == 2
+        and isinstance(n.test.args[0], ast.Name) and isinstance(n.test.args[1], ast.Name)):
+        var = n.test.args[0].id
+        typ = Primitive(n.test.args[1].id)
+        narrows_true[var] = typ
+        self.note(n.test, f"{var} narrowed to {typ} via isinstance")
+    
+    # Omitted: x is None / x is not None -&gt; refine both branches
+
+    # Push the narrowed types down both branches.
+    if narrows_true or narrows_false:
+        self.push(narrows_true);  [self.visit(s) for s in n.body];  self.pop()
+        self.push(narrows_false); [self.visit(s) for s in n.orelse]; self.pop()
+    else:
+        [self.visit(s) for s in n.body]
+        [self.visit(s) for s in n.orelse]
+</pre>
+
+<p>This looks at the condition of an <i>if</i>. If it is an <i>isinstance</i> check or a <i>None</i> check, we record what type the variable must have inside the true branch (and sometimes what it must not have in the false branch).</p>
+
+<p>Here is a helper function to remove <i>None</i> from a union type when we know it can no longer be <i>None</i>:</p>
+
+<pre class="prettyprint lang-py">
+def without_none(t: Type) -&gt; Type:
+    if isinstance(t, UnionType):
+        remaining = tuple(o for o in t.options
+                          if not (isinstance(o, Primitive) and o.name == "None"))
+        return remaining[0] if len(remaining) == 1 else UnionType(remaining)
+    return t
+</pre>
+
+<p>Similar to <i>isinstance</i>, assertions work like runtime checks that let us narrow types in the current scope. If we see <i>assert x is not None</i>, we know that after this line, <i>x</i> can be treated as non-<i>None</i>.</p>
+
+<pre class="prettyprint lang-py">
+def visit_Assert(self, n: ast.Assert) -&gt; None:
+    # assert x is not None -&gt; refine in the current scope
+    if (isinstance(n.test, ast.Compare) and isinstance(n.test.left, ast.Name)
+        and len(n.test.comparators)==1
+        and isinstance(n.test.comparators[0], ast.Constant)
+        and n.test.comparators[0].value is None
+        and any(isinstance(op, ast.IsNot) for op in n.test.ops)):
+        var = n.test.left.id
+        original = self.lookup(var)
+        if original is not ANY and is_compatible(Primitive("None"), original):
+            self.scopes[-1][var] = without_none(original)
+            self.note(n, f"{var} refined by assert -&gt; {self.lookup(var)}")
+    self.generic_visit(n)
+</pre>
+
+<p>One final test to ensure type narrowing is working for these cases:</p>
+
+<pre class="prettyprint lang-py">
+from typing import Optional
+
+def f(x: Optional[int], y: object):
+    if x is not None:
+        z = x + 1          # ✔︎ x narrowed to int
+    if None is x:
+        x + 1              # ❌ using None as int
+    if isinstance(y, (int, str)):
+        y + 1              # ✔︎ ok if int
+    else:
+        y + 1              # ❌ not int here (narrowed false-branch)
+</pre>
+
+<p>We have type narrowing! Magic.</p>
+
+<h3>What's left?</h3>
+
+<p>With all that, we have a baby type checker for Python that can detect a variety of type errors in just 350 lines of code. From variables to functions to union types.</p>
+
+<p>While this is a great start, there are a few things missing from our type checker that you may want to add if this project interests you:</p>
+
+<ul>
+    <li>Classes, attributes, and method calls</li>
+    <ul style="margin-bottom: 0;"><li>No class symbol table, attribute existence/type checks, method-call signature validation, or inheritance tracking</li></ul>
+    <li>Flow-sensitive narrowing</li>
+    <ul style="margin-bottom: 0;"><li>Handles x is not None, assert x is not None, and isinstance(x, SomeClass)'s true path but does not handle loops, try/except, with, tuple forms, boolean conditions, or after re-assignment</li></ul>
+    <li>Container depth and heterogeneity</li>
+    <ul style="margin-bottom: 0;"><li>list[int] element checks stop at one level, nested lists do not validate heterogeneity, tuples and sets are not recognized, and no comprehension inference</li></ul>
+    <li>Generics and TypeVar</li>
+    <ul style="margin-bottom: 0;"><li>No unification, variance rules, or generic functions/classes</li></ul>
+    <li>Unions, Optionals, & type aliases</li>
+    <ul style="margin-bottom: 0;"><li>Basic unions (int | None, Union[int, str], Optional[T]) are supported; no advanced union algebra or exhaustiveness analysis</li></ul>
+    <li>Star-arguments & keyword-only</li>
+    <ul style="margin-bottom: 0;"><li>No checking of *args, **kwargs, positional-only parameters, or default values</li></ul>
+    <li>Decorators that change signatures</li>
+    <ul style="margin-bottom: 0;"><li>No @overload, @classmethod, or wrappers that add or drop parameters</li></ul>
+    <li>Numeric tower & literals</li>
+    <ul style="margin-bottom: 0;"><li>No float, complex, Literal["A", "B"], or promotion (int -&gt; float)</li></ul>
+    <li>Protocols & structural typing</li>
+    <ul style="margin-bottom: 0;"><li>No Protocol, TypedDict, NewType, dataclass field inference, or PEP 681 transforms</li></ul>
+    <li>Async & context managers</li>
+    <ul style="margin-bottom: 0;"><li>No async def, await, async with, with resource typing</li></ul>
+    <li>Multiple-file projects</li>
+    <ul style="margin-bottom: 0;"><li>Imports are ignored; only the single file you pass in is analysed</li></ul>
+    <li>Pattern matching (match and case)</li>
+    <ul style="margin-bottom: 0;"><li>No exhaustiveness or pattern-type checking</li></ul>
+    <li>Built-in functions</li>
+    <ul style="margin-bottom: 0;"><li>Built-ins are treated as Any but will error when called (e.g., int() and sum())</li></ul>
+    <li>Performance / caching</li>
+    <ul style="margin-bottom: 0;"><li>No incremental graph, memoisation, or SARIF/JSON output for editors</li></ul>
+</ul>
+
+<p>All the code can be found on <a href="https://github.com/AZHenley/babytypechecker">GitHub</a>. I hope this article showed that type checking is fairly simple, even in a language as large as Python, although there are many scenarios that you must cover.</p>
+
+<hr>
+
+<p>Want more to read? You may enjoy these other articles of mine:</p>
+
+<ul>
+    <li><a href="superoptimizer.html">My first superoptimizer</a></li>
+    <li><a href="teenytinycompiler1.html">Let's make a Teeny Tiny compiler</a></li>
+    <li><a href="hofstadter.html">Hofstadter: An esoteric programming language with concurrency, regex, and web requests</a></li>
+    <li><a href="mirrorlang.html">Mirror: An LLM-powered programming-by-example programming language</a></li>
+</ul>
+
+<br><br><br><br>
+
+</body>
+</html>
