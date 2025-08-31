@@ -101,7 +101,7 @@ def length(xs: list[int]) -&gt; int:
 
 <p>Anyway, show me the code!</p>
 
-<img src="images/showmethecode.png" class="center" style="max-width:40%; border:1px solid #000000;">
+<img src="images/showmethecode.png" class="center" style="max-width:35%; border:1px solid #000000;">
 
 
 <h3>Finding the type annotations</h3>
@@ -307,7 +307,7 @@ class CallableType(Type):
 def visit_FunctionDef(self, n: ast.FunctionDef) -&gt; None:
     params = [self.eval_ann(a.annotation) for a in n.args.args]
     ret    = self.eval_ann(n.returns)
-    self.scope()[n.name] = CallableType(params, ret)   # record
+    self.scope()[n.name] = CallableType(params, ret) # record
 
     # inner scope for the body
     self.push({a.arg: t for a, t in zip(n.args.args, params)})
