@@ -54,7 +54,7 @@
 	<h1 class="blogtitle">Baby's first type checker</h1>
 	<small>8/31/2025</small><br><br>
 
-    <img src="images/babytypechecker.png" class="center" style="max-width:40%; margin-bottom:28px; border:1px solid #000000;">
+    <img src="images/babytypechecker.png" class="center" style="max-width:40%; margin-bottom:28px; border:1px solid #000000;" alt="A baby robot pushing different shaped blocks into a box with slots for each shape.">
 
 
 <p>Have you ever wondered how type checking works? Me too&mdash;let's make one!</p>
@@ -101,7 +101,7 @@ def length(xs: list[int]) -&gt; int:
 
 <p>Anyway, show me the code!</p>
 
-<img src="images/showmethecode.png" class="center" style="max-width:35%; border:1px solid #000000;">
+<img src="images/showmethecode.png" class="center" style="max-width:35%; border:1px solid #000000;" alt="A baby robot yelling, 'show me the code!'">
 
 
 <h3>Finding the type annotations</h3>
@@ -663,7 +663,7 @@ def f(x: Optional[int]):
 
 <p>We have type narrowing! Magic. Go ahead and test on the prior examples too to make sure we didn't break anything.</p>
 
-<img src="images/babytypechecked.png" class="center" style="max-width:50%; border:1px solid #000000;">
+<img src="images/babytypechecked.png" class="center" style="max-width:50%; border:1px solid #000000;" alt="A baby robot standing in triumph after sorting a few blocks! Many unsorted blocks behind it remain.">
 
 <h3>What's left?</h3>
 
@@ -672,34 +672,34 @@ def f(x: Optional[int]):
 <p>While this is a great start, there are a few things missing from our type checker that you may want to add if this project interests you:</p>
 
 <ul>
-    <li>Classes, attributes, and method calls</li>
-    <ul style="margin-bottom: 0;"><li>No class symbol table, attribute existence/type checks, method-call signature validation, or inheritance tracking</li></ul>
-    <li>Flow-sensitive narrowing</li>
-    <ul style="margin-bottom: 0;"><li>Handles x is not None, assert x is not None, and isinstance(x, SomeClass)'s true path but does not handle loops, try/except, with, tuple forms, boolean conditions, or after re-assignment</li></ul>
-    <li>Container depth and heterogeneity</li>
-    <ul style="margin-bottom: 0;"><li>list[int] element checks stop at one level, nested lists do not validate heterogeneity, tuples and sets are not recognized, and no comprehension inference</li></ul>
-    <li>Generics and TypeVar</li>
-    <ul style="margin-bottom: 0;"><li>No unification, variance rules, or generic functions/classes</li></ul>
-    <li>Unions, Optionals, & type aliases</li>
-    <ul style="margin-bottom: 0;"><li>Basic unions (int | None, Union[int, str], Optional[T]) are supported; no advanced union algebra or exhaustiveness analysis</li></ul>
-    <li>Star-arguments & keyword-only</li>
-    <ul style="margin-bottom: 0;"><li>No checking of *args, **kwargs, positional-only parameters, or default values</li></ul>
-    <li>Decorators that change signatures</li>
-    <ul style="margin-bottom: 0;"><li>No @overload, @classmethod, or wrappers that add or drop parameters</li></ul>
-    <li>Numeric tower & literals</li>
-    <ul style="margin-bottom: 0;"><li>No float, complex, Literal["A", "B"], or promotion (int -&gt; float)</li></ul>
-    <li>Protocols & structural typing</li>
-    <ul style="margin-bottom: 0;"><li>No Protocol, TypedDict, NewType, dataclass field inference, or PEP 681 transforms</li></ul>
-    <li>Async & context managers</li>
-    <ul style="margin-bottom: 0;"><li>No async def, await, async with, with resource typing</li></ul>
-    <li>Multiple-file projects</li>
-    <ul style="margin-bottom: 0;"><li>Imports are ignored; only the single file you pass in is analysed</li></ul>
-    <li>Pattern matching (match and case)</li>
-    <ul style="margin-bottom: 0;"><li>No exhaustiveness or pattern-type checking</li></ul>
-    <li>Built-in functions</li>
-    <ul style="margin-bottom: 0;"><li>Built-ins are treated as Any but will error when called (e.g., int() and sum())</li></ul>
-    <li>Performance / caching</li>
-    <ul style="margin-bottom: 0;"><li>No incremental graph, memoisation, or SARIF/JSON output for editors</li></ul>
+    <li>Classes, attributes, and method calls
+    <ul style="margin-bottom: 0;"><li>No class symbol table, attribute existence/type checks, method-call signature validation, or inheritance tracking</li></ul></li>
+    <li>Flow-sensitive narrowing
+    <ul style="margin-bottom: 0;"><li>Handles x is not None, assert x is not None, and isinstance(x, SomeClass)'s true path but does not handle loops, try/except, with, tuple forms, boolean conditions, or after re-assignment</li></ul></li>
+    <li>Container depth and heterogeneity
+    <ul style="margin-bottom: 0;"><li>list[int] element checks stop at one level, nested lists do not validate heterogeneity, tuples and sets are not recognized, and no comprehension inference</li></ul></li>
+    <li>Generics and TypeVar
+    <ul style="margin-bottom: 0;"><li>No unification, variance rules, or generic functions/classes</li></ul></li>
+    <li>Unions, Optionals, & type aliases
+    <ul style="margin-bottom: 0;"><li>Basic unions (int | None, Union[int, str], Optional[T]) are supported; no advanced union algebra or exhaustiveness analysis</li></ul></li>
+    <li>Star-arguments & keyword-only
+    <ul style="margin-bottom: 0;"><li>No checking of *args, **kwargs, positional-only parameters, or default values</li></ul></li>
+    <li>Decorators that change signatures
+    <ul style="margin-bottom: 0;"><li>No @overload, @classmethod, or wrappers that add or drop parameters</li></ul></li>
+    <li>Numeric tower & literals
+    <ul style="margin-bottom: 0;"><li>No float, complex, Literal["A", "B"], or promotion (int -&gt; float)</li></ul></li>
+    <li>Protocols & structural typing
+    <ul style="margin-bottom: 0;"><li>No Protocol, TypedDict, NewType, dataclass field inference, or PEP 681 transforms</li></ul></li>
+    <li>Async & context managers
+    <ul style="margin-bottom: 0;"><li>No async def, await, async with, with resource typing</li></ul></li>
+    <li>Multiple-file projects
+    <ul style="margin-bottom: 0;"><li>Imports are ignored; only the single file you pass in is analysed</li></ul></li>
+    <li>Pattern matching (match and case)
+    <ul style="margin-bottom: 0;"><li>No exhaustiveness or pattern-type checking</li></ul></li>
+    <li>Built-in functions
+    <ul style="margin-bottom: 0;"><li>Built-ins are treated as Any but will error when called (e.g., int() and sum())</li></ul></li>
+    <li>Performance / caching
+    <ul style="margin-bottom: 0;"><li>No incremental graph, memoisation, or SARIF/JSON output for editors</li></ul></li>
 </ul>
 
 <p>All the code can be found on <a href="https://github.com/AZHenley/babytypechecker">GitHub</a>. I hope this article showed that type checking is fairly simple, even in a language as large as Python, although there are many scenarios that you must cover.</p>
