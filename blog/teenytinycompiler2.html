@@ -374,7 +374,7 @@ Parsing completed.
 <p>Make sure <i>self.nl()</i> is still at the end of the <b>statement</b> function. We can't test this just yet, so we will move on to the next grammar rule, which is for the <i>while</i> loop. The grammar looks almost identical to the <i>if</i> statement that we just did.</p>
 
 <pre class="prettyprint">
-    | "WHILE" comparison "REPEAT" nl {statement nl} "ENDWHILE" nl
+    | "WHILE" comparison "REPEAT" nl {statement} "ENDWHILE" nl
 </pre>
 
 <p>And the code looks similar too. Remember, this is still part of the <b>statement</b> function that we are adding to:</p>
