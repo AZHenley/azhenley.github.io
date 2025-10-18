@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The design space of AI coding tools - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="10 design dimensions based on 90 AI coding tools.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="The design space of AI coding tools">
+    <meta property="og:description" content="10 design dimensions based on 90 AI coding tools.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/buildingrobots.jpg">
+    <meta property="og:url" content="https://austinhenley.com/blog/aidesignspace.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">The design space of AI coding tools</h1>
+	<small>10/18/2025</small><br><br>
+
+<img src="images/buildingrobots.jpg" class="center" style="max-width:50%; margin-bottom:12px;">
+
+
+<p>What are the design decisions involved in building an AI coding assistant?</p>
+
+<p>A paper was recently published, <a href="https://lau.ucsd.edu/pubs/2025_analysis-of-90-genai-coding-tools_VLHCC.pdf">The Design Space of LLM-Based AI Coding Assistants: An Analysis of 90 Systems in Academia and Industry</a>, by <a href="https://lau.ucsd.edu">Sam Lau</a> and <a href="https://pg.ucsd.edu">Philip Guo</a> at UC San Diego that tries to answer this question.</p>
+
+<p>They looked at 90 AI coding assistants and identified 10 design dimensions. The paper describes how we went from autocomplete to chat to agents, and why industry is converging on speed and polish while academia explores novel interaction designs. Then it maps the design dimensions to 6 personas of users with the key trade-offs for each.</p>
+
+
+<h3>The three eras of AI coding assistants</h3>
+
+<p>We have seen three major UIs for AI coding assistants so far:</p>
+
+<p><b>Autocomplete (2021-2022):</b> Inline gray text that you press tab to accept. Minimum friction, maximum flow. Great when the function you want exists on Stack Overflow or GitHub.</p>
+
+<p><b>Chat (2023-2024):</b> Prompts with multi-turn clarifications and code blocks. Features “explain this”, “write tests”, "refactor", etc. Broadened the audience beyond IDE power users.</p>
+
+<p><b>Agents (2024-2025):</b> Tools that read/write your repo, run commands, browse docs, and chain steps. UIs now look like CI logs with diff reviewers. Magic when it works.</p>
+
+
+<h3>The 10 design dimensions of AI coding assistants</h3>
+
+<p>The researchers examined 90 code-generating tools from 2021-2025, which included 58 industry products and 32 academic projects, and ran a qualitative analysis across the tool (when available), documentation, publications, product sites, and demo videos.</p>
+
+<p>From that analysis, they identified 4 broad categories of design for AI coding assistants: user interface, system inputs, capabilities, and outputs. These 4 categories are further made up of 10 design dimensions: development environment, user actions, initiative, input format, semantic context, personalization, autonomy, system actions, output format, and explainability.</p>
+
+<img src="images/aidesigndimensions.png" class="center" style="max-width:98%;border:1px solid #000000;" alt="Figure 1 from the paper listing the 10 design dimensions and their major features.">
+
+<p>Rephrased in my own words:</p>
+
+<ul>
+  <li><b>Where it lives:</b> Browser, terminal, IDE plugin, or its own IDE.</li>
+  <li><b>How you ask:</b> Tab, single-shot prompt, multi-turn, or structured UI.</li>
+  <li><b>Who starts:</b> The user, the tool, or mixed-initiative.</li>
+  <li><b>What you feed it:</b> Text, code, voice, screenshots, sketches, Figma.</li>
+  <li><b>What it knows:</b> Just the open file, smart codebase summaries, docs it fetched, your recent actions.</li>
+  <li><b>How it adapts:</b> Model picks, project rules, long-term memory.</li>
+  <li><b>How autonomous:</b> One-shot vs. self-correcting vs. multi-step agent.</li>
+  <li><b>What it can do:</b> Generate/explain code, edit files, run tests, call tools.</li>
+  <li><b>How it talks back:</b> Inline completions, code blocks, interactive canvases.</li>
+  <li><b>Can it justify itself:</b> Explanations, traces, diffs, links to sources/tests.</li>
+</ul>
+
+
+<h3>Coding assistants from industry vs. academia</h3>
+
+<p><b>Industry converges:</b> Every product ships the same bundle consisting of inline + chat + agent, with slogans like "speed of thought". The focus is on latency, polish, and breadth. They sell the idea that you can "tab, tab, tab" or do a big one-click refactor as if it is magic.</p>
+
+<blockquote>"One recurring observation as we performed this research was how hard it could be to find out precisely what some industry products did."</blockquote>
+
+<p><b>Academia diverges:</b> Prototypes probe the weirder edges, like scaffolding for reflection, proactive secondary cursors, teaching-oriented friction, multimodal sketch-to-code, or better explainability for data science. Less shiny and more whimsical ideas.</p>
+
+
+<h3>Who is assisted by these AI tools?</h3>
+
+<p>In the discussion of the paper, the researchers propose 6 personas that use these AI coding assistants and map the design dimensions to the personas' needs.</p>
+
+<ul>
+<li><b>Pro SWEs:</b> Wants deep repo context, rules, and fast edits inside IDE/CLI. Agents are useful if they're reviewable and reversible.</li>
+<li><b>Hobbyist programmers:</b> AI provides thorough starting points that can be customized plus quick interactive outputs to demo ideas.</li>  
+<li><b>UX designers:</b> Screenshot/Figma -> working prototype. Interactive output > code walls.</li>
+<li><b>Entrepreneurs, PMs, sales, etc.:</b> Browser, high-level prompts, deploy a demo without reading the code.</li>
+<li><b>Data scientists:</b> Explainability, runtime visualizations, and test scaffolds trump raw speed.</li>
+<li><b>Students:</b> Guardrails, nudges to think first, and explanations. Autonomy is a bug, not a feature.</li> 
+</ul> 
+
+
+<h3>It is all trade-offs</h3>
+
+<p>The design of these tools is entirely trade-offs, but this isn't new. How much control do you give the user? How much customization? Do you prioritize the power user or the novice? These have always been fundamental to designing any system. Sure, AI complicates it because it is so easy (and tempting?) for the tool builders to throw the kitchen sink at their users.</p>
+	
+<p>You can choose between access and power, control and convenience, simplicity and capability. Browser UIs are easy to try but cap customization and integratiions. Inline completions keep users in flow, while multi-turn chat yields richer context at the cost of friction. Proactive features can give serendipity but may erode a user's sense of control. More personalization may help experts but can overwhelm novices. Letting the AI plan multi-step changes and call more system actions is powerful, but increases the surface area for failures. Etc.</p>
+
+
+<h3>What is next?</h3>
+
+<p>We're past the "wow, it writes code" phase. The interesting work now is <b>shaping how</b> these assistants fit real workflows: deciding <b>when to be fast and when to be careful</b>, <b>what context to include</b>, and <b>how to keep humans in the loop</b> without overwhelming them.</p>
+
+<p>The authors close by arguing we need the best of both worlds, industry's production rigor and academia's innovation, to bridge the "two cultures" and move beyond hype.</p>
+
+<hr>
+
+<p>You can read the paper here: <a href="https://lau.ucsd.edu/pubs/2025_analysis-of-90-genai-coding-tools_VLHCC.pdf">The Design Space of LLM-Based AI Coding Assistants: An Analysis of 90 Systems in Academia and Industry</a>.</p>
+
+<p>Check out a few of my other related articles:</p>
+
+<ul>
+	<li><a href="proactiveai.html">Where are the proactive AI coding tools?</a></li>
+	<li><a href="intellicode.html">Exploring 50 user interfaces for AI code suggestions</a></li>
+	<li><a href="copilotworkspace.html">How I would redesign Copilot Workspace</a></li>
+	<li><a href="copilotpainpoints.html">The pain points of building a copilot</a></li>
+	<li><a href="chatgptdatascience.html">Can ChatGPT do data science?</a></li>
+	<li><a href="codeaid.html">CodeAid: A classroom deployment of an LLM-based programming assistant</a></li>
+	<li><a href="../pubs/Kazemitabaar2025IUI_AIFriction.pdf">Exploring the Design Space of Cognitive Engagement Techniques with AI-Generated Code for Enhanced Learning</a> (pdf)</li>
+	<li><a href="learningwithai.html">Learning to code with and without AI</a></li>
+</ul>
+
+
+<br><br><br><br>
+
+</body>
+</html>
