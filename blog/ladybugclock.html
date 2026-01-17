@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simulating the ladybug clock puzzle - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="3Blue1Brown shared a fun puzzle that stumped me, so I wrote a simulator to understand it.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Simulating the ladybug clock puzzle">
+    <meta property="og:description" content="3Blue1Brown shared a fun puzzle that stumped me, so I wrote a simulator to understand it.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/ladybugclock.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/ladybugclock.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Simulating the ladybug clock puzzle</h1>
+	<small>1/17/2026</small><br><br>
+
+    <img src="images/ladybugclock.png" class="center" style="max-width:90%; margin-bottom:2px; margin-top:-10px;" alt="Screenshot of 3Blue1Brown's YouTube video showing 4 clocks with ladybugs moving around.">
+
+
+<p>A few days ago, 3Blue1Brown posted a 60-second <a href="https://www.youtube.com/shorts/t3jZ2xGOvYg">video</a> describing a puzzle...</p>
+
+<p>Imagine that a ladybug lands on the 12 o'clock marker of a clock. It then proceeds to move either clockwise or counterclockwise to the adjacent hour marker, one at a time, and repeats until all hour markers have been visited at least once.</p>
+
+<p>What is the probability that it ends on the 6?</p>
+
+<p>These sort of puzzles always intrigue me. They're simple to describe and at first might even look easy to solve, but as I dig into them, my intuition leads me astray.</p>
+
+<p>What a fun Saturday morning project! I whipped up a simulator to try it out. It works like this:</p>
+
+<pre class="prettyprint lang-js">
+    let position = 0; // 0-11 hour markers
+    let visited = new Set([0]);
+
+    while (visited.size &lt; 12) {
+        const direction = Math.random() &lt; 0.5 ? -1 : 1;
+        position = (position + direction + 12) % 12;
+        visited.add(position);
+    }
+
+    return position;
+</pre>
+
+<p>See, it is simple. But before running the simulator, can you guess the probability of it ending on 6? What about 11 or 1? 3? The other numbers?</p>
+
+
+<h3>The simulator</h3><br> 
+
+<link rel="stylesheet" href="scripts/ladybug.css">
+
+<div class="ladybug-sim">
+    <div class="container">
+        <div class="clock-section">
+            <canvas id="ladybug-clock" width="320" height="360"></canvas>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>Speed</label>
+                <input type="range" id="ladybug-speed" min="1" max="500" value="5">
+                <div class="speed-display" id="ladybug-speedDisplay">5 ticks/sec</div>
+            </div>
+            
+            <div class="control-group">
+                <label>Total Runs</label>
+                <input type="number" id="ladybug-totalRuns" value="100" min="1" max="10000">
+            </div>
+            
+            <button class="btn btn-start" id="ladybug-startBtn">Start</button>
+            <button class="btn btn-stop" id="ladybug-stopBtn" disabled>Stop</button>
+            <button class="btn btn-reset" id="ladybug-resetBtn">Reset</button>
+            
+            <div class="stats">
+                <h3>Current Run</h3>
+                <div class="stat-row">
+                    <span>Steps</span>
+                    <span id="ladybug-steps">0</span>
+                </div>
+                <div class="stat-row">
+                    <span>Visited</span>
+                    <span id="ladybug-visited">1/12</span>
+                </div>
+                <div class="stat-row">
+                    <span>Run</span>
+                    <span id="ladybug-runCount">0/0</span>
+                </div>
+                <div class="stat-row">
+                    <span>Avg Steps</span>
+                    <span id="ladybug-avgSteps">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results">
+            <h3>Ending Position</h3>
+            <div id="ladybug-distribution"></div>
+        </div>
+    </div>
+</div>
+
+<script src="scripts/ladybug.js"></script>
+
+
+<h3>Spoiler: Tell me the answer!</h3>
+
+<p>It stumped me. My guess was that 6 would be the most likely&mdash;it is the farthest away but it is also necessary to visit all other numbers first. Am I right? It might remind you of other <a href="https://en.wikipedia.org/wiki/Random_walk">random walk</a> problems.</p>
+
+<p>So what is the answer? Well, I first ran the simulator 100 times and the results looked random. More runs! After ~1500 runs, all of the numbers were showing 8-10% likelihood with no discernable pattern. That isn't what I expected. After 5000 runs, they were all 8.4-9.7%. And then after 10,000 runs...</p>
+
+<p>Based on the simulator, <b>all numbers are equally likely with 9% probability</b>, excluding 12 of course, since that is visited first and thus can't be last. The answer is <span><sup>1</sup>&frasl;<sub>11</sub></span>.</p>
+
+<p>An even more fun question? What is the average number of moves that the ladybug will make to visit all 12 numbers? I'd love to hear someone's explanation for that answer!</p>
+
+
+<br><br><br><br>
+
+</body>
+</html>

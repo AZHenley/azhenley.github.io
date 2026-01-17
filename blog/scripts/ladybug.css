@@ -1,0 +1,158 @@
+/* Austin Henley, 2026
+   with assistance from Claude */
+
+.ladybug-sim {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #333;
+    box-sizing: border-box;
+}
+.ladybug-sim *, .ladybug-sim *::before, .ladybug-sim *::after {
+    box-sizing: border-box;
+}
+.ladybug-sim .container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.ladybug-sim .clock-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.ladybug-sim canvas {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+}
+.ladybug-sim .controls {
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 260px;
+    border: 1px solid #e0e0e0;
+}
+.ladybug-sim .control-group {
+    margin-bottom: 15px;
+}
+.ladybug-sim label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #000;
+}
+.ladybug-sim input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+}
+.ladybug-sim input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+}
+.ladybug-sim .btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+.ladybug-sim .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.ladybug-sim .btn-start {
+    background: #333;
+    color: #fff;
+}
+.ladybug-sim .btn-stop {
+    background: #888;
+    color: #fff;
+}
+.ladybug-sim .btn-reset {
+    background: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+}
+.ladybug-sim .stats {
+    background: #fff;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 15px;
+    border: 1px solid #e0e0e0;
+}
+.ladybug-sim .stats h3 {
+    margin: 0 0 10px 0;
+    font-size: 12px;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ladybug-sim .stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+.ladybug-sim .stat-row span:first-child {
+    color: #000;
+}
+.ladybug-sim .results {
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 260px;
+    border: 1px solid #e0e0e0;
+}
+.ladybug-sim .results h3 {
+    margin: 0 0 15px 0;
+    font-size: 12px;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ladybug-sim .result-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+.ladybug-sim .result-num {
+    width: 20px;
+    text-align: right;
+    margin-right: 8px;
+    color: #000;
+}
+.ladybug-sim .result-bar-bg {
+    flex: 1;
+    height: 16px;
+    background: #eee;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.ladybug-sim .result-bar-fill {
+    height: 100%;
+    background: #333;
+    transition: width 0.3s;
+}
+.ladybug-sim .result-pct {
+    width: 45px;
+    text-align: right;
+    margin-left: 8px;
+    font-family: monospace;
+    color: #000;
+}
+.ladybug-sim .speed-display {
+    text-align: center;
+    font-size: 11px;
+    color: #000;
+    margin-top: 3px;
+}
