@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dear Researchers: Is AI all you've got? - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Are we missing the next big innovation because of the over-fixation on AI?">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Dear Researchers: Is AI all you've got?">
+    <meta property="og:description" content="Are we missing the next big innovation because of the over-fixation on AI?">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/TODO">
+    <meta property="og:url" content="https://austinhenley.com/blog/dearresearchers.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>
+						Associate Teaching Professor<br>
+						Carnegie Mellon University
+					</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:azhenley@cmu.edu">azhenley@cmu.edu</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Dear Researchers: Is AI all you've got?</h1>
+	<small>Unpublished draft, 1/17/2026</small><br><br>
+
+<p><small><i>This is a preprint of my article in the <a href="https://www.sciencedirect.com/special-issue/10DML17WPDQ">Dear Researchers</a> column in the Journal of Systems and Software (JSS). I'm a co-editor of the column, and we are soliciting articles from industry practitioners addressed to the research community. Email <a href="mailto:azhenley@cmu.edu">me</a> if you're interested!</i></small></p>
+
+<p>What important problems have software engineering researchers abandoned so that they could focus on AI instead?</p>
+
+<p>In the early 1900s, bacteriophage therapy was a popular topic in medical and biological research for its potential to target specific bacteria<sup>1</sup>. However, after the discovery of penicillin in 1928, the research community shifted its attention to antibiotics, mostly abandoning bacteriophage research by the 1950s<sup>2</sup>. Interest surged again in the 2000s as antibiotic resistance grew more common and the highly targeted nature of phage therapy became more appealing<sup>3</sup>.</p>
+
+<p>Is a similar phenomenon happening in the software engineering community? Are researchers over-indexing on AI? At <a href="https://conf.researchr.org/track/icse-2025/icse-2025-research-track?#event-overview">ICSE '25</a>, one third of research-track papers and two thirds of industry-track papers involved AI. In contrast, a study of research trends from 1992 to 2016 in software engineering did not even include AI or ML (machine learning) in the top-10 most popular topics<sup>4</sup>. Furthermore, AI conferences have grown exponentially, with <a href="https://aaai.org/conference/aaai/aaai-26/review-process-update/">AAAI</a> going from 9000 submissions in 2022 to 29,000 submissions for the 2026 conference.</p>
+
+
+<h3>What might be missed?</h3>
+
+<p>My concern is not that AI doesn't have considerable value (I have worked on AI in both academia and industry) or that it isn't a <b>huge innovation</b> for the field, but rather that other topics are important too. What innovations might we miss? What problems will continue to go unsolved? What daily pain points exist beyond AI?</p>
+
+<p>As software engineers build highly distributed systems, architectural and implementation decisions play a critical role in system resilience. In 2025, we saw several significant outages that have had cascading consequences across the globe. In June 2025, Google Cloud had an <a href="https://www.reuters.com/business/google-cloud-down-thousands-users-downdetector-shows-2025-06-12/">outage</a> that impacted Google products for millions of users as well as Spotify, Discord, ChatGPT, etc. In October 2025, AWS had a large-scale <a href="https://www.reuters.com/business/retail-consumer/amazons-cloud-unit-reports-outage-several-websites-down-2025-10-20/">outage</a> that impacted many popular services, such as Zoom, Venmo, Reddit, Amazon, and even banks around the world. Only a few days later, Azure had an <a href="https://www.cnbc.com/2025/10/29/microsoft-hit-with-azure-365-outage-ahead-of-quarterly-earnings.html">outage</a> that affected various Microsoft services, many retailers' websites and in-store services, and airline systems. In November and December 2025, Cloudflare had <a href="https://www.reuters.com/business/elon-musks-x-down-thousands-us-users-downdetector-shows-2025-11-18/">outages</a> that caused disruptions to ChatGPT, LinkedIn, Shopify, Fortnite, Square, and <a href="https://www.cnbc.com/2025/12/05/cloudlfare-is-investigating-issues-with-dashboard-and-related-apps.html">many others</a>.</p>
+
+<p>Given that approximately <a href="https://w3techs.com/technologies/history_overview/proxy/all">20%</a> of all websites use Cloudflare and that AWS, Azure, and GCP account for <a href="https://www.crn.com/news/cloud/2025/cloud-market-share-q2-2025-microsoft-dips-aws-still-kingpin">62%</a> of the global cloud infrastructure, this is of huge concern. The AWS outage was estimated to have cost businesses upwards of <a href="https://www.cybcube.com/news/insurance-loss-estimate-for-aws-amazonk-outage">$581</a> million dollars in just 15 hours and one of the Cloudflare outages to have cost <a href="https://www.forrester.com/blogs/cloudflares-outage-another-wake-up-call-for-cloud-resilience/">$300</a> million dollars in less than 4 hours. In fact, I argue that it is a global catastrophe waiting to happen and we have seen repeated warning signs, yet I do not see researchers flocking to solve the problem as if lives depend on it. Has AI dramatically increased the reliability of software?</p>
+
+<p>From my experience in industry, most recently at a startup that went through an acquisition, the problems we faced were fundamentally human problems. For example, convincing business partners, customers, and lawyers that our software does what we say that it does and that it won't have major disruptions was a huge challenge that we spent considerable time on. AI allowed us to scale faster, but it did not help us convince others to trust our system.</p>
+
+<p>Looking over the keynote talks from <a href="https://www.icse-conferences.org">ICSE</a> and <a href="https://www.esec-fse.org/index">FSE</a> leading up to the release of ChatGPT in late 2023, we can remind ourselves of the topics that were once top of mind for researchers: software safety, reliability, runtime monitoring, testing, industry impact, software engineering education, research rigor and reproducibility, socio-technical coordination, ethics and privacy, environmental impacts, etc. Several of these talks are relevant to the global cloud outages we have been experiencing, such as Marsha Chechik's <a href="https://2022.esec-fse.org/details/fse-2022-keynotes/1/On-Safety-Assurance-and-Reliability-A-Software-Engineering-Perspective-Keynote-">keynote</a> at FSE 2022 on the safety and reliability of software. Unfortunately, it seems that her call to action was not enough.</p>
+
+
+<h3>Follow the incentives</h3>
+
+<p>But perhaps there are innovations out there that we aren't even thinking about. Clayton Christensen, in his seminal book, Innovator's Dilemma<sup>5</sup>, argues that as fields mature, they often optimize and sustain existing innovations while also overlooking novel, disruptive innovations. He goes on to state that disruption often begins in places that others dismiss as too small, too immature, or too orthogonal, which are the exact areas that risk being neglected when AI becomes the default answer to every research question.</p>
+
+<p>A straightforward explanation for why researchers would jump on the AI bandwagon lies in incentives. There has been an incredibly strong force pulling everyone into AI, including funding agencies asking for AI related proposals, conferences adding multiple topics in AI to their calls for papers, and universities posting numerous faculty openings for AI researchers. It makes it incredibly difficult for a researcher to avoid. In fact, the papers I co-author involving AI are being cited at a far, far higher rate than any of my other work. As Zimmermann observes, academic behavior is often shaped less by intrinsic motivation than by the incentive structures and metrics that govern how academics are evaluated<sup>6</sup>. In other words, "incentives, incentives, and incentives".</p>
+
+<p>I'm certainly not the first to voice concerns about the fixation on AI, in fact, several others have argued about the potential downsides of AI. Johnson and Menzies stated that <i>"AI overhype"</i> is dangerous and that it is <i>"the ethical duty of software professionals to rally against such remarks"</i><sup>7</sup>. Early studies of AI use in the classroom have shown evidence that it may disrupt learning<sup>8, 9, 10</sup>. This is further complicated by the <a href="https://spectrum.ieee.org/ai-impact-on-job-market">disruption</a> in the job market for software engineers, especially those that are early in their career, caused by AI.</p>
+
+
+<h3>Right now is the opportunity</h3>
+
+<p>Given that virtually every researcher is focused on AI, now is the opportunity to make progress on any other topic. Even <a href="https://en.wikipedia.org/wiki/Yann_LeCun">Yann LeCun</a>, the 2018 Turing Award winner for his foundational work on deep neural networks, <a href="https://gizmodo.com/yann-lecun-world-models-2000685265">said</a> that <i>"an LLM is basically an off-ramp, a distraction, a dead end"</i>, in regards to his belief that LLMs will not continue to scale, <a href="https://www.newsweek.com/nw-ai/ai-impact-interview-yann-lecun-artificial-intelligence-2054237">and</a> <i>"don't work on LLMs."</i>. He also <a href="https://www.businessinsider.com/meta-ai-yann-lecun-llm-world-model-intelligence-criticism-2025-11">warned</a>, <i>"right now, they are sucking the air out of the room anywhere they go, and so there's basically no resources for anything else. And so for the next revolution, we need to take a step back and figure out what's missing from the current approaches"</i>.</p>
+
+<p>Perhaps we can use machine learning as inspiration to solve this concern of over-indexing on AI. Machine learning algorithms have mechanisms for escaping local maxima. Simulated annealing and stochastic gradient descent introduce noise, evolutionary algorithms create variation with random starting points and mutations, and optimization methods use random perturbations and restarts to explore new areas of a search space.</p>
+
+<p>Can researchers apply these concepts to how they decide their next research topics? I worry that researchers are stuck in a local maximum. Worse yet, they are intentionally reducing the "randomness" in their exploration of research topics with the goal of joining (or staying on) the AI bandwagon.</p>
+
+<p>While everyone is researching AI, the software systems that quietly run our society continue to fail in ways that are neither rare or surprising. If the global cloud can go down repeatedly, affecting banks, airlines, retailers, and governments, then resilience and trust are not solved problems. The unfortunate part is not that these problems are hard, but rather that they increasingly feel unfashionable.</p>
+
+<p>In the 2021 book, Think Again<sup>11</sup>, by organizational psychologist Adam Grant, he claimed, <i>"Thinking like a scientist involves more than just reacting with an open mind. It means being actively open-minded. It requires searching for reasons why we might be wrong, not for reasons why we must be right, and revising our views based on what we learn."</i> Whether it is through this scientific approach or through random perturbations, we can't get stuck in local maxima.</p>
+
+<p>So software and systems researchers, is AI all you've got?</p>
+
+<hr>
+
+<p><i>Special thanks to <a href="https://ozimmer.ch">Olaf Zimmermann</a> for providing multiple rounds of feedback to improve this article, and for being the co-editor of Dear Researchers with me.</i></p>
+
+<p><i>If you have opinions that you want to share with the research community, consider writing an article for Dear Researchers. Reach out to me.</i></p>
+
+
+<h3>References</h3>
+
+<ol>
+	<li>Salmond, G. P., & Fineran, P. C. (2015). A century of the phage: past, present and future. Nature Reviews Microbiology, 13(12), 777-786.</li>
+	<li>Wittebole, X., De Roock, S., & Opal, S. M. (2014). A historical overview of bacteriophage therapy as an alternative to antibiotics for the treatment of bacterial pathogens. Virulence, 5(1), 226-235. https://doi.org/10.4161/viru.25991</li>
+	<li>Gordillo Altamirano, F. L., & Barr, J. J. (2019). Phage therapy in the postantibiotic era. Clinical microbiology reviews, 32(2), 10-1128.</li>
+	<li>Mathew, G., Agrawal, A., & Menzies, T. (2018). Finding trends in software research. IEEE Transactions on Software Engineering, 49(4), 1397-1410.</li>
+	<li>Christensen, C. M. (2015). The innovator's dilemma: when new technologies cause great firms to fail. Harvard Business Review Press.</li>
+	<li>Zimmermann, O. (2025). Overcoming the research-practice gap: Root cause analysis and topics of practical relevance in software architecture and distributed systems. Journal of Systems and Software, 230.</li>
+	<li>Johnson, B., & Menzies, T. (2024). Ai over-hype: A dangerous threat (and how to fix it). IEEE Software, 41(6), 131-138.</li>
+	<li>Kazemitabaar, M., Williams, J., Drosos, I., Grossman, T., Henley, A. Z., Negreanu, C., & Sarkar, A. (2024, October). Improving steering and verification in AI-assisted data analysis with interactive task decomposition. In Proceedings of the 37th Annual ACM Symposium on User Interface Software and Technology (pp. 1-19).</li>
+	<li>Bastani, H., Bastani, O., Sungu, A., Ge, H., Kabakcı, Ö., & Mariman, R. (2024). Generative AI can harm learning. The Wharton School Research Paper.</li>
+	<li>Prather, J., Reeves, B. N., Leinonen, J., MacNeil, S., Randrianasolo, A. S., Becker, B. A., ... & Briggs, B. (2024, August). The widening gap: The benefits and harms of generative ai for novice programmers. In Proceedings of the 2024 ACM Conference on International Computing Education Research-Volume 1 (pp. 469-486).</li>
+	<li>Grant, A. (2023). Think again: The power of knowing what you don't know. Penguin.</li>
+</ol>
+
+
+
+<br><br><br><br>
+
+</body>
+</html>
