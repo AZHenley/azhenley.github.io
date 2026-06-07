@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Automating my job away - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="AI is using AI to use AI to do my job! What do I do now?">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Automating my job away">
+    <meta property="og:description" content="AI is using AI to use AI to do my job! What do I do now?">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/automatingmyjob.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/automatingmyjob.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I build tools for people</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austin.henley@microsoft.com">austin.henley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Automating my job away</h1>
+	<small>6/7/2026</small><br><br>
+
+<img src="images/automatingmyjob.png" class="center" style="max-width:60%;border:1px solid #000000;" alt="A sketch of a human building a robot, which builds a a robot, which builds a bigger robot.">
+
+
+<p><small><i>This post was inspired by conversations with several colleagues: Sourav Pal, Gustavo Soares, the Excel Agent Science Team, John Lam, and Dan Morris.</i></small></p>
+
+<p>I was talking to a friend who runs a <a href="https://certiv.ai/">startup</a> and he said that he tells his team, <b>"don't do anything three times."</b> If they have to do something more than twice, they should automate it.</p>
+
+<p>Surely, this is overkill? I already automated 95% of my coding-related tasks. What else would be left for me to do even? And the remaining bits are probably too hard to automate. But... I was wrong. Very, very wrong.</p>
+
+<p>I started trying it. Slowly at first, because automation can be a distraction from getting work done in the moment. By the second week, I was leaning in head first&mdash;<i>how deep does the rabbit hole go?</i></p>
+
+<p>There was an unexpected consequence: By automating the laborious parts of my work, I had, in turn, filled my day with <i>more</i> laborious parts.</p>
+
+<p>A menial task that took me 5 minutes once or twice a day turned into a menial task that I was doing 10-20 times a day. As I had automated the obvious parts, it left behind the glue work that never bothered me before. Now it was a substantial part of my day, and the context switching was killing me. It was no longer a linear step-by-step process since I was juggling several agents concurrently. Because of it, I was now making silly mistakes, which compounded the time and hair pulling.</p>
+
+<blockquote>"It never gets easier, you just go faster" &mdash; Greg LeMond</blockquote>
+
+<p>Try it yourself: Anytime you need to do something more than twice, spend the <i>minimal</i> time possible asking Copilot CLI to automate it. Don't write out a spec or give details or provide examples. Let it try to figure it out. Maybe it will fail, oh well, it is only a tiny bit of time spent, and then you can check where it failed and ask it to correct it.</p>
+
+<img src="images/automationtiers.png" class="center" style="max-width:85%;" alt="A diagram showing 4 tiers: human writes a script intended for human use, AI generates a script intended for human use, AI generates a skill intended for AI use, and AI self-improves the skill for AI use.">
+
+<p>I'm surprised at how far AI can get on the first try even when under-specified. But don't just generate Python scripts for automating tasks. Your agent should be generating skills so that it knows when and how to use the scripts. You shouldn't be running them manually.</p>
+
+<p>Through this process, I also learned that automation allowed me to change how I worked, not just speed up my work.</p>
+
+<p>Recently, Karpathy's <a href="https://github.com/karpathy/autoresearch">autoresearch</a> inspired the world to try self-improving agents. What if we expose a bunch of knobs to the agent and let it experiment continuously? Even better, what if we let the AI come up with new knobs?!</p>
+
+<p><i>"Copilot, read my Copilot session logs from the last 7 days and propose opportunities for automation. Draft a reusable skill for each."</i></p>
+
+
+<br><br><br><br>
+
+</body>
+</html>
