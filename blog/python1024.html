@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Making a Python interpreter in 1024 bytes - Austin Z. Henley</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="I challenged myself to make a tiny subset of Python in C.">
+	<meta name="author" content="Austin Z. Henley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Making a Python interpreter in 1024 bytes">
+    <meta property="og:description" content="I challenged myself to make a tiny subset of Python in C.">
+    <meta property="og:image" content="https://austinhenley.com/blog/images/python1024.png">
+    <meta property="og:url" content="https://austinhenley.com/blog/python1024.html">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="stylesheet" type="text/css" href="../modesty.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for austinhenley.com" href="https://austinhenley.com/blog/feed.rss" />
+	<script async defer data-domain="austinhenley.com" src="https://plausible.io/js/plausible.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+    <div class="card">
+		<div class="row">
+			<div class="text-container">
+				<div class="dense right">
+				  <h2 style="margin-bottom:-2px;">Austin Z. Henley</h2>
+				  <p>I build tools for people</p>
+				</div>
+			  </div>
+		  <div class="text-container" style="margin-left:20px;margin-top:20px;">
+			<div class="dense">
+				<a href="mailto:austin.henley@microsoft.com">austin.henley@microsoft.com</a><br>
+				<a href="https://twitter.com/austinzhenley">@austinzhenley</a><br>
+				<a href="https://github.com/AZHenley">github/AZHenley</a><br>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <hr />
+	  <div style="text-align: center;">
+		  <a href="../index.html">Home</a> |
+		  <a href="../publications.html">Publications</a> |
+		  <a href="../teaching.html">Teaching</a> |
+		  <a href="../blog.html" style="text-decoration: underline;">Blog</a>
+	  </div>
+    <div style="text-align: center; margin-top: 10px;">
+      
+    </div>
+	  <hr />
+
+	<h1 class="blogtitle">Making a Python interpreter in 1024 bytes</h1>
+	<small>9/6/2026</small><br><br>
+
+    <img src="images/python1024.png" class="center" style="max-width:85%;" alt="A screenshot of the 1024 bytes of golfed C code.">
+
+
+<p>To feel human, I write code <b>by hand</b> on the weekends.</p>
+
+<p>My latest challenge? Make a Python interpreter in <s>512</s> 1024 bytes of good ole C code. Oh, and no macro shenanigans or library tomfoolery.</p>
+
+<pre class="prettyprint lang-py">
+def buzz():
+    for n in range(101):
+        if n % 15 == 0:
+            print("FizzBuzz")
+        else:
+            if n % 3 == 0:
+                print("Fizz")
+            else:
+                if n % 5 == 0:
+                    print("Buzz")
+                else:
+                    print(n)
+buzz()
+</pre>
+
+<p>I probably can't fit <i>all</i> of the Python language into an interpreter that is only 1024 bytes of code. So what can I fit that will <i>look</i> like Python?</p>
+
+<p>This fizzbuzz program looks distinctly Python. It has the <i>def</i>, the colons, the indentations, and no parentheses for if statements. Looks like Python to me! Of course, I'll also have to add some additional limitations beyond just a subset of the syntax.</p>
+
+<p>My first attempt was bad though.</p>
+
+
+<h3>First try: 512 bytes is not enough!</h3>
+
+<p>I've written many recursive descent parsers, so how different can this be? A subset of Python should be similar to the other languages I've implemented.</p>
+
+<p>I started with the most basic code I could think of: <b>1 + 2</b></p>
+
+<p>Then I made it more complex: <b>x = 1 + 2 * 3</b></p>
+
+<p>And then I even added statements: <b>if x &gt; y: z = 3</b></p>
+
+<p>Great, I made a calculator... Not what I meant with this challenge! I was already over the limit too. That is when I zoomed out and made a list of elements that <i>look</i> Pythony, while also realizing that my code golf skills were not up to snuff to make it fit in 512 bytes.</p>
+
+<p>Maybe I can do it in 1024 bytes? First, make it work, and then make it small.</p>
+
+
+<h3>The parser</h3>
+
+<p>The actual <a href="https://github.com/python/cpython">CPython</a> implementation tokenizes the Python source, parses it into an abstract syntax tree, performs some analysis and optimizations, emits bytecode, and then interprets the bytecode.</p>
+
+<p>This won't really do any of that.</p>
+
+<p>The state is held in a handful of global variables. It uses a fixed-length array (999 for now) that will hold the raw Python code. The variables and function names all fit into a single array.</p>
+
+<pre class="prettyprint lang-c">
+char src[999];       /* Entire program without most spaces. */
+int  vars[256];      /* Symbol table.                       */
+int  pos;            /* Next character in src.              */
+int  ch;             /* Current character in src.           */
+int  line_start;     /* Where the current line starts.      */
+</pre>
+
+<p>The expressions are handled like any other recursive descent parser, although they are also executed along the way. For example:</p>
+
+<pre class="prettyprint lang-c">
+int parse_sum(void) {
+    int value = parse_term();
+    while (ch == '+' || ch == '-') {
+        if (ch == '+')
+            value = value + parse_term();
+        else
+            value = value - parse_term();
+    }
+    return value;
+}
+</pre>
+
+<p>Straightforward so far.</p>
+
+<p>There is no error handling of any kind! It makes <b>a lot</b> of assumptions based on the correctness of the code. For example, it assumes that the keywords are all typed out correctly.</p>
+
+<pre class="prettyprint lang-c">
+    if (ch == 'w' || ch == 'i' || ch == 'f') {
+        /* ---- while / if / for ---- */
+        int keyword = ch;
+        int loop_var = 0;
+
+        if (keyword == 'f') {             /* "for K in range(N):" */
+            pos += 2;                     /* skip "or"             */
+            loop_var = next();            /* the loop variable     */
+            pos += 8;                     /* skip "inrange("       */
+            vars[loop_var] = 0;
+        } else if (keyword == 'w')
+            pos += 4;                     /* skip "hile"           */
+        else 
+            pos += 1;                     /* skip "f" of "if"      */
+</pre>
+
+<p>It also assumes the token boundaries are correct and strips out most whitespace. It keeps indentation and spaces in string literals.</p>
+
+<p>It is limited to variable names of a single, lowercase character, which allows us to do symbol table lookups directly:</p>
+
+<pre class="prettyprint lang-c">
+    if (ch &gt; 96) {
+        value = vars[ch];
+        next();
+    }
+</pre>
+
+
+<h3>Control flow magic</h3>
+
+<p>The function for executing blocks of code continues until the indentation decreases. When that happens, it returns, and it is up to the caller to handle the next line. So, it is using the C program's call stack to handle the recursion.</p>
+
+<pre class="prettyprint lang-c">
+void run_block(int min_indent) {
+    for (;;) {
+        int indent = read_indent();
+
+        if (ch == '\n')                       
+            continue;
+
+        if (indent &lt; min_indent || ch == 0) {
+            pos = line_start;
+            return;
+        }
+</pre>
+
+<p>But what about loops?!</p>
+
+<p>Since nothing is compiled, loops work by jumping backwards and reparsing the source each iteration. Both while and for loops keep track of the position of the condition expression. After the body executes, it jumps back to that position and continues parsing.</p>
+
+<p>Functions work in the same way. When parsing the definition, the symbol table remembers the position of the function in the source code. Then when parsing a function call, the caller location is saved, the parser jumps to the function body, executes the body, and restores the caller location when it reaches the end.</p>
+
+<p>It is quite beautiful what we can do even with no intermediate representation! The interpreter maintains very little state too.</p>
+
+
+<h3>Minify!</h3>
+
+<p>I haven't <a href="https://en.wikipedia.org/wiki/Code_golf">code golfed</a> much. Trimming the variable names and whitespace is obvious, but how do I save the big bytes?</p>
+
+<p>There exists an ancient, forgotten website called Stack Overflow where the code magicians of yesteryear shared their knowledge. I learned a lot of ideas from <a href="https://codegolf.stackexchange.com/questions/2203/tips-for-golfing-in-c">Tips for golfing in C</a>.</p>
+	
+<p>Since rules only exist in your imagination, I <i>did</i> have to get creative. Some of those tips rely on "features" specific to GNU C89. This is <b>not</b> tomfoolery! This is conventional fiddle-faddle. Here is what I did to shave off bytes from the readable version:</p>
+
+<ul>
+	<li>Single-letter variable and function names</li>
+	<li>Assume the compiler will link libc</li>
+	<li>Use globals for temp variables</li>
+	<li>Globals are zero initialized</li>
+	<li>C89 allows variable declarations to be implicitly int and functions are assumed to return int</li>
+	<li>Use function parameters as temp variables that are preserved on the call stack</li>
+	<li>ASCII values instead of character literals</li>
+	<li>Ternary operator and comma operator</li>
+	<li>Bitwise operations instead of logical operations</li>
+</ul>
+
+<p>For example, the <i>parse_sum(void)</i> function that I showed earlier was golfed down to <i>e(){for(z=t();c-43u&lt;3;)y=44-c,z+=y*t();return z;}</i>. It uses ASCII values to shave a few bytes.</p>
+
+<p>After everything, the golfed version is <b>1024</b> bytes!</p>
+
+<p>The final readable version is over 4800 bytes. I originally had several more features but I kept cutting to make it fit. The comparison expressions were next on the chopping block, since that eats up a lot of bytes and truthiness still works: <i>if n%15:</i>.</p>
+	
+<p>If all I cared about was making fizzbuzz work, I think I could get below 800 bytes! There are probably other golfing tricks too.</p>
+
+<img src="images/python1024running.png" class="center" style="max-width:90%;" alt="A screenshot of a terminal checking the byte length of the golfed code, compiling it, and running fizzbuzz with it.">
+
+
+<p>Here is the golfed source in all its glory:</p>
+
+<pre class="prettyprint lang-c" style="white-space: pre-wrap; overflow-wrap: anywhere;">
+char s[999];v[256],p,c,x,y,z,w,u;G(){return c=s[p++];}I(){for(u=p;G()==32;);return p-u;}Y(){c&amp;&amp;c-10&amp;&amp;Y(G());}f(){x=0;if(G()&gt;96)x=v[c],G();for(;c-48u&lt;10;G())x=x*10+c-48;return x;}t(g,h){for(g=f();c==42|c==37;)h=c,g=h-42?g%f():g*f();return g;}e(){for(z=t();c-43u&lt;3;)y=44-c,z+=y*t();return z;}E(a,q){a=e();if(c-60u&gt;2)return a;w=c-61;q=G()==61;p-=!q;x=e();return w?(a-x)*w&gt;-q:a==x;}S(i){for(;I()&gt;i|c==10;)Y();p=u;}Q(){for(G();G()-34;)putchar(c);G();}B(i,q,j,k,a,m,n){for(;;){j=I();if(c==10)continue;if(j&lt;i|!c){p=u;return;}if(c==119|c==105|c==102){k=c;k-102?p+=k/4-25:(p+=2,m=G(),p+=8,v[m]=0);q=p;for(;;){a=k-102?E():v[m]&lt;E();p+=k==102;G();if(!a){S(j);break;}B(j+1);if(k==105)break;k-102||v[m]++;p=q;}I()-j|c-101?p=u:(p+=4,G(),a?S(j):B(j+1));}else if(c==100){p+=2;k=G();Y();v[k]=p;S(j);}else{if(c&gt;96){k=c;while(G()&gt;96);c==40?k-112?(G(),n=p,p=v[k],B(2),p=n,G()):(s[p]-34?printf("%d",E()):Q(),puts(""),G()):(v[k]=E());}Y();}}}main(q,m,h){for(h=m=q=0;~(c=getchar());){c=c-9?c:32;h^=c==34;s[q]=c;q+=c-32?1:!m|h;m=c&gt;32|m&amp;&amp;c-10;}B(0);}
+</pre>
+
+<p>In the end, I was able to implement these features:</p>
+
+<ul>
+	<li>Integer variables (single letter) and literals</li>
+	<li>Variable assignment</li>
+	<li>Arithmetic with + - * % with precedence (unary + - only works at the beginning of an expression)</li>
+	<li>Comparisons with &lt; &gt; &lt;= &gt;= == (only one per expression)</li>
+	<li>Integer truthiness</li>
+	<li><i>if</i> and <i>else</i></li>
+	<li><i>while</i> loops, including <i>else</i> blocks</li>
+	<li><i>for x in range(y)</i> loops, including <i>else</i> blocks</li>
+	<li>Function definitions with no arguments</li>
+	<li>Function calls, even recursive</li>
+	<li>Indent-based blocks (without scope)</li>
+	<li><i>print</i> with a single string literal or integer expression</li>
+	<li>Comments</li>
+</ul>
+
+<p>I don't think I will be doing any code golf challenges again in the near future. The process was quite tedious, going back and forth between the gulfing-in-progress version and the original version to try to understand what I changed just 2 minutes ago. Both versions are on <a href="https://github.com/AZHenley/python1024">GitHub</a>.</p>
+
+<p>Now it is your turn. What does your Python in 1024 bytes look like?</p>
+
+
+
+<br><br><br><br>
+
+</body>
+</html>
