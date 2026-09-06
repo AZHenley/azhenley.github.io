@@ -76,7 +76,7 @@ buzz()
 
 <p>I probably can't fit <i>all</i> of the Python language into an interpreter that is only 1024 bytes of code. So what can I fit that will <i>look</i> like Python?</p>
 
-<p>This fizzbuzz program looks distinctly Python. It has the <i>def</i>, the colons, the indentations, and no parentheses for if statements. Looks like Python to me! Of course, I'll also have to add some additional limitations beyond just a subset of the syntax.</p>
+<p>This fizzbuzz program looks distinctly Python. It has the <i>def</i>, the colons, the indentations, and no parentheses for <i>if</i> statements. Looks like Python to me! Of course, I'll also have to add some additional limitations beyond just a subset of the syntax.</p>
 
 <p>My first attempt was bad though.</p>
 
@@ -112,7 +112,7 @@ int  ch;             /* Current character in src.           */
 int  line_start;     /* Where the current line starts.      */
 </pre>
 
-<p>The expressions are handled like any other recursive descent parser, although they are also executed along the way. For example:</p>
+<p>The expressions are handled like any other recursive descent parser, and they are executed along the way. For example:</p>
 
 <pre class="prettyprint lang-c">
 int parse_sum(void) {
@@ -180,7 +180,7 @@ void run_block(int min_indent) {
 
 <p>But what about loops?!</p>
 
-<p>Since nothing is compiled, loops work by jumping backwards and reparsing the source each iteration. Both while and for loops keep track of the position of the condition expression. After the body executes, it jumps back to that position and continues parsing.</p>
+<p>Since nothing is compiled, loops work by jumping backwards and reparsing the source each iteration. Both <i>while</i> and <i>for</i> loops keep track of the position of the condition expression. After the body executes, it jumps back to that position and continues parsing.</p>
 
 <p>Functions work in the same way. When parsing the definition, the symbol table remembers the position of the function in the source code. Then when parsing a function call, the caller location is saved, the parser jumps to the function body, executes the body, and restores the caller location when it reaches the end.</p>
 
@@ -211,7 +211,7 @@ void run_block(int min_indent) {
 
 <p>After everything, the golfed version is <b>1024</b> bytes!</p>
 
-<p>The final readable version is over 4800 bytes. I originally had several more features but I kept cutting to make it fit. The comparison expressions were next on the chopping block, since that eats up a lot of bytes and truthiness still works: <i>if n%15:</i>.</p>
+<p>The final readable version is over 4800 bytes. I originally had several more features but I kept cutting to make it fit. The comparison expressions were next on the chopping block, since that eats up a lot of bytes and truthiness still works without them: <i>if n%15:</i>.</p>
 	
 <p>If all I cared about was making fizzbuzz work, I think I could get below 800 bytes! There are probably other golfing tricks too.</p>
 
