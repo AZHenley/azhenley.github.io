@@ -8,6 +8,13 @@
     <language>en-us</language>
     <copyright>Austin Z. Henley (2026)</copyright>
     <item>
+      <title>Making a Python interpreter in 1024 bytes</title>
+      <pubDate>Sun, 6 Sep 2026 19:00:01 -0400</pubDate>
+      <link>https://austinhenley.com/blog/python1024.html</link>
+      <author>austin.henley@microsoft.com (Austin Z. Henley)</author>
+      <description><![CDATA[<a href="https://austinhenley.com/blog/python1024.html">https://austinhenley.com/blog/python1024.html</a>]]></description>
+    </item>
+    <item>
       <title>You probably use AI because your colleagues use AI</title>
       <pubDate>Sun, 23 Aug 2026 16:00:01 -0400</pubDate>
       <link>https://austinhenley.com/blog/aiadoption.html</link>
