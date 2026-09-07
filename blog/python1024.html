@@ -83,7 +83,7 @@ buzz()
 
 <h3>First try: 512 bytes is not enough!</h3>
 
-<p>I've written many recursive descent parsers, so how different can this be? A subset of Python should be similar to the other languages I've implemented.</p>
+<p>I've written many recursive descent parsers, so how different can this be? A subset of Python should be similar to the other languages I've implemented (such as my <a href="teenytinycompiler1.html">Teeny Tiny</a> compiler).</p>
 
 <p>I started with the most basic code I could think of: <b>1 + 2</b></p>
 
@@ -133,7 +133,6 @@ int parse_sum(void) {
 
 <pre class="prettyprint lang-c">
     if (ch == 'w' || ch == 'i' || ch == 'f') {
-        /* ---- while / if / for ---- */
         int keyword = ch;
         int loop_var = 0;
 
