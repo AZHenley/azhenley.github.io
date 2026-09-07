@@ -192,6 +192,8 @@ void run_block(int min_indent) {
 <p>I haven't <a href="https://en.wikipedia.org/wiki/Code_golf">code golfed</a> much. Trimming the variable names and whitespace is obvious, but how do I save the big bytes?</p>
 
 <p>There exists an ancient, forgotten website called Stack Overflow where the code magicians of yesteryear shared their knowledge. I learned a lot of ideas from <a href="https://codegolf.stackexchange.com/questions/2203/tips-for-golfing-in-c">Tips for golfing in C</a>.</p>
+
+<img src="images/codegolfingtips.png" class="center" style="max-width:80%;" alt="A screenshot of the code golfing thread on Stack Overflow.">
 	
 <p>Since rules only exist in your imagination, I <i>did</i> have to get creative. Some of those tips rely on "features" specific to GNU C89. This is <b>not</b> tomfoolery! This is conventional fiddle-faddle. Here is what I did to shave off bytes from the readable version:</p>
 
@@ -208,6 +210,19 @@ void run_block(int min_indent) {
 </ul>
 
 <p>For example, the <i>parse_sum(void)</i> function that I showed earlier was golfed down to <i>e(){for(z=t();c-43u&lt;3;)y=44-c,z+=y*t();return z;}</i>. It uses ASCII values to shave a few bytes.</p>
+
+<p>Another example is a helper function that skips to the end of a line:</p>
+
+<pre class="prettyprint lang-c">
+void skip_to_eol(void) {
+  if (ch != 0 &amp;&amp; ch != '\n') {
+    next();
+    skip_to_eol();
+  }
+}
+</pre>
+
+<p>I got it down to: <i>Y(){c&amp;&amp;c-10&amp;&amp;Y(G());}</i>. It tests for 0, subtracts 10 to check for a newline, and uses <i>&amp;&amp;</i> instead of an <i>if</i>. Then it saves a byte by doing <i>Y(G());</i> instead of <i>G();Y();</i>. Clever! Thanks again to that Stack Overflow post.</p>
 
 <p>After everything, the golfed version is <b>1024</b> bytes!</p>
 
