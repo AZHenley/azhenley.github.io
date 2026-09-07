@@ -137,15 +137,15 @@ int parse_sum(void) {
         int keyword = ch;
         int loop_var = 0;
 
-        if (keyword == 'f') {             /* "for K in range(N):" */
-            pos += 2;                     /* skip "or"             */
-            loop_var = next();            /* the loop variable     */
-            pos += 8;                     /* skip "inrange("       */
+        if (keyword == 'f') {        /* "for K in range(N):" */
+            pos += 2;                /* Skip "or".           */
+            loop_var = next(); 
+            pos += 8;                /* Skip "inrange(".     */
             vars[loop_var] = 0;
         } else if (keyword == 'w')
-            pos += 4;                     /* skip "hile"           */
+            pos += 4;                /* Skip "hile".         */
         else 
-            pos += 1;                     /* skip "f" of "if"      */
+            pos += 1;                /* Skip "f" of "if".    */
 </pre>
 
 <p>It also assumes the token boundaries are correct and strips out most whitespace. It keeps indentation and spaces in string literals.</p>
